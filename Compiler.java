@@ -1,6 +1,5 @@
 public class Compiler {
 	public static void main(String[] args) {
-		System.out.println("Test");
 		String option = "";
 		String option2 = "";
 		String filename = "";
@@ -9,9 +8,17 @@ public class Compiler {
 				if(i==args.length-3){
 					option = args[i];
 				}else if(i==args.length-2){
-					option2 = args[i];
+					if(args[i].substring(0,1).equals("-")){
+						option = args[i];
+					}else{
+						option2 = args[i];
+					}
 				}else if(i==args.length-1){
-					filename = args[i];
+					if(args[i].substring(0,1).equals("-")){
+						option = args[i];
+					}else{
+						filename = args[i];
+					}
 				}
 			}
 		}else if((args.length<2)&&(args.length>0)){
@@ -35,6 +42,13 @@ public class Compiler {
 			case "-o":
 			break;
 			case "-stage":
+				if(option2.equals("scan")){
+				}else if(option2.equals("parse")){
+				}else if(option2.equals("ast")){
+				}else if(option2.equals("semantic")){
+				}else if(option2.equals("irt")){
+				}else if(option2.equals("codegen")){
+				}
 			break;
 			case "-debug":
 			break;
