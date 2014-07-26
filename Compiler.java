@@ -18,7 +18,7 @@ public class Compiler {
 
 		String option = "";
 		String option2 = "";
-		if ( args.length > 0 ) {
+		if ( args.length > 1 ) {
 			// recorre el arreglo args y setea las variables de configuración 
 			for ( int i = 0; i< args.length; i++ ) {
 				switch(args[i]){
@@ -41,33 +41,41 @@ public class Compiler {
 						exit(0);
 						break;
 					default:
-						if ( Pattern.matches("[^\\-].*\\.[d][c][f]", args[i]) && args.length-1 == i ) {
+						if ( Pattern.matches("[^\\-].*\\.dcf", args[i]) && args.length-1 == i ) {
 							inputFilename = args[i];
-						} else {
+						} else if(Pattern.matches("[^\\-].*(^\\.)", args[i])){
+						    System.err.println("Opcion " + args[i] + " no reconocida");
+							System.exit(1);
+						}else if( !Pattern.matches("[^\\-].*\\.dcf", args[i]) && args.length-1 == i ){
+							System.err.println("Archivo " + args[i] + " es invalido");
+							System.exit(1);
+						} else{
 							System.err.println("Opcion " + args[i] + " no reconocida");
 							System.exit(1);
 						}
 						break;
 				}
 			}
+		}else if (args.length==0){
+			printHelp();
+		}else if ((args[0].equals("-h"))&&(args.length==1)){
+			printHelp();
+		}
 
-			Scanner scan;
-			CC4Parser parse;
-			Ast ast;
-			Semantic semantic;
-			Irt irt;
-			Codegen codegen;
-			
+		Scanner scan;
+		CC4Parser parse;
+		Ast ast;
+		Semantic semantic;
+		Irt irt;
+		Codegen codegen;
+		if ((args.length > 0)&&(!args[0].equals("-h"))){
 			if ( !target.equals("") ){
 				if(!inputFilename.equals("")) {
-
 					if(outputFilename.equals("")){
 						outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";	
 					}
-
 					System.out.println("input: " + inputFilename);
 					System.out.println("output: " + outputFilename);
-
 					// Ejecuta el compilador hasta el target indicado
 					if( target.equals("scan") || target.equals("parse") || target.equals("ast") 
 							|| target.equals("semantic") || target.equals("irt") || target.equals("codegen") ){
@@ -83,7 +91,9 @@ public class Compiler {
 						irt = new Irt(semantic);
 						if (target.equals("irt")) exit(0);
 						codegen = new Codegen(irt);
-					}
+					}else {
+						System.err.println("opcion de -target " + target + " es invalida");
+				    }
 
 				} else {
 					System.err.println("Error No se indico el archivo");
@@ -91,10 +101,8 @@ public class Compiler {
 			} else {
 				System.err.println("Error No se indico target");
 			}
-		} else {
-			printHelp();
-		}
-	}
+		} 
+    }
 
 	/**
 	*	Despliega la ayuda del comand line
