@@ -5,6 +5,8 @@ import compiler.ast.Ast;
 import compiler.irt.Irt;
 import compiler.semantic.Semantic;
 import compiler.codegen.Codegen;
+import compiler.opt.Algebraic;
+import compiler.opt.ConstantFolding;
 
 public class Compiler {
 	public static void main(String[] args) {
@@ -68,6 +70,8 @@ public class Compiler {
 		Semantic semantic;
 		Irt irt;
 		Codegen codegen;
+		ConstantFolding cf;
+		Algebraic algebraic;
 		if ((args.length > 0)&&(!args[0].equals("-h"))){
 			if ( !target.equals("") ){
 				if(!inputFilename.equals("")) {
@@ -92,11 +96,30 @@ public class Compiler {
 						if (target.equals("irt")) exit(0);
 						codegen = new Codegen(irt);
 					}else {
-						System.err.println("opcion de -target " + target + " es invalida");
+						System.err.println("opcion de -target \"" + target + "\" es invalida");
 				    }
 
 				} else {
-					System.err.println("Error No se indico el archivo");
+					System.err.println("Error No se indico el archivo o falto la opcion");
+				}
+			}else if ( !opt.equals("") ){
+				if(!inputFilename.equals("")) {
+					if(outputFilename.equals("")){
+						outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";	
+					}
+					System.out.println("input: " + inputFilename);
+					System.out.println("output: " + outputFilename);
+					
+					if( opt.equals("constant") ){
+						cf = new ConstantFolding(inputFilename); exit(0);
+					} else if( opt.equals("algebraic") ){
+						algebraic = new Algebraic(inputFilename); exit(0);
+					}else {
+						System.err.println("opcion de -opt \"" + opt + "\" es invalida");
+				    }
+
+				} else {
+					System.err.println("Error No se indico el archivo o falto la opcion");
 				}
 			} else {
 				System.err.println("Error No se indico target");
