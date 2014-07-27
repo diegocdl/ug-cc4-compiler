@@ -7,6 +7,7 @@ import compiler.semantic.Semantic;
 import compiler.codegen.Codegen;
 import compiler.opt.Algebraic;
 import compiler.opt.ConstantFolding;
+import compiler.lib.Debug;
 
 public class Compiler {
 	public static void main(String[] args) {
@@ -15,7 +16,7 @@ public class Compiler {
 		String outputFilename = "";
 		String target = "";
 		String opt = "";
-		String debug = "";
+		String debug [] = null;
 		
 
 		String option = "";
@@ -35,8 +36,8 @@ public class Compiler {
 						System.out.println("optimizacion " + opt );
 						break;
 					case "-debug":
-						debug = args[++i];
-						System.out.print("Debug: " + args[++i]);
+						debug = args[++i].split(":");
+						//System.out.print("Debug: " + args[++i]);
 						break;
 					case "-h":
 						printHelp();
@@ -72,6 +73,8 @@ public class Compiler {
 		Codegen codegen;
 		ConstantFolding cf;
 		Algebraic algebraic;
+		Debug deb = new Debug();
+
 		if ((args.length > 0)&&(!args[0].equals("-h"))){
 			if ( !target.equals("") ){
 				if(!inputFilename.equals("")) {
@@ -85,16 +88,28 @@ public class Compiler {
 							|| target.equals("semantic") || target.equals("irt") || target.equals("codegen") ){
 
 						scan = new Scanner(inputFilename);
+						if (buscarString(debug, "scan")) scan.setDebuger(deb);
 						if (target.equals("scan")) exit(0);
+
 						parse = new CC4Parser(scan);
+						if (buscarString(debug, "parse")) parse.setDebuger(deb);
 						if (target.equals("parse")) exit(0);
+						
 						ast = new Ast(parse);
+						if (buscarString(debug, "ast")) ast.setDebuger(deb);
 						if (target.equals("ast")) exit(0);
+						
 						semantic = new Semantic(ast);
+						if (buscarString(debug, "semantic")) semantic.setDebuger(deb);
 						if (target.equals("semantic")) exit(0);
+						
 						irt = new Irt(semantic);
+						if (buscarString(debug, "irt")) irt.setDebuger(deb);
 						if (target.equals("irt")) exit(0);
+						
 						codegen = new Codegen(irt);
+						if (buscarString(debug, "codegen")) codegen.setDebuger(deb);
+
 					}else {
 						System.err.println("opcion de -target \"" + target + "\" es invalida");
 				    }
@@ -104,13 +119,13 @@ public class Compiler {
 				}
 			}else if ( !opt.equals("") ){
 				if(!inputFilename.equals("")) {
-					if(outputFilename.equals("")){
+					if(outputFilename.equals("")) {
 						outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";	
 					}
 					System.out.println("input: " + inputFilename);
 					System.out.println("output: " + outputFilename);
 					
-					if( opt.equals("constant") ){
+					if ( opt.equals("constant") ) {
 						cf = new ConstantFolding(inputFilename); exit(0);
 					} else if( opt.equals("algebraic") ){
 						algebraic = new Algebraic(inputFilename); exit(0);
@@ -159,5 +174,16 @@ public class Compiler {
 
 	public static void exit(int i){
 		System.exit(i);
+	}
+
+	public static boolean buscarString(String [] array, String str){
+		if( array != null) {
+			for (String e : array) {
+				if (e.equals(str)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
