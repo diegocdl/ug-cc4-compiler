@@ -95,6 +95,28 @@ public class Compiler {
 						irt = new Irt(semantic);
 						if (target.equals("irt")) exit(0);
 						codegen = new Codegen(irt);
+						if ( !opt.equals("") ){
+							if(!inputFilename.equals("")) {
+								if(outputFilename.equals("")){
+									outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";	
+								}
+								System.out.println("input: " + inputFilename);
+								System.out.println("output: " + outputFilename);
+					
+								if( opt.equals("constant") ){
+									cf = new ConstantFolding(inputFilename); exit(0);
+								} else if( opt.equals("algebraic") ){
+									algebraic = new Algebraic(inputFilename); exit(0);
+								}else {
+									System.err.println("opcion de -opt \"" + opt + "\" es invalida");
+								}
+
+							} else {
+								System.err.println("Error No se indico el archivo o falto la opcion");
+							}
+						} else {
+							System.err.println("Error No se indico el archivo o falto la opcion");
+						}
 					}else {
 						System.err.println("opcion de -target \"" + target + "\" es invalida");
 				    }
@@ -102,28 +124,11 @@ public class Compiler {
 				} else {
 					System.err.println("Error No se indico el archivo o falto la opcion");
 				}
-			}else if ( !opt.equals("") ){
-				if(!inputFilename.equals("")) {
-					if(outputFilename.equals("")){
-						outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";	
-					}
-					System.out.println("input: " + inputFilename);
-					System.out.println("output: " + outputFilename);
-					
-					if( opt.equals("constant") ){
-						cf = new ConstantFolding(inputFilename); exit(0);
-					} else if( opt.equals("algebraic") ){
-						algebraic = new Algebraic(inputFilename); exit(0);
-					}else {
-						System.err.println("opcion de -opt \"" + opt + "\" es invalida");
-				    }
 
-				} else {
-					System.err.println("Error No se indico el archivo o falto la opcion");
-				}
-			} else {
-				System.err.println("Error No se indico target");
+			}else {
+				System.err.println("Error No se indico el archivo o falto la opcion");
 			}
+			
 		} 
     }
 
