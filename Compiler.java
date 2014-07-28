@@ -9,16 +9,18 @@ import compiler.opt.Algebraic;
 import compiler.opt.ConstantFolding;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
+import compiler.lib.ErrorHandler;
 
 public class Compiler {
 	public static void main(String[] args)  throws Exception {
 		// Variables de configuracion del Compilador
+		try{
 		String inputFilename = "";
 		String outputFilename = "";
 		String target = "";
 		String opt = "";
 		String debug [] = null;
-		
+
 
 		String option = "";
 		String option2 = "";
@@ -34,7 +36,7 @@ public class Compiler {
 						break;
 					case "-opt":
 						opt = args[++i];
-						System.out.println("optimizacion " + opt );
+						//System.out.println("optimizacion " + opt );
 						break;
 					case "-debug":
 						debug = args[++i].split(":");
@@ -48,14 +50,11 @@ public class Compiler {
 						if ( Pattern.matches("[^\\-].*\\.dcf", args[i]) && args.length-1 == i ) {
 							inputFilename = args[i];
 						} else if(Pattern.matches("[^\\-].*(^\\.)", args[i])){
-						    System.err.println("Opcion " + args[i] + " no reconocida");
-							System.exit(1);
+							throw new ErrorHandler("Error en la opcion: " + args[i]);
 						}else if( !Pattern.matches("[^\\-].*\\.dcf", args[i]) && args.length-1 == i ){
-							System.err.println("Archivo " + args[i] + " es invalido");
-							System.exit(1);
+							throw new ErrorHandler("Error en el archivo: " + args[i]);
 						} else{
-							System.err.println("Opcion " + args[i] + " no reconocida");
-							System.exit(1);
+							throw new ErrorHandler("Error en la opcion: " + args[i]);
 						}
 						break;
 				}
@@ -98,19 +97,19 @@ public class Compiler {
 						parse = new CC4Parser(scan);
 						if (buscarString(debug, "parse")) parse.setDebuger(deb);
 						if (target.equals("parse")) exit(0);
-						
+
 						ast = new Ast(parse);
 						if (buscarString(debug, "ast")) ast.setDebuger(deb);
 						if (target.equals("ast")) exit(0);
-						
+
 						semantic = new Semantic(ast);
 						if (buscarString(debug, "semantic")) semantic.setDebuger(deb);
 						if (target.equals("semantic")) exit(0);
-						
+
 						irt = new Irt(semantic);
 						if (buscarString(debug, "irt")) irt.setDebuger(deb);
 						if (target.equals("irt")) exit(0);
-						
+
 						codegen = new Codegen(irt);
 						if (buscarString(debug, "codegen")) codegen.setDebuger(deb);
 
@@ -121,33 +120,36 @@ public class Compiler {
 								}
 								System.out.println("input: " + inputFilename);
 								System.out.println("output: " + outputFilename);
-					
+
 								if( opt.equals("constant") ){
 									cf = new ConstantFolding(inputFilename); exit(0);
 								} else if( opt.equals("algebraic") ){
 									algebraic = new Algebraic(inputFilename); exit(0);
 								}else {
-									System.err.println("opcion de -opt \"" + opt + "\" es invalida");
+									throw new ErrorHandler("Opcion de optimizacion invalida: " + opt);
 								}
 
 							} else {
-								System.err.println("Error No se indico el archivo o falto la opcion");
+								throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 							}
 						} else {
-							System.err.println("Error No se indico el archivo o falto la opcion");
+							throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 						}
 					}else {
-						System.err.println("opcion de -target \"" + target + "\" es invalida");
+						throw new ErrorHandler("Opcion de target invalida: " + target);
 				    }
 
 				} else {
-					System.err.println("Error No se indico el archivo o falto la opcion");
+					throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 				}
 			}else {
-				System.err.println("Error No se indico el archivo o falto la opcion");
+				throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 			}
-			
-		} 
+
+		}
+			}catch(ErrorHandler e){
+				System.err.println(e.getMessage());
+			}
     }
 
 	/**
