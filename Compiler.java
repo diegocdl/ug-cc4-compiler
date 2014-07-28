@@ -8,9 +8,10 @@ import compiler.codegen.Codegen;
 import compiler.opt.Algebraic;
 import compiler.opt.ConstantFolding;
 import compiler.lib.Debug;
+import compiler.lib.OutputFile;
 
 public class Compiler {
-	public static void main(String[] args) {
+	public static void main(String[] args)  throws Exception {
 		// Variables de configuracion del Compilador
 		String inputFilename = "";
 		String outputFilename = "";
@@ -74,20 +75,23 @@ public class Compiler {
 		ConstantFolding cf;
 		Algebraic algebraic;
 		Debug deb = new Debug();
+		OutputFile outFile;
 
 		if ((args.length > 0)&&(!args[0].equals("-h"))){
 			if ( !target.equals("") ){
 				if(!inputFilename.equals("")) {
 					if(outputFilename.equals("")){
-						outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";	
+						outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";
 					}
+					outFile = new OutputFile( outputFilename );
+
 					System.out.println("input: " + inputFilename);
 					System.out.println("output: " + outputFilename);
 					// Ejecuta el compilador hasta el target indicado
 					if( target.equals("scan") || target.equals("parse") || target.equals("ast") 
 							|| target.equals("semantic") || target.equals("irt") || target.equals("codegen") ){
 
-						scan = new Scanner(inputFilename);
+						scan = new Scanner(inputFilename, outFile);
 						if (buscarString(debug, "scan")) scan.setDebuger(deb);
 						if (target.equals("scan")) exit(0);
 

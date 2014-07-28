@@ -17,6 +17,9 @@ $RECYCLE.BIN/
 # Java .class
 *.class
 
+# MIPS .s
+*.s
+
 # =========================
 # Operating System Files
 # =========================
