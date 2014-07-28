@@ -11,8 +11,9 @@ import compiler.lib.Debug;
 import compiler.lib.ErrorHandler;
 
 public class Compiler {
-	public static void main(String[] args) throws ErrorHandler{
+	public static void main(String[] args) {
 		// Variables de configuracion del Compilador
+		try{
 		String inputFilename = "";
 		String outputFilename = "";
 		String target = "";
@@ -34,7 +35,7 @@ public class Compiler {
 						break;
 					case "-opt":
 						opt = args[++i];
-						System.out.println("optimizacion " + opt );
+						//System.out.println("optimizacion " + opt );
 						break;
 					case "-debug":
 						debug = args[++i].split(":");
@@ -48,11 +49,11 @@ public class Compiler {
 						if ( Pattern.matches("[^\\-].*\\.dcf", args[i]) && args.length-1 == i ) {
 							inputFilename = args[i];
 						} else if(Pattern.matches("[^\\-].*(^\\.)", args[i])){
-							throw new ErrorHandler(1,args[i]);
+							throw new ErrorHandler("Error en la opcion: " + args[i]);
 						}else if( !Pattern.matches("[^\\-].*\\.dcf", args[i]) && args.length-1 == i ){
-							throw new ErrorHandler(2,args[i]);
+							throw new ErrorHandler("Error en el archivo: " + args[i]);
 						} else{
-							throw new ErrorHandler(1,args[i]);
+							throw new ErrorHandler("Error en la opcion: " + args[i]);
 						}
 						break;
 				}
@@ -121,27 +122,30 @@ public class Compiler {
 								} else if( opt.equals("algebraic") ){
 									algebraic = new Algebraic(inputFilename); exit(0);
 								}else {
-									throw new ErrorHandler(3,opt);
+									throw new ErrorHandler("Opcion de optimizacion invalida: " + opt);
 								}
 
 							} else {
-								throw new ErrorHandler(5,"");
+								throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 							}
 						} else {
-							throw new ErrorHandler(5,"");
+							throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 						}
 					}else {
-						throw new ErrorHandler(4,target);
+						throw new ErrorHandler("Opcion de target invalida: " + target);
 				    }
 
 				} else {
-					throw new ErrorHandler(5,"");
+					throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 				}
 			}else {
-				throw new ErrorHandler(5,"");
+				throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 			}
 
-		} 
+		}
+			}catch(ErrorHandler e){
+				System.err.println(e.getMessage());
+			}
     }
 
 	/**
