@@ -14,14 +14,36 @@ public class Scanner {
 		//System.out.println(msg);
 		of = outFile;
 		of.writeln(msg);
-		try{
+		try {
 		    DecafLexer lexer = new DecafLexer(new ANTLRFileStream(inputFile));
+		    lexer.removeErrorListeners();
+		    lexer.addErrorListener(new BaseErrorListener(){
+		    	 @Override
+			    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
+			                            int line, int charPositionInLine,
+			                            String msg, RecognitionException e)
+			    {
+
+			        String sourceName = recognizer.getInputStream().getSourceName();
+			        if (!sourceName.isEmpty()) {
+			            sourceName = String.format("%s:%d:%d: ", sourceName, line, charPositionInLine);
+			        }
+			        try {
+			        	of.writeln(sourceName+"line "+line+":"+charPositionInLine+ " " + msg);
+			        	
+			        } catch (Exception ex) { 
+			        	// Ignoramos la excepcion
+			        }
+	    		}
+		    });
 		    int i;
 		    String str;
 		    Token t = lexer.nextToken();
 		    while (t.getType() != Token.EOF){
 		    	if(DecafLexer.tokenNames[t.getType()].equals("CHAR_ERROR")){
 		    		str = t.getLine() + " -> " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText().substring(1,t.getText().length()-1);
+		    	} else if ( DecafLexer.tokenNames[t.getType()].equals("HEX_ERROR") ) {
+		    		str = t.getLine() + " -> " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText();
 		    	}else{
 		    		str = t.getLine() + " " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText();
 		    	}
@@ -46,5 +68,4 @@ public class Scanner {
 	public OutputFile getOutFile(){
 		return of;
 	}
-
 }

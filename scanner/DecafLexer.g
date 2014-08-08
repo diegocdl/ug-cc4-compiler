@@ -1,25 +1,35 @@
 lexer grammar DecafLexer;
 
+
 @header {
 	package compiler.scanner;
 }
 
 
-COMMENT 		: ('//' ~('\n')* WHITESPACE | '/*' ~('\n')* '*/'){skip();};
+COMMENT 					: ('//' ~('\n')* WHITESPACE | '/*' ~('\n')* '*/'){skip();};
+WHITESPACE					: ('\n' | '\t' | ' ' | '\r') {skip();};
 // numeros
-DIGIT			: [0-9];
-ALPHA			: [a-zA-Z];
-ALPHA_NUM		: DIGIT | ALPHA;
-HEX_DIGIT 		: DIGIT | [a-zA-Z];
-DECIMAL_LITERAL	: DIGIT+;
-INT_LITERAL		: DECIMAL_LITERAL | HEX_LITERAL;
+fragment DIGIT				: [0-9];
+fragment ALPHA				: [a-zA-Z];
+fragment ALPHA_NUM			: DIGIT | ALPHA;
+fragment HEX_DIGIT		 	: DIGIT | [a-zA-Z];
+fragment INT_LITERAL			: DECIMAL_LITERAL | HEX_LITERAL;
+
+
+HEX_LITERAL					: '0x'(HEX_DIGIT)+;
+HEX_ERROR					: '0x' ~([0-9] | [a-zA-Z])*;					
+DECIMAL_LITERAL				: DIGIT+;
 
 // Char y String
-CHAR_ERROR		: ('\'' ('\'') '\'' | '\'' ~('\'')+ | '\'\\' ~( '\'' | '\"' | '\\' | 'n' | 'r' | 't' | 'b' | 'f' | 'v' | '0' ) ('\'')?); 
-CHAR_LITERAL	: '\'' ~('\'') '\'' | ESCAPE_CHAR;
-ESCAPE_CHAR		: '\'\\' ( '\'' | '\"' | '\\' | 'n' | 'r' | 't' | 'b' | 'f' | 'v' | '0' )'\''; 
-STRING_LITERAL 	: '"'~('"')*'"';
-ID				: ALPHA(ALPHA_NUM*);
+fragment ESCAPE_CHAR  	: '\'\\' ( '\'' | '\"' | '\\' | 'n' | 't' )'\'';
+CHAR_LITERAL		  	: '\'' ~('\'' | '\\' | '\n' | '\"') '\'' 
+						| ESCAPE_CHAR; // Literales de escape
+CHAR_ERROR				: '\'' ('\'' | '\\' | '\n' | '\"') '\'' 
+						| '\'\\' ~( '\'' | '\"' | '\\' | 'n' | 't' ) ('\'')?  
+						| '\'' ~('\'')+ '\''
+						| '\'' ~('\'')+ ; 
+STRING_LITERAL 			: '"'~('"')*'"';
+ID						: (ALPHA | '_')(ALPHA_NUM | '_')*;
 
 // Operaciones 
 BIN_OP			: ADD_ARITH_OP | MULT_ARITH_OP | REL_OP | EQ_OP | COND_OP;
@@ -30,12 +40,11 @@ ASIG_OP			: '=' | '+=' | '-=';
 REL_OP			: '<' | '>' | '<=' | '>=';
 EQ_OP 			: '==' | '!=';
 BOOL_LITERAL	: KW_TRUE | KW_FALSE;
-HEX_LITERAL		: '0X'(HEX_DIGIT+);
 LITERAL 		: INT_LITERAL | CHAR_LITERAL | BOOL_LITERAL;
 
 // palabras reservadas
-KW_INT			: 'int' {System.out.println("Palabra reservada int");}; 
-KW_BOOL			: 'boolean'{System.out.println("Palabra reservada boolean");};
+KW_INT			: 'int' { System.out.println("Palabra reservada int");}; 
+KW_BOOL			: 'boolean'{ System.out.println("Palabra reservada boolean");};
 KW_CALLOUT		: 'callout';
 KW_VOID			: 'void';
 KW_IF			: 'if';
@@ -56,4 +65,4 @@ AND 			: '&&';
 OR 				: '||';
 PUNTO_COMA		: ';';
 COMA 			: ',';
-WHITESPACE		: ('\n' | '\t' | ' ') {skip();};
+
