@@ -29,7 +29,6 @@ CHAR_ERROR				: '\'' ('\'' | '\\' | '\n' | '\"') '\''
 						| '\'' ~('\'')+ '\''
 						| '\'' ~('\'')+ ; 
 STRING_LITERAL 			: '"'~('"')*'"';
-ID						: (ALPHA | '_')(ALPHA_NUM | '_')*;
 
 // Operaciones 
 BIN_OP			: ADD_ARITH_OP | MULT_ARITH_OP | REL_OP | EQ_OP | COND_OP;
@@ -57,6 +56,7 @@ KW_CONTINUE		: 'continue';
 KW_TRUE			: 'true';
 KW_FALSE		: 'false';
 
+ID						: (ALPHA | '_')(ALPHA_NUM | '_')*;
 PLUS 			: '+';
 MINUS 			: '-';
 MULT			: '*';
