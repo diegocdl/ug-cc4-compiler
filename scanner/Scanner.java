@@ -8,6 +8,7 @@ public class Scanner {
 
 	public Debug debug;
 	public OutputFile of;
+	public DecafLexer lexer;
 
 	public Scanner(String inputFile, OutputFile outFile) throws Exception {
 		String msg = "stage: Scanner";
@@ -15,7 +16,7 @@ public class Scanner {
 		of = outFile;
 		of.writeln(msg);
 		try {
-		    DecafLexer lexer = new DecafLexer(new ANTLRFileStream(inputFile));
+		    lexer = new DecafLexer(new ANTLRFileStream(inputFile));
 		    lexer.removeErrorListeners();
 		    lexer.addErrorListener(new BaseErrorListener(){
 		    	 @Override
@@ -29,14 +30,14 @@ public class Scanner {
 			            sourceName = String.format("%s:%d:%d: ", sourceName, line, charPositionInLine);
 			        }
 			        try {
-			        	of.writeln(sourceName+"line "+line+":"+charPositionInLine+ " " + msg);
+			        	System.out.println(sourceName+ " " +charPositionInLine+ " " + msg);
+			        	of.writeln(sourceName+ " " + msg);
 			        	
 			        } catch (Exception ex) { 
 			        	// Ignoramos la excepcion
 			        }
 	    		}
 		    });
-		    int i;
 		    String str;
 		    Token t = lexer.nextToken();
 		    while (t.getType() != Token.EOF){

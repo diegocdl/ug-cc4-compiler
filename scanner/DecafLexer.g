@@ -28,13 +28,12 @@ CHAR_ERROR				: '\'' ('\'' | '\\' | '\n' | '\"') '\''
 						| '\'\\' ~( '\'' | '\"' | '\\' | 'n' | 't' ) ('\'')?  
 						| '\'' ~('\'')+ '\''
 						| '\'' ~('\'')+ ; 
-STRING_LITERAL 			: '"'~('"')*'"';
+STRING_LITERAL 			: '"' ('\\''\"' | '\\''\'' | ~('"' | '\''))* '"';
+STRING_ERROR 			: '"' ('\\''\"' | '\\''\'' | ~('"' | '\''))* '\''?;
+
 
 // Operaciones 
-BIN_OP			: ADD_ARITH_OP | MULT_ARITH_OP | REL_OP | EQ_OP | COND_OP;
-ADD_ARITH_OP	: PLUS | MINUS;
-MULT_ARITH_OP	: MULT | DIV | '%';
-COND_OP			: OR | AND;
+
 ASIG_OP			: '=' | '+=' | '-=';
 REL_OP			: '<' | '>' | '<=' | '>=';
 EQ_OP 			: '==' | '!=';
@@ -55,8 +54,16 @@ KW_BREAK		: 'break';
 KW_CONTINUE		: 'continue';
 KW_TRUE			: 'true';
 KW_FALSE		: 'false';
+ID				: (ALPHA | '_')(ALPHA_NUM | '_')*;
 
-ID						: (ALPHA | '_')(ALPHA_NUM | '_')*;
+
+PARENTESIS_I	: '(';
+PARENTESIS_D	: ')';
+CORCHETE_I		: '[';
+CORCHETE_D		: ']';
+LLAVE_I			: '{';
+LLAVE_D			: '}';
+
 PLUS 			: '+';
 MINUS 			: '-';
 MULT			: '*';

@@ -8,6 +8,10 @@ options {
   package compiler.parser;
 }
 
+ADD_ARITH_OP	: PLUS | MINUS;
+MULT_ARITH_OP	: MULT | DIV | '%';
+COND_OP			: OR | AND;
+
 // expresiones
 STATEMENT		: LOCATION ASIG_OP EXPR PUNTO_COMA
 				| METHOD_CALL PUNTO_COMA
