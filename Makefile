@@ -1,14 +1,14 @@
 make: scanner\DecafLexer.java scanner\DecafLexer.class scanner\Scanner.class	\
-	parser\CC4Parser.class 		\
+	parser\DecafParser.java parser\DecafParser.class parser\CC4Parser.class 	\
 	ast\Ast.class semantic\Semantic.class	\
 	irt\Irt.class codegen\Codegen.class		\
 	opt\Algebraic.class opt\ConstantFolding.class 		\
 	lib\Debug.class lib\ErrorHandler.class lib\OutputFile.class		\
 	Compiler.class
-	
+
 Compiler.class: Compiler.java
 	javac Compiler.java
-	
+
 # Scanner
 scanner\Scanner.class: scanner\Scanner.java
 	javac scanner\Scanner.java
@@ -24,7 +24,7 @@ parser\CC4Parser.class: parser\CC4Parser.java
 	javac parser\CC4Parser.java
 
 parser\DecafParser.java: parser\DecafParser.g
-	java org.antlr.v4.Tool -lib scanner\ parser\DecafParser.g
+	java org.antlr.v4.Tool -lib scanner parser\DecafParser.g
 
 parser\DecafParser.class: parser\DecafParser.java
 	javac parser\DecafParser.java
@@ -70,20 +70,20 @@ clean:
 	del scanner\DecafLexer.java
 	del scanner\DecafLexer.class
 	del scanner\DecafLexer.tokens
-	
+
 	del parser\CC4Parser.class
-	
+
 	del ast\Ast.class
-	
+
 	del semantic\Semantic.class
-	
+
 	del irt\Irt.class
-	
+
 	del codegen\Codegen.class
-	
+
 	del opt\Algebraic.class
 	del opt\ConstantFolding.class
-	
+
 	del lib\Debug.class
 	del lib\ErrorHandler.class
 	del lib\OutputFile.class
