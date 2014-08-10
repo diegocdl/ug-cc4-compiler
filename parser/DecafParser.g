@@ -15,7 +15,7 @@ start 			: class_decl_error EOF
 statement		: location ASIG_OP expr PUNTO_COMA {System.out.println("asginacion");}
 				| method_call PUNTO_COMA {System.out.println("llamado a metodo");}
 				| KW_IF PARENTESIS_I expr PARENTESIS_D block (KW_ELSE block)? { System.out.println("if");}
-				| KW_FOR PARENTESIS_I ID EQUAL expr COMA expr PARENTESIS_D block {System.out.println("for");}
+				| KW_FOR PARENTESIS_I ID ASIG_OP expr COMA expr PARENTESIS_D block {System.out.println("for");}
 				| KW_WHILE PARENTESIS_I expr PARENTESIS_D block {System.out.println("while");}
 				| KW_RETURN (expr)? PUNTO_COMA {System.out.println("return");}
 				| KW_BREAK PUNTO_COMA {System.out.println("break");}
@@ -72,8 +72,9 @@ field_decl_error: type ( (ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? C
 				| type ( (ID CORCHETE_I CORCHETE_D)? | (ID COMA | ID CORCHETE_I CORCHETE_D COMA)+(ID CORCHETE_I CORCHETE_D)) PUNTO_COMA {System.out.println("Falto el tamaño del arreglo");};
 				
 type			: KW_INT | KW_BOOL;
-method_call		: method_name PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D
-				| method_name PARENTESIS_I ( (callout_arg)? | (callout_arg COMA )+(callout_arg) ) PARENTESIS_D;
+method_call		: (method_name | KW_CALLOUT) PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D
+				| (method_name | KW_CALLOUT) PARENTESIS_I ( (callout_arg)? | (callout_arg COMA )+ (callout_arg) ) PARENTESIS_D;
+
 callout_arg		: expr | STRING_LITERAL;
 
 callout_decl	: KW_CALLOUT ID PUNTO_COMA {System.out.println("callout_decl");};

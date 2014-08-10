@@ -15,7 +15,7 @@ fragment ALPHA		: [a-zA-Z];
 fragment ALPHA_NUM	: DIGIT | ALPHA;
 fragment HEX_DIGIT	: DIGIT | [a-zA-Z];
 
-HEX_LITERAL			: '0x'(HEX_DIGIT)+;
+fragment HEX_LITERAL	: '0x'(HEX_DIGIT)+;
 HEX_ERROR			: '0x' ~([0-9] | [a-zA-Z])*;					
 
 INT_LITERAL			: DECIMAL_LITERAL | HEX_LITERAL ;
@@ -34,7 +34,7 @@ STRING_ERROR		: '"' ('\\''\"' | '\\''\'' | ~('"' | '\''))* '\''?;
 
 // Operaciones 
 ASIG_OP				: EQUAL | '+=' | '-=';
-EQUAL				: '=';
+fragment EQUAL		: '=';
 NEGATION			: '!';
 COND_OP				: OR | AND;
 REL_OP				: '<' | '>' | '<=' | '>=';
