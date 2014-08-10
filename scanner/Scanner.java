@@ -16,9 +16,10 @@ public class Scanner {
 		of = outFile;
 		of.writeln(msg);
 		try {
-		    lexer = new DecafLexer(new ANTLRFileStream(inputFile));
-		    lexer.removeErrorListeners();
-		    lexer.addErrorListener(new BaseErrorListener(){
+		    lexer =  new DecafLexer(new ANTLRFileStream(inputFile));;
+		    DecafLexer lexerTemp = new DecafLexer(new ANTLRFileStream(inputFile));
+		    lexerTemp.removeErrorListeners();
+		    lexerTemp.addErrorListener(new BaseErrorListener(){
 		    	 @Override
 			    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
 			                            int line, int charPositionInLine,
@@ -39,7 +40,7 @@ public class Scanner {
 	    		}
 		    });
 		    String str;
-		    Token t = lexer.nextToken();
+		    Token t = lexerTemp.nextToken();
 		    while (t.getType() != Token.EOF){
 		    	if(DecafLexer.tokenNames[t.getType()].equals("CHAR_ERROR")){
 		    		str = t.getLine() + " -> " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText().substring(1,t.getText().length()-1);
@@ -50,7 +51,7 @@ public class Scanner {
 		    	}
 				System.out.println(str);
 				of.writeln(str);
-				t = lexer.nextToken();
+				t = lexerTemp.nextToken();
 		    } 
 		}catch(ArrayIndexOutOfBoundsException aiobe){
 		    System.err.println("Must provide a valid path to the filename with the tokens");
