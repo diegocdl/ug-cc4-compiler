@@ -8,40 +8,43 @@ options {
   package compiler.parser;
 }
 
-ADD_ARITH_OP	: PLUS | MINUS;
-MULT_ARITH_OP	: MULT | DIV | '%';
-COND_OP			: OR | AND;
-
 // expresiones
-STATEMENT		: LOCATION ASIG_OP EXPR PUNTO_COMA
-				| METHOD_CALL PUNTO_COMA
-				| KW_IF '(' EXPR ')' BLOCK (KW_ELSE BLOCK)?
-				| KW_FOR '(' ID '=' EXPR COMA EXPR ')' BLOCK
-				| KW_WHILE '(' EXPR ')' BLOCK
-				| KW_RETURN (EXPR)? PUNTO_COMA
+start : program EOF{System.out.println("nada");};
+
+statement		: location ASIG_OP expr PUNTO_COMA
+				| method_call PUNTO_COMA
+				| KW_IF PARENTESIS_I expr PARENTESIS_D block (KW_ELSE block)?
+				| KW_FOR PARENTESIS_I ID EQUAL expr COMA expr PARENTESIS_D block
+				| KW_WHILE PARENTESIS_I expr PARENTESIS_D block
+				| KW_RETURN (expr)? PUNTO_COMA
 				| KW_BREAK PUNTO_COMA
-				| KW_CONTINUE PUNTO_COMA;
+				| KW_CONTINUE PUNTO_COMA{System.out.println("statement");};
 
-EXPR 			: LOCATION
-				| METHOD_CALL
+expr 			: location
+				| method_call
 				| LITERAL
-				| '-' EXPR
-				| '!' EXPR
-				| '(' EXPR ')';
+				| expr bin_op expr
+				| MINUS expr
+				| NEGATION expr
+				| PARENTESIS_I expr PARENTESIS_D{System.out.println("expr");};
 
-BLOCK			: '{' FIELD_DECL* STATEMENT* '}';
+block			: LLAVE_I field_decl* statement* LLAVE_D{System.out.println("block");};
+block_error		: LLAVE_I field_decl* statement*{System.out.println("falto cerrar llave");};
 
-METHOD_DECL		: (TYPE | KW_VOID) ID '(' ( (TYPE ID)? | (TYPE ID COMA )+(TYPE ID) )? ')' BLOCK;
-FIELD_DECL		: TYPE ( (ID | ID '[' INT_LITERAL']')? | (ID | ID '[' INT_LITERAL']')+(ID | ID '[' INT_LITERAL']')) PUNTO_COMA;   
+bin_op			: ADD_ARITH_OP | MULT_ARITH_OP | REL_OP | EQ_OP | COND_OP {System.out.println("bin op");};
 
-TYPE			: KW_INT | KW_BOOL;
-METHOD_CALL		: METHOD_NAME '(' ( (EXPR)? | (EXPR COMA )+(EXPR) ) ')'
-				| METHOD_NAME '(' ( (CALLOUT_ARG)? | (CALLOUT_ARG COMA )+(CALLOUT_ARG) ) ')';
-CALLOUT_ARG		: EXPR | STRING_LITERAL;
+method_decl		: (type | KW_VOID) ID PARENTESIS_I ( (type ID)? | (type ID COMA )+(type ID) )? PARENTESIS_D block;
+field_decl		: type ( (ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)? | (ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)+(ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)) PUNTO_COMA;
 
-CALLOUT_DECL	: KW_CALLOUT ID PUNTO_COMA;
+type			: KW_INT | KW_BOOL;
+method_call		: method_name PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D
+				| method_name PARENTESIS_I ( (callout_arg)? | (callout_arg COMA )+(callout_arg) ) PARENTESIS_D;
+callout_arg		: expr | STRING_LITERAL;
 
-PROGRAM			: (CALLOUT_DECL* FIELD_DECL* METHOD_DECL*)WS ;
-LOCATION		: ID | (ID '[' EXPR ']');
-METHOD_NAME		: ID;
+callout_decl	: KW_CALLOUT ID PUNTO_COMA;
+
+program			: (callout_decl* field_decl* method_decl*)WHITESPACE ;
+location		: ID | (ID CORCHETE_I expr CORCHETE_D);
+method_name		: ID;
+
 
