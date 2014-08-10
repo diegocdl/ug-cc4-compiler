@@ -14,17 +14,17 @@ fragment DIGIT		: [0-9];
 fragment ALPHA		: [a-zA-Z];
 fragment ALPHA_NUM	: DIGIT | ALPHA;
 fragment HEX_DIGIT	: DIGIT | [a-zA-Z];
-INT_LITERAL			: DECIMAL_LITERAL | HEX_LITERAL;
-
 
 HEX_LITERAL			: '0x'(HEX_DIGIT)+;
 HEX_ERROR			: '0x' ~([0-9] | [a-zA-Z])*;					
-DECIMAL_LITERAL		: DIGIT+;
+
+INT_LITERAL			: DECIMAL_LITERAL | HEX_LITERAL ;
+DECIMAL_LITERAL		: DIGIT+ {System.out.println("Int");};
 
 // Char y String
 fragment ESCAPE_CHAR	: '\'\\' ( '\'' | '\"' | '\\' | 'n' | 't' )'\'';
 CHAR_LITERAL	  	: '\'' ~('\'' | '\\' | '\n' | '\"') '\'' 
-					| ESCAPE_CHAR;// Literales de escape
+					| ESCAPE_CHAR; // Literales de escape
 CHAR_ERROR			: '\'' ('\'' | '\\' | '\n' | '\"') '\'' 
 					| '\'\\' ~( '\'' | '\"' | '\\' | 'n' | 't' ) ('\'')?  
 					| '\'' ~('\'')+ '\''
@@ -36,13 +36,11 @@ STRING_ERROR		: '"' ('\\''\"' | '\\''\'' | ~('"' | '\''))* '\''?;
 ASIG_OP				: EQUAL | '+=' | '-=';
 EQUAL				: '=';
 NEGATION			: '!';
-ADD_ARITH_OP		: PLUS | MINUS;
-MULT_ARITH_OP		: MULT | DIV | '%';
 COND_OP				: OR | AND;
 REL_OP				: '<' | '>' | '<=' | '>=';
 EQ_OP 				: '==' | '!=';
 BOOL_LITERAL		: KW_TRUE | KW_FALSE;
-LITERAL 			: INT_LITERAL | CHAR_LITERAL | BOOL_LITERAL;
+
 
 // palabras reservadas
 KW_INT				: 'int'; 

@@ -42,13 +42,13 @@ public class Scanner {
 		    String str;
 		    Token t = lexerTemp.nextToken();
 		    while (t.getType() != Token.EOF){
-		    	if(DecafLexer.tokenNames[t.getType()].equals("CHAR_ERROR")){
-		    		str = t.getLine() + " -> " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText().substring(1,t.getText().length()-1);
-		    	} else if ( DecafLexer.tokenNames[t.getType()].equals("HEX_ERROR") ) {
-		    		str = t.getLine() + " -> " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText();
-		    	}else{
-		    		str = t.getLine() + " " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText();
-		    	}
+		    		str = t.getLine() + " " +t.getType() + ": " + t.getText();
+		    	// if(DecafLexer.tokenNames[t.getType()].equals("CHAR_ERROR")){
+		    	// 	str = t.getLine() + " -> " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText().substring(1,t.getText().length()-1);
+		    	// } else if ( DecafLexer.tokenNames[t.getType()].equals("HEX_ERROR") ) {
+		    	// 	str = t.getLine() + " -> " + DecafLexer.tokenNames[t.getType()] + ": " + t.getText();
+		    	// }else{
+		    	// }
 				System.out.println(str);
 				of.writeln(str);
 				t = lexerTemp.nextToken();

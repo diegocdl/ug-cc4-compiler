@@ -19,6 +19,18 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAddOp(@NotNull DecafParser.AddOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAddOp(@NotNull DecafParser.AddOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStart(@NotNull DecafParser.StartContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -79,6 +91,18 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLiteral(@NotNull DecafParser.LiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLiteral(@NotNull DecafParser.LiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBin_op(@NotNull DecafParser.Bin_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -110,6 +134,18 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlock_error(@NotNull DecafParser.Block_errorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMulOp(@NotNull DecafParser.MulOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMulOp(@NotNull DecafParser.MulOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

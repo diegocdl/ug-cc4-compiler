@@ -11,31 +11,54 @@ options {
 // expresiones
 start 			: class_decl EOF {System.out.println("start");};
 
-statement		: location ASIG_OP expr PUNTO_COMA
-				| method_call PUNTO_COMA
-				| KW_IF PARENTESIS_I expr PARENTESIS_D block (KW_ELSE block)?
-				| KW_FOR PARENTESIS_I ID EQUAL expr COMA expr PARENTESIS_D block
-				| KW_WHILE PARENTESIS_I expr PARENTESIS_D block
-				| KW_RETURN (expr)? PUNTO_COMA
-				| KW_BREAK PUNTO_COMA
+statement		: location ASIG_OP expr PUNTO_COMA {System.out.println("asginacion");}
+				| method_call PUNTO_COMA {System.out.println("llamado a metodo");}
+				| KW_IF PARENTESIS_I expr PARENTESIS_D block (KW_ELSE block)? { System.out.println("if");}
+				| KW_FOR PARENTESIS_I ID EQUAL expr COMA expr PARENTESIS_D block {System.out.println("for");}
+				| KW_WHILE PARENTESIS_I expr PARENTESIS_D block {System.out.println("while");}
+				| KW_RETURN (expr)? PUNTO_COMA {System.out.println("return");}
+				| KW_BREAK PUNTO_COMA {System.out.println("break");}
 				| KW_CONTINUE PUNTO_COMA {System.out.println("statement");};
 
-expr 			: location
-				| method_call
-				| LITERAL
-				| expr bin_op expr
-				| MINUS expr
-				| NEGATION expr
-				| PARENTESIS_I expr PARENTESIS_D{System.out.println("expr");};
+expr 			: location {System.out.println("location");}
+				| method_call {System.out.println("llamado a metodo");}
+				| literal { System.out.println("literal");}
+				| expr bin_op expr {System.out.println("operacion");}
+				| MINUS expr {System.out.println("menos expr");}
+				| NEGATION expr { System.out.println("negacion de expr");}
+				| PARENTESIS_I expr PARENTESIS_D{System.out.println("(expr)");};
+literal			: (INT_LITERAL | CHAR_LITERAL | BOOL_LITERAL ){System.out.println("literal");};
+// expr 			: location {System.out.println("location");}
+// 				| method_call {System.out.println("llamado a metodo");}
+// 				| LITERAL { System.out.println("literal");}
+// 				| op_expr {System.out.println("operacion");}
+// 				| MINUS expr {System.out.println("menos expr");}
+// 				| NEGATION expr { System.out.println("negacion de expr");}
+// 				| PARENTESIS_I expr PARENTESIS_D{System.out.println("(expr)");};
+
+
+// op_expr			: op_expr addOp op_expr { System.out.println("op_expr addOp op_term");}
+// 				| op_expr {System.out.println("op_term");}
+// 				| op_expr mulOp op_num {System.out.println("op_term mulOp op_num");}
+// 				| op_num {System.out.println("op_num");};
+
+// op_num			: INT_LITERAL
+// 				| PARENTESIS_I op_expr PARENTESIS_D
+// 				| location
+// 				| method_call;
 
 block			: LLAVE_I (field_decl | statement)* LLAVE_D {System.out.println("block");};
 block_error		: LLAVE_I field_decl* statement*{System.out.println("falto cerrar llave");};
 
-bin_op			: ADD_ARITH_OP 
-				| MULT_ARITH_OP 
+bin_op			: addOp 
+				| mulOp
 				| REL_OP 
 				| EQ_OP 
 				| COND_OP {System.out.println("bin op");};
+addOp 			: PLUS  
+				| MINUS;
+mulOp 			: MULT
+				| DIV;
 
 method_decl		: (type | KW_VOID) ID PARENTESIS_I ( (type ID)? | (type ID COMA )+ (type ID) ) PARENTESIS_D block {System.out.println("declaracion de metodo");};
 field_decl		: type ( (ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)? | (ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)+(ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)) PUNTO_COMA 

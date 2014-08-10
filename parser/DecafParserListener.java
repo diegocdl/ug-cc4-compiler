@@ -11,6 +11,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface DecafParserListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link DecafParser#addOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddOp(@NotNull DecafParser.AddOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DecafParser#addOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddOp(@NotNull DecafParser.AddOpContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DecafParser#start}.
 	 * @param ctx the parse tree
 	 */
@@ -61,6 +71,16 @@ public interface DecafParserListener extends ParseTreeListener {
 	 */
 	void exitType(@NotNull DecafParser.TypeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link DecafParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteral(@NotNull DecafParser.LiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DecafParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteral(@NotNull DecafParser.LiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DecafParser#bin_op}.
 	 * @param ctx the parse tree
 	 */
@@ -90,6 +110,16 @@ public interface DecafParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlock_error(@NotNull DecafParser.Block_errorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DecafParser#mulOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterMulOp(@NotNull DecafParser.MulOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DecafParser#mulOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitMulOp(@NotNull DecafParser.MulOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#field_decl}.
 	 * @param ctx the parse tree
