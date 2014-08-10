@@ -43,6 +43,18 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterClass_decl_error(@NotNull DecafParser.Class_decl_errorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitClass_decl_error(@NotNull DecafParser.Class_decl_errorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMethod_call(@NotNull DecafParser.Method_callContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -163,6 +175,18 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterField_decl_error(@NotNull DecafParser.Field_decl_errorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitField_decl_error(@NotNull DecafParser.Field_decl_errorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCallout_decl(@NotNull DecafParser.Callout_declContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -170,6 +194,18 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCallout_decl(@NotNull DecafParser.Callout_declContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProgram_error(@NotNull DecafParser.Program_errorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProgram_error(@NotNull DecafParser.Program_errorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

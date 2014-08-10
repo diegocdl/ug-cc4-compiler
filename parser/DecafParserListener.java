@@ -31,6 +31,16 @@ public interface DecafParserListener extends ParseTreeListener {
 	 */
 	void exitStart(@NotNull DecafParser.StartContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link DecafParser#class_decl_error}.
+	 * @param ctx the parse tree
+	 */
+	void enterClass_decl_error(@NotNull DecafParser.Class_decl_errorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DecafParser#class_decl_error}.
+	 * @param ctx the parse tree
+	 */
+	void exitClass_decl_error(@NotNull DecafParser.Class_decl_errorContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DecafParser#method_call}.
 	 * @param ctx the parse tree
 	 */
@@ -131,6 +141,16 @@ public interface DecafParserListener extends ParseTreeListener {
 	 */
 	void exitField_decl(@NotNull DecafParser.Field_declContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link DecafParser#field_decl_error}.
+	 * @param ctx the parse tree
+	 */
+	void enterField_decl_error(@NotNull DecafParser.Field_decl_errorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DecafParser#field_decl_error}.
+	 * @param ctx the parse tree
+	 */
+	void exitField_decl_error(@NotNull DecafParser.Field_decl_errorContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DecafParser#callout_decl}.
 	 * @param ctx the parse tree
 	 */
@@ -140,6 +160,16 @@ public interface DecafParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCallout_decl(@NotNull DecafParser.Callout_declContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DecafParser#program_error}.
+	 * @param ctx the parse tree
+	 */
+	void enterProgram_error(@NotNull DecafParser.Program_errorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DecafParser#program_error}.
+	 * @param ctx the parse tree
+	 */
+	void exitProgram_error(@NotNull DecafParser.Program_errorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#method_name}.
 	 * @param ctx the parse tree

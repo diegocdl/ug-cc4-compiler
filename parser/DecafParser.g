@@ -66,8 +66,8 @@ method_decl		: (type | KW_VOID) ID PARENTESIS_I ( (type ID) | (type ID COMA )+(t
 field_decl		: field_decl_error
 				| type ( (ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)) PUNTO_COMA{System.out.println("declaracion de variable");};
 
-field_decl_error: type ( (ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D)) EQUAL? literal? {System.out.println("Falto ;");}
-				| type ( (ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)) EQUAL literal PUNTO_COMA {System.out.println("no se puede inicializar");/*no funciona*/ } 
+field_decl_error: type ( (ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D)) ASIG_OP? literal? {System.out.println("Falto ;");}
+				| type ( (ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)) ASIG_OP literal PUNTO_COMA {System.out.println("no se puede inicializar");/*no funciona*/ } 
 				| type ( (ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D COMA)+(ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D)) PUNTO_COMA {System.out.println("Error en la declaracion del arreglo");/*no funciona*/}
 				| type ( (ID CORCHETE_I CORCHETE_D)? | (ID COMA | ID CORCHETE_I CORCHETE_D COMA)+(ID CORCHETE_I CORCHETE_D)) PUNTO_COMA {System.out.println("Falto el tamaño del arreglo");};
 				
