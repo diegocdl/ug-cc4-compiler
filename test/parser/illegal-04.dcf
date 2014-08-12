@@ -1,6 +1,4 @@
-class Program {
-  void main() {
+void main() {
     int i = 0;	// initializers not allowed
-  }
 }
 

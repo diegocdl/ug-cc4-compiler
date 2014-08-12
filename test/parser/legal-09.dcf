@@ -1,11 +1,9 @@
-class Program {
-  void bar(int a) {
-    for i = 0, a {
-      callout("printf", "%d\n", i);
-    }
-  }
+void bar(int a) {
+	for(i = 0, a){
+		callout("printf", "%d\n", i);
+	}
+}
 
-  void main() {
-    bar(10);
-  }
+void main() {
+	bar(10);
 }

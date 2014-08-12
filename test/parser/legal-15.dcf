@@ -1,18 +1,16 @@
-class Program {
-  boolean b;
-  
-  int abs(int a) {
-    b = a < 0;
+boolean b;
 
-    if (b) {
-      return -a;
-    }
-    else {
-      return a;
-    }
-  }
+int abs(int a) {
+  b = a < 0;
 
-  void main() {
-    abs(-5);
+  if (b) {
+    return -a;
   }
+  else {
+    return a;
+  }
+}
+
+void main() {
+  abs(-5);
 }
