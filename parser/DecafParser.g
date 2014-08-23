@@ -11,7 +11,8 @@ options {
 // expresiones
 start 			: program EOF {System.out.println("start");};
 
-statement		: location ASIG_OP expr PUNTO_COMA {System.out.println("asginacion");}
+statement		: statement_error
+				| location ASIG_OP expr PUNTO_COMA {System.out.println("asginacion");}
 				| method_call PUNTO_COMA {System.out.println("llamado a metodo");}
 				| KW_IF PARENTESIS_I expr PARENTESIS_D block (KW_ELSE block)? { System.out.println("if");}
 				| KW_FOR PARENTESIS_I ID ASIG_OP expr COMA expr PARENTESIS_D block {System.out.println("for");}
@@ -20,6 +21,36 @@ statement		: location ASIG_OP expr PUNTO_COMA {System.out.println("asginacion");
 				| KW_BREAK PUNTO_COMA {System.out.println("break");}
 				| KW_CONTINUE PUNTO_COMA{System.out.println("statement");};
 
+statement_error	: if_error
+				| while_error
+				| for_error
+				| location ASIG_OP expr {System.out.println("falto ;");}
+				| KW_RETURN (expr)? {System.out.println("falto ;");}
+				| KW_BREAK {System.out.println("falto ;");}
+				| KW_CONTINUE {System.out.println("falto ;");}
+				| method_call {System.out.println("falto ;");};
+
+for_error		: ID PARENTESIS_I? ID ASIG_OP expr COMA expr PARENTESIS_D? block {System.out.println("for invalido");}
+				| KW_FOR PARENTESIS_I ID ASIG_OP expr COMA expr block {System.out.println("falto )");}
+				| KW_FOR ID ASIG_OP expr COMA expr PARENTESIS_D block {System.out.println("falto (");}
+				| KW_FOR ID ASIG_OP expr COMA expr (block|block_error) {System.out.println("faltan ()");}
+				| KW_FOR PARENTESIS_I ASIG_OP expr COMA expr PARENTESIS_D block {System.out.println("falto el identificador");}
+				| KW_FOR PARENTESIS_I ID ASIG_OP expr COMA expr PARENTESIS_D block_error {System.out.println("error en el for");};
+				
+if_error		: KW_IF PARENTESIS_I PARENTESIS_D block (KW_ELSE block)? { System.out.println("no hay condicion en el if");}
+				| KW_IF PARENTESIS_I expr PARENTESIS_D (KW_ELSE block)? { System.out.println("faltan las instrucciones");}
+				| KW_IF expr PARENTESIS_D block (KW_ELSE block)? { System.out.println("falto (");}
+				| KW_IF PARENTESIS_I expr block (KW_ELSE block)? { System.out.println("falto )");}
+				| KW_IF expr (block|block_error) (KW_ELSE block)? { System.out.println("faltan ()");}
+				| KW_IF PARENTESIS_I expr PARENTESIS_D block_error KW_ELSE block { System.out.println("error en el if");};
+
+while_error		: KW_WHILE PARENTESIS_I PARENTESIS_D block {System.out.println("falta la condicion del while");}
+				| KW_WHILE expr PARENTESIS_D block {System.out.println("falto (");}
+				| KW_WHILE PARENTESIS_I expr  block {System.out.println("falto )");}
+				| KW_WHILE expr (block|block_error) {System.out.println("faltan ()");}
+				| KW_WHILE PARENTESIS_I expr PARENTESIS_D block_error {System.out.println("error en el while");}
+				| KW_WHILE PARENTESIS_I expr PARENTESIS_D {System.out.println("while vacio");};
+				
 expr 			: location {System.out.println("location");}
 				| method_call {System.out.println("llamado a metodo");}
 				| literal { System.out.println("literal");}
@@ -60,7 +91,11 @@ bin_op			: addOp
 				| COND_OP {System.out.println("bin op");};
 
 
-method_decl		: (type | KW_VOID) ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block{System.out.println("declaracion de metodo");};
+method_decl			: method_decl_error
+					| (type | KW_VOID) ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block{System.out.println("declaracion de metodo");};
+
+method_decl_error	: (type | KW_VOID) ID PARENTESIS_I ((type? ID COMA )* ID (type? ID COMA )*) PARENTESIS_D block {System.out.println("falto el tipo del parametro");};
+
 field_decl		: field_decl_error
 				| type ( (ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)) PUNTO_COMA{System.out.println("declaracion de variable");};
 
@@ -85,12 +120,19 @@ keywords		: KW_INT
 				| KW_FALSE;
 
 type			: KW_INT | KW_BOOL;
-method_call		: (method_name | KW_CALLOUT) PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D
-				| (method_name | KW_CALLOUT) PARENTESIS_I ( (callout_arg)? | (callout_arg COMA )+ (callout_arg) ) PARENTESIS_D;
+method_call			: method_call_error
+					| (method_name | KW_CALLOUT) PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D
+					| (method_name | KW_CALLOUT) PARENTESIS_I ( (callout_arg)? | (callout_arg COMA )+ (callout_arg) ) PARENTESIS_D;
 
-callout_arg		: expr | STRING_LITERAL;
+method_call_error	: (method_name | KW_CALLOUT) PARENTESIS_I (keywords|bin_op) PARENTESIS_D {System.out.println("Error en la llamada del metodo");}
+					| INT_LITERAL PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D {System.out.println("identificador invalido");};
+				
+callout_arg			: expr | STRING_LITERAL;
 
-callout_decl	: KW_CALLOUT ID PUNTO_COMA {System.out.println("callout_decl");};
+callout_decl		: callout_decl_error
+					| KW_CALLOUT ID PUNTO_COMA {System.out.println("callout_decl");};
+
+callout_decl_error	: KW_CALLOUT ID {System.out.println("falto ;");};
 
 program			: program_error
 				| callout_decl* field_decl* method_decl* {System.out.println("program");};
