@@ -4,6 +4,7 @@ import compiler.scanner.*;
 import org.antlr.v4.runtime.*;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
+import java.util.List;
 
 public class CC4Parser {
 
@@ -18,6 +19,8 @@ public class CC4Parser {
 		of.writeln(msg);
 		try {	    
 			parser = new DecafParser(new CommonTokenStream(scan.lexer));
+			parser.removeErrorListeners();
+			parser.addErrorListener(scan.listener);
 			parser.start();
 		} catch (ArrayIndexOutOfBoundsException aiobe) {
 			System.err.println("usage: java Main <file>\nwhere file is the path to the filename with the tokens");

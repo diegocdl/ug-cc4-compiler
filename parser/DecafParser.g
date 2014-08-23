@@ -9,8 +9,7 @@ options {
 }
 
 // expresiones
-start 			: class_decl_error EOF
-				| class_decl EOF {System.out.println("start");};
+start 			: program EOF {System.out.println("start");};
 
 statement		: location ASIG_OP expr PUNTO_COMA {System.out.println("asginacion");}
 				| method_call PUNTO_COMA {System.out.println("llamado a metodo");}
@@ -52,7 +51,7 @@ literal			: (INT_LITERAL | CHAR_LITERAL | BOOL_LITERAL ){System.out.println("lit
 
 block			: block_error
 				|(LLAVE_I (field_decl | statement)* LLAVE_D{System.out.println("block");});
-block_error		: LLAVE_I field_decl* statement*{System.out.println("falto cerrar llave");};
+block_error		: LLAVE_I field_decl* statement*{notifyErrorListeners("falto cerrar llave");};
 
 bin_op			: addOp 
 				| mulOp
@@ -60,17 +59,31 @@ bin_op			: addOp
 				| EQ_OP 
 				| COND_OP {System.out.println("bin op");};
 
-class_decl		: KW_CLASS ID LLAVE_I program LLAVE_D {System.out.println("declaracion de clase");};
-class_decl_error: KW_CLASS ID LLAVE_I program {System.out.println("Falto cerrar llave en declaracion de clase");};
+
 method_decl		: (type | KW_VOID) ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block{System.out.println("declaracion de metodo");};
 field_decl		: field_decl_error
 				| type ( (ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL CORCHETE_D)) PUNTO_COMA{System.out.println("declaracion de variable");};
 
-field_decl_error: type ( (ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D)) ASIG_OP? literal? {System.out.println("Falto ;");}
-				| type ( (ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)) ASIG_OP literal PUNTO_COMA {System.out.println("no se puede inicializar");/*no funciona*/ } 
-				| type ( (ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D COMA)+(ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D)) PUNTO_COMA {System.out.println("Error en la declaracion del arreglo");/*no funciona*/}
-				| type ( (ID CORCHETE_I CORCHETE_D)? | (ID COMA | ID CORCHETE_I CORCHETE_D COMA)+(ID CORCHETE_I CORCHETE_D)) PUNTO_COMA {System.out.println("Falto el tamaño del arreglo");};
-				
+field_decl_error: type ( (ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)) ASIG_OP literal PUNTO_COMA {notifyErrorListeners("No se puede inicializar");}
+				| type ( (ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? bin_op? INT_LITERAL? CORCHETE_D)) ASIG_OP? literal? {notifyErrorListeners("falto ;");}
+				| type ( (ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D COMA)+(ID CORCHETE_I INT_LITERAL bin_op INT_LITERAL CORCHETE_D)) PUNTO_COMA {notifyErrorListeners("Error en la declaracion del arreglo");}
+				| type ( (ID CORCHETE_I CORCHETE_D)? | (ID COMA | ID CORCHETE_I CORCHETE_D COMA)+(ID CORCHETE_I CORCHETE_D)) PUNTO_COMA {notifyErrorListeners("Falto el tamaño del arreglo");}
+				  type  ( keywords (CORCHETE_I INT_LITERAL CORCHETE_D )?  | (keywords (CORCHETE_I INT_LITERAL CORCHETE_D )?)+ COMA keywords (CORCHETE_I INT_LITERAL CORCHETE_D )? PUNTO_COMA ){notifyErrorListeners("Error no se puede usar palabras reservadas");};
+
+keywords		: KW_INT
+				| KW_BOOL
+				| KW_CALLOUT
+				| KW_VOID
+				| KW_IF
+				| KW_ELSE
+				| KW_FOR
+				| KW_WHILE
+				| KW_RETURN
+				| KW_BREAK
+				| KW_CONTINUE
+				| KW_TRUE
+				| KW_FALSE;
+
 type			: KW_INT | KW_BOOL;
 method_call		: (method_name | KW_CALLOUT) PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D
 				| (method_name | KW_CALLOUT) PARENTESIS_I ( (callout_arg)? | (callout_arg COMA )+ (callout_arg) ) PARENTESIS_D;
@@ -81,7 +94,7 @@ callout_decl	: KW_CALLOUT ID PUNTO_COMA {System.out.println("callout_decl");};
 
 program			: program_error
 				| callout_decl* field_decl* method_decl* {System.out.println("program");};
-program_error	: callout_decl* method_decl field_decl {System.out.println("error las declaraciones van primero");};
+program_error	: callout_decl* method_decl field_decl {notifyErrorListeners("las declaraciones van primero");};
 
 location		: ID | (ID CORCHETE_I expr CORCHETE_D);
 method_name		: ID;

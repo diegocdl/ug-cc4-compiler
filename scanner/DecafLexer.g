@@ -10,19 +10,12 @@ COMMENT 			: ('//' ~('\n')* WHITESPACE | '/*' ~('\n')* '*/'){skip();};
 WHITESPACE			: ('\n' | '\t' | ' ' | '\r') {skip();};
 
 // numeros
-fragment DIGIT		: [0-9];
-fragment ALPHA		: [a-zA-Z];
-fragment ALPHA_NUM	: DIGIT | ALPHA;
-fragment HEX_DIGIT	: DIGIT | [a-zA-Z];
-
-fragment HEX_LITERAL	: '0x'(HEX_DIGIT)+;
 HEX_ERROR			: '0x' ~([0-9] | [a-zA-Z])*;					
 
 INT_LITERAL			: DECIMAL_LITERAL | HEX_LITERAL ;
 DECIMAL_LITERAL		: DIGIT+ {System.out.println("Int");};
 
 // Char y String
-fragment ESCAPE_CHAR	: '\'\\' ( '\'' | '\"' | '\\' | 'n' | 't' )'\'';
 CHAR_LITERAL	  	: '\'' ~('\'' | '\\' | '\n' | '\"') '\'' 
 					| ESCAPE_CHAR; // Literales de escape
 CHAR_ERROR			: '\'' ('\'' | '\\' | '\n' | '\"') '\'' 
@@ -34,7 +27,6 @@ STRING_ERROR		: '"' ('\\''\"' | '\\''\'' | ~('"' | '\''))* '\''?;
 
 // Operaciones 
 ASIG_OP				: EQUAL | '+=' | '-=';
-fragment EQUAL		: '=';
 NEGATION			: '!';
 COND_OP				: OR | AND;
 REL_OP				: '<' | '>' | '<=' | '>=';
@@ -56,7 +48,6 @@ KW_BREAK			: 'break';
 KW_CONTINUE			: 'continue';
 KW_TRUE				: 'true';
 KW_FALSE			: 'false';
-KW_CLASS			: 'class';
 ID					: (ALPHA | '_')(ALPHA_NUM | '_')*;
 
 PARENTESIS_I		: '(';
@@ -74,3 +65,11 @@ AND					: '&&';
 OR 					: '||';
 PUNTO_COMA			: ';';
 COMA				: ',';
+fragment DIGIT		: [0-9];
+fragment ALPHA		: [a-zA-Z];
+fragment ALPHA_NUM	: DIGIT | ALPHA;
+fragment HEX_DIGIT	: DIGIT | [a-zA-Z];
+fragment ESCAPE_CHAR	: '\'\\' ( '\'' | '\"' | '\\' | 'n' | 't' )'\'';
+fragment EQUAL		: '=';
+
+fragment HEX_LITERAL	: '0x'(HEX_DIGIT)+;

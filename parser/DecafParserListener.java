@@ -11,6 +11,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface DecafParserListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link DecafParser#keywords}.
+	 * @param ctx the parse tree
+	 */
+	void enterKeywords(@NotNull DecafParser.KeywordsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DecafParser#keywords}.
+	 * @param ctx the parse tree
+	 */
+	void exitKeywords(@NotNull DecafParser.KeywordsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DecafParser#addOp}.
 	 * @param ctx the parse tree
 	 */
@@ -30,16 +40,6 @@ public interface DecafParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStart(@NotNull DecafParser.StartContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link DecafParser#class_decl_error}.
-	 * @param ctx the parse tree
-	 */
-	void enterClass_decl_error(@NotNull DecafParser.Class_decl_errorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DecafParser#class_decl_error}.
-	 * @param ctx the parse tree
-	 */
-	void exitClass_decl_error(@NotNull DecafParser.Class_decl_errorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#method_call}.
 	 * @param ctx the parse tree
@@ -210,16 +210,6 @@ public interface DecafParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlock(@NotNull DecafParser.BlockContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link DecafParser#class_decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterClass_decl(@NotNull DecafParser.Class_declContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DecafParser#class_decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitClass_decl(@NotNull DecafParser.Class_declContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#location}.
 	 * @param ctx the parse tree

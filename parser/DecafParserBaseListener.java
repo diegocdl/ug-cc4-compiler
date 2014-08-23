@@ -19,6 +19,18 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterKeywords(@NotNull DecafParser.KeywordsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitKeywords(@NotNull DecafParser.KeywordsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAddOp(@NotNull DecafParser.AddOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -38,18 +50,6 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStart(@NotNull DecafParser.StartContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterClass_decl_error(@NotNull DecafParser.Class_decl_errorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitClass_decl_error(@NotNull DecafParser.Class_decl_errorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -254,18 +254,6 @@ public class DecafParserBaseListener implements DecafParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlock(@NotNull DecafParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterClass_decl(@NotNull DecafParser.Class_declContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitClass_decl(@NotNull DecafParser.Class_declContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
