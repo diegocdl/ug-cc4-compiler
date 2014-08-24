@@ -66,24 +66,20 @@ lib\OutputFile.class: lib\OutputFile.java
 clean:
 	del Compiler.class
 
-	del scanner\Scanner.class
+	del scanner\*.class
 	del scanner\DecafLexer.java
-	del scanner\DecafLexer.class
 	del scanner\DecafLexer.tokens
 
-	del parser\CC4Parser.class
+	del parser\*.class
 
-	del ast\Ast.class
+	del ast\*.class
 
-	del semantic\Semantic.class
+	del semantic\*.class
 
-	del irt\Irt.class
+	del irt\*.class
 
-	del codegen\Codegen.class
+	del codegen\*.class
 
-	del opt\Algebraic.class
-	del opt\ConstantFolding.class
+	del opt\*.class
 
-	del lib\Debug.class
-	del lib\ErrorHandler.class
-	del lib\OutputFile.class
+	del lib\*.class

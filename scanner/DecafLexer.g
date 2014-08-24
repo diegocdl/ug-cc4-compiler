@@ -10,10 +10,10 @@ COMMENT 			: ('//' ~('\n')* WHITESPACE | '/*' ~('\n')* '*/'){skip();};
 WHITESPACE			: ('\n' | '\t' | ' ' | '\r') {skip();};
 
 // numeros
-HEX_ERROR			: '0x' ~([0-9] | [a-zA-Z])*;					
+HEX_ERROR			: '0x' ~([0-9] | [a-fA-F] )* ;					
 
 INT_LITERAL			: DECIMAL_LITERAL | HEX_LITERAL ;
-DECIMAL_LITERAL		: DIGIT+ {System.out.println("Int");};
+DECIMAL_LITERAL		: DIGIT+;
 
 // Char y String
 CHAR_LITERAL	  	: '\'' ~('\'' | '\\' | '\n' | '\"') '\'' 
@@ -65,11 +65,15 @@ AND					: '&&';
 OR 					: '||';
 PUNTO_COMA			: ';';
 COMA				: ',';
-fragment DIGIT		: [0-9];
-fragment ALPHA		: [a-zA-Z];
-fragment ALPHA_NUM	: DIGIT | ALPHA;
-fragment HEX_DIGIT	: DIGIT | [a-zA-Z];
-fragment ESCAPE_CHAR	: '\'\\' ( '\'' | '\"' | '\\' | 'n' | 't' )'\'';
-fragment EQUAL		: '=';
 
+// error general para  los errores que no sean verificados en las reglas anteriores
+ERROR 				: .;
+
+// fragmentos 
+fragment DIGIT			: [0-9];
+fragment ALPHA			: [a-zA-Z];
+fragment ALPHA_NUM		: DIGIT | ALPHA;
+fragment HEX_DIGIT		: DIGIT | [a-fA-F];
+fragment ESCAPE_CHAR	: '\'\\' ( '\'' | '\"' | '\\' | 'n' | 't' )'\'';
+fragment EQUAL			: '=';
 fragment HEX_LITERAL	: '0x'(HEX_DIGIT)+;

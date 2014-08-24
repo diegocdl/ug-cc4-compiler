@@ -1,4 +1,5 @@
 import java.util.regex.Pattern;
+import java.io.File;
 import compiler.scanner.Scanner;
 import compiler.parser.CC4Parser;
 import compiler.ast.Ast;
@@ -78,7 +79,7 @@ public class Compiler {
 
 		if ((args.length > 0)&&(!args[0].equals("-h"))){
 			if ( !target.equals("") ){
-				if(!inputFilename.equals("")) {
+				if(!inputFilename.equals("") && existeArchivo(inputFilename)) {
 					if(outputFilename.equals("")){
 						outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";
 					}
@@ -193,6 +194,11 @@ public class Compiler {
 
 	public static void exit(int i){
 		System.exit(i);
+	}
+
+	public static boolean existeArchivo(String file){
+		File f = new File(file);
+		return f.exists();
 	}
 
 	public static boolean buscarString(String [] array, String str){

@@ -13,34 +13,41 @@ public class Scanner {
 
 	public Scanner(String inputFile, OutputFile outFile) throws Exception {
 		String msg = "stage: Scanner";
-		//System.out.println(msg);
 		of = outFile;
 		of.writeln(msg);
 		try {
 		    lexer =  new DecafLexer(new ANTLRFileStream(inputFile));;
 		    DecafLexer lexerTemp = new DecafLexer(new ANTLRFileStream(inputFile));
-		    lexerTemp.removeErrorListeners(); // remover los listeners originales de ANTLr
+		  	lexerTemp.removeErrorListeners(); // remover los listeners originales de ANTLr
 
 		    // agregamos nuestro Listener 
 	    	listener = new ErrorListener(); 
-		    lexerTemp.addErrorListener(listener);
+			lexerTemp.addErrorListener(listener);
 
 		    // Se recorren los tokens
 		    String str;
 		    Token t = lexerTemp.nextToken();
 		    while (t.getType() != Token.EOF){
-		    	str = t.getLine() 
-		    			+ " " + getRuleName(t.getType())  // concatena el nombre de la regla 
-		    			+ ": " + t.getText(); // se agrega el texto de token
-				System.out.println(str);
-				of.writeln(str);
+		    	if(getRuleName(t.getType()).contains("ERROR")){
+		    		str = error(t);
+		    		of.writeln(str);
+		    		System.err.println(str);
+		    	} else {
+					str = t.getLine() 
+							+ " " + getRuleName(t.getType())  // concatena el nombre de la regla 
+							+ ": " + t.getText(); // se agrega el texto de token
+					System.out.println(str);
+					of.writeln(str);
+		    	}
 				t = lexerTemp.nextToken();
 		    } 
 		}catch(ArrayIndexOutOfBoundsException aiobe){
 		    System.err.println("Must provide a valid path to the filename with the tokens");
+		    aiobe.printStackTrace();
 		    System.exit(1);
 		}catch(Exception e){
 		    System.err.println("Must provide a valid path to the filename with the tokens");
+		    e.printStackTrace();
 		    System.exit(1);
 		}
 	}
@@ -56,8 +63,8 @@ public class Scanner {
 
 	/**
 	*	Retorna el nombre de la regla correspondiente al idType	
-	*	se le resta 1 por que el arreglo empieza en 0 y el los tokens antlr los numero a partir de 1
-	* 
+	*	se le resta 1 por que el arreglo empieza en 0 y en los tokens antlr 
+	*	los numero a partir de 1
 	*/
 	public String getRuleName(int id) {
 		if (id <= DecafLexer.ruleNames.length) {
@@ -66,6 +73,34 @@ public class Scanner {
 			return null;
 		}
 	}
+
+	/**
+	*	Metodo que recibe un token de error y retorna el mensaje de error corespondiente
+	* 	@param Token t token con error
+	*	@return String mensaje de error del token
+	*/
+	public String error(Token t){
+		String error = "Error en";
+
+		switch (getRuleName(t.getType())) {
+			case "HEX_ERROR":
+				error += " hexadecimal \"" + t.getText() + "\"";
+				break;
+			case "CHAR_ERROR":
+				error += " char " + t.getText();
+				break;
+			case "STRING_ERROR":
+				error += " string " + t.getText();
+				break;
+			default:
+				error += " caracter no esperado \'" + t.getText() + "\'";
+				break;
+		}
+
+		error +=  " en la linea " + t.getLine();
+		return error;
+	}
+
 	class ErrorListener extends BaseErrorListener	{
 		 @Override
 	    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
@@ -73,10 +108,12 @@ public class Scanner {
 	                            String msg, RecognitionException e) {
 	        String sourceName = recognizer.getInputStream().getSourceName();
 	        if (!sourceName.isEmpty()) {
+
+	        	//System.out.println(e.getCtx().toStringTree());
 	            sourceName = String.format("%s:%d:%d: ", sourceName, line, charPositionInLine);
 	        }
+	        System.out.println(sourceName + offendingSymbol);
 	        // try {
-	        	System.out.println(e.getCtx());
 	        	// System.out.println(sourceName+ " " +charPositionInLine+ " " + msg);
 	        	// of.writeln(sourceName+ " " + msg);
 	        	
