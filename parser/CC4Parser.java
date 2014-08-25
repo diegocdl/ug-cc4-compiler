@@ -11,12 +11,18 @@ public class CC4Parser {
 	public Debug debug;
 	public OutputFile of;
 	public DecafParser parser;
+	public Scanner scan;
+
 
 	public CC4Parser(Scanner scan) throws Exception {
-		String msg = "stage: Parser";
+		this.scan = scan;
 		of = scan.getOutFile();
+		String msg = "stage: Parser";
 		System.out.println(msg);
 		of.writeln(msg);
+	}
+
+	public void start() {
 		try {	    
 			parser = new DecafParser(new CommonTokenStream(scan.lexer));
 			parser.removeErrorListeners();

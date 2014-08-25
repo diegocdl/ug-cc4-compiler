@@ -86,7 +86,7 @@ method_decl:
 
 method_decl_error:
 	(type | KW_VOID) ID PARENTESIS_I ((type? ID COMA )* ID (type? ID COMA )*) PARENTESIS_D block {notifyErrorListeners("Error falto el tipo del parametro");}
-	| ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block {notifyErrorListeners("declaracion de metodo");}
+	| ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block {notifyErrorListeners("Error no indico tipo de retorno en declaracion de metodo");}
 	| (type | KW_VOID) ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block_error {notifyErrorListeners("Error no cerro } de la declaracion del metodo");};
 	
 

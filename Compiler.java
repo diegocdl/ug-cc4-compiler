@@ -93,11 +93,13 @@ public class Compiler {
 
 						scan = new Scanner(inputFilename, outFile);
 						if (buscarString(debug, "scan")) scan.setDebuger(deb);
+						scan.start();
 						if (target.equals("scan")) {
 							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
 							exit(0);
 						}
 						parse = new CC4Parser(scan);
+						parse.start();
 						if (buscarString(debug, "parse")) parse.setDebuger(deb);
 						if (target.equals("parse")) {
 							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");

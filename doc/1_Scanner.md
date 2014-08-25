@@ -37,12 +37,12 @@ Errores
 En esta parte de la fase se contemplaron mas errores segun los testcase provistos, los mensajes de error son desplegados con la
 descripcion del error y el numero de linea donde se encuentra.
 
- -	*Declaracion de variables:* se verifico que solo se puede tener dos tipos `boolean` o `int` que pueden ser un arreglo pero
+ -	**Declaracion de variables:** se verifico que solo se puede tener dos tipos `boolean` o `int` que pueden ser un arreglo pero
  	solo se puede inicializar el numero de elementos del arreglo con un numero entero, no se puede asignar un valor en la declaracion,
  	se puede declarar varias variables separadas por coma siempre y cuando sean del mismo tipo se verifico que tuvieran la separacion 
  	por coma, se verifico que se haya escrito el identificador de la variable y no sea una palabra reservada.
- - 	*Ciclos for:* se verificaron los parentecis y los parametros que debe llevar dentro de los parentecis ademas tambien las llaves de
- 	apertura y cierre del bloque de codigo que pertenece al `for.
- -	*Condiciona if:* se verifico que tenga una condicion y que tenga los parentecis de apertura y de cierre y las llaves de apertura
+ - 	**Ciclos for:** se verificaron los parentecis y los parametros que debe llevar dentro de los parentecis ademas tambien las llaves 
+ 	de apertura y cierre del bloque de codigo que pertenece al `for.
+ -	**Condiciona if:** se verifico que tenga una condicion y que tenga los parentecis de apertura y de cierre y las llaves de apertura
  	y cierre del bloque.
- -	*Ciclo while:* se verifico que contenga la condicion del ciclo y los parentecis.
+ -	**Ciclo while:** se verifico que contenga la condicion del ciclo y los parentecis.

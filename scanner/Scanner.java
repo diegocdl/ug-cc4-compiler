@@ -9,16 +9,24 @@ public class Scanner {
 	public Debug debug;
 	public OutputFile of;
 	public DecafLexer lexer;
+	public String inputFile;
 	public BaseErrorListener listener;
 
 	public Scanner(String inputFile, OutputFile outFile) throws Exception {
-		String msg = "stage: Scanner";
 		of = outFile;
-		of.writeln(msg);
+		this.inputFile = inputFile;
+	    lexer =  new DecafLexer(new ANTLRFileStream(inputFile));;
+	}
+
+	public void start() {
 		try {
-		    lexer =  new DecafLexer(new ANTLRFileStream(inputFile));;
+			String msg = "stage: Scanner";
+			of.writeln(msg);
+			if(debug != null) debug.println(msg);
 		    DecafLexer lexerTemp = new DecafLexer(new ANTLRFileStream(inputFile));
-		  	lexerTemp.removeErrorListeners(); // remover los listeners originales de ANTLr
+
+		    // remover los listeners originales de ANTLr
+		  	lexerTemp.removeErrorListeners(); 
 
 		    // agregamos nuestro Listener 
 	    	listener = new ErrorListener(); 
@@ -31,12 +39,12 @@ public class Scanner {
 		    	if(getRuleName(t.getType()).contains("ERROR")){
 		    		str = error(t);
 		    		of.writeln(str);
-		    		System.err.println(str);
+					if(debug != null) debug.println(str);
 		    	} else {
 					str = t.getLine() 
 							+ " " + getRuleName(t.getType())  // concatena el nombre de la regla 
 							+ ": " + t.getText(); // se agrega el texto de token
-					System.out.println(str);
+					if(debug != null) debug.println(str);
 					of.writeln(str);
 		    	}
 				t = lexerTemp.nextToken();

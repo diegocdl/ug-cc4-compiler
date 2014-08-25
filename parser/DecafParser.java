@@ -811,7 +811,7 @@ public class DecafParser extends Parser {
 				setState(282); match(PARENTESIS_I);
 				setState(283); match(PARENTESIS_D);
 				setState(284); block();
-				System.out.println("falta la condicion del while");
+				notifyErrorListeners("falta la condicion del while");
 				}
 				break;
 			case 2:
@@ -821,7 +821,7 @@ public class DecafParser extends Parser {
 				setState(288); expr(0);
 				setState(289); match(PARENTESIS_D);
 				setState(290); block();
-				System.out.println("falto (");
+				notifyErrorListeners("falto (");
 				}
 				break;
 			case 3:
@@ -831,7 +831,7 @@ public class DecafParser extends Parser {
 				setState(294); match(PARENTESIS_I);
 				setState(295); expr(0);
 				setState(296); block();
-				System.out.println("falto )");
+				notifyErrorListeners("falto )");
 				}
 				break;
 			case 4:
@@ -852,7 +852,7 @@ public class DecafParser extends Parser {
 					}
 					break;
 				}
-				System.out.println("faltan ()");
+				notifyErrorListeners("faltan ()");
 				}
 				break;
 			case 5:
@@ -863,7 +863,7 @@ public class DecafParser extends Parser {
 				setState(309); expr(0);
 				setState(310); match(PARENTESIS_D);
 				setState(311); block_error();
-				System.out.println("Error en el while");
+				notifyErrorListeners("Error en el while");
 				}
 				break;
 			case 6:
@@ -873,7 +873,7 @@ public class DecafParser extends Parser {
 				setState(315); match(PARENTESIS_I);
 				setState(316); expr(0);
 				setState(317); match(PARENTESIS_D);
-				System.out.println("while vacio");
+				notifyErrorListeners("while vacio");
 				}
 				break;
 			}
@@ -1613,7 +1613,7 @@ public class DecafParser extends Parser {
 				}
 				setState(475); match(PARENTESIS_D);
 				setState(476); block();
-				notifyErrorListeners("declaracion de metodo");
+				notifyErrorListeners("Error no indico tipo de retorno en declaracion de metodo");
 				}
 				break;
 			case 3:
@@ -2777,7 +2777,7 @@ public class DecafParser extends Parser {
 					throw new NoViableAltException(this);
 				}
 				setState(798); match(PARENTESIS_D);
-				System.out.println("Error en la llamada del metodo");
+				notifyErrorListeners("Error en la llamada del metodo");
 				}
 				break;
 			case INT_LITERAL:
@@ -2828,7 +2828,7 @@ public class DecafParser extends Parser {
 					break;
 				}
 				setState(817); match(PARENTESIS_D);
-				System.out.println("identificador invalido");
+				notifyErrorListeners("identificador invalido");
 				}
 				break;
 			default:
@@ -2985,7 +2985,7 @@ public class DecafParser extends Parser {
 			{
 			setState(832); match(KW_CALLOUT);
 			setState(833); match(ID);
-			System.out.println("falto ;");
+			notifyErrorListeners("falto ;");
 			}
 		}
 		catch (RecognitionException re) {
@@ -3046,56 +3046,56 @@ public class DecafParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(836); program_error();
-				}
-				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(840);
+				setState(839);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,99,_ctx);
 				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(837); callout_decl();
+						setState(836); callout_decl();
 						}
 						} 
 					}
-					setState(842);
+					setState(841);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,99,_ctx);
 				}
-				setState(846);
+				setState(845);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,100,_ctx);
 				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(843); field_decl();
+						setState(842); field_decl();
 						}
 						} 
 					}
-					setState(848);
+					setState(847);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,100,_ctx);
 				}
-				setState(852);
+				setState(851);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << KW_INT) | (1L << KW_BOOL) | (1L << KW_VOID) | (1L << ID))) != 0)) {
 					{
 					{
-					setState(849); method_decl();
+					setState(848); method_decl();
 					}
 					}
-					setState(854);
+					setState(853);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				System.out.println("program");
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(855); program_error();
 				}
 				break;
 			}
@@ -3432,9 +3432,9 @@ public class DecafParser extends Parser {
 		"\24\3\24\5\24\u031f\n\24\3\24\3\24\3\24\3\24\3\24\3\24\5\24\u0327\n\24"+
 		"\3\24\3\24\3\24\6\24\u032c\n\24\r\24\16\24\u032d\3\24\3\24\5\24\u0332"+
 		"\n\24\3\24\3\24\5\24\u0336\n\24\3\25\3\25\5\25\u033a\n\25\3\26\3\26\3"+
-		"\26\3\26\3\26\5\26\u0341\n\26\3\27\3\27\3\27\3\27\3\30\3\30\7\30\u0349"+
-		"\n\30\f\30\16\30\u034c\13\30\3\30\7\30\u034f\n\30\f\30\16\30\u0352\13"+
-		"\30\3\30\7\30\u0355\n\30\f\30\16\30\u0358\13\30\3\30\5\30\u035b\n\30\3"+
+		"\26\3\26\3\26\5\26\u0341\n\26\3\27\3\27\3\27\3\27\3\30\7\30\u0348\n\30"+
+		"\f\30\16\30\u034b\13\30\3\30\7\30\u034e\n\30\f\30\16\30\u0351\13\30\3"+
+		"\30\7\30\u0354\n\30\f\30\16\30\u0357\13\30\3\30\3\30\5\30\u035b\n\30\3"+
 		"\31\7\31\u035e\n\31\f\31\16\31\u0361\13\31\3\31\3\31\3\31\3\31\3\32\3"+
 		"\32\3\32\3\32\3\32\3\32\5\32\u036d\n\32\3\33\3\33\3\34\3\34\3\35\3\35"+
 		"\3\35\4\u0273\u027e\3\16\36\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \""+
@@ -3697,29 +3697,30 @@ public class DecafParser extends Parser {
 		"\u033d\7\24\2\2\u033d\u033e\7\37\2\2\u033e\u033f\7,\2\2\u033f\u0341\b"+
 		"\26\1\2\u0340\u033b\3\2\2\2\u0340\u033c\3\2\2\2\u0341+\3\2\2\2\u0342\u0343"+
 		"\7\24\2\2\u0343\u0344\7\37\2\2\u0344\u0345\b\27\1\2\u0345-\3\2\2\2\u0346"+
-		"\u035b\5\60\31\2\u0347\u0349\5*\26\2\u0348\u0347\3\2\2\2\u0349\u034c\3"+
-		"\2\2\2\u034a\u0348\3\2\2\2\u034a\u034b\3\2\2\2\u034b\u0350\3\2\2\2\u034c"+
-		"\u034a\3\2\2\2\u034d\u034f\5\34\17\2\u034e\u034d\3\2\2\2\u034f\u0352\3"+
-		"\2\2\2\u0350\u034e\3\2\2\2\u0350\u0351\3\2\2\2\u0351\u0356\3\2\2\2\u0352"+
-		"\u0350\3\2\2\2\u0353\u0355\5\30\r\2\u0354\u0353\3\2\2\2\u0355\u0358\3"+
-		"\2\2\2\u0356\u0354\3\2\2\2\u0356\u0357\3\2\2\2\u0357\u0359\3\2\2\2\u0358"+
-		"\u0356\3\2\2\2\u0359\u035b\b\30\1\2\u035a\u0346\3\2\2\2\u035a\u034a\3"+
-		"\2\2\2\u035b/\3\2\2\2\u035c\u035e\5*\26\2\u035d\u035c\3\2\2\2\u035e\u0361"+
-		"\3\2\2\2\u035f\u035d\3\2\2\2\u035f\u0360\3\2\2\2\u0360\u0362\3\2\2\2\u0361"+
-		"\u035f\3\2\2\2\u0362\u0363\5\30\r\2\u0363\u0364\5\34\17\2\u0364\u0365"+
-		"\b\31\1\2\u0365\61\3\2\2\2\u0366\u036d\7\37\2\2\u0367\u0368\7\37\2\2\u0368"+
-		"\u0369\7\"\2\2\u0369\u036a\5\16\b\2\u036a\u036b\7#\2\2\u036b\u036d\3\2"+
-		"\2\2\u036c\u0366\3\2\2\2\u036c\u0367\3\2\2\2\u036d\63\3\2\2\2\u036e\u036f"+
-		"\7\37\2\2\u036f\65\3\2\2\2\u0370\u0371\t\5\2\2\u0371\67\3\2\2\2\u0372"+
-		"\u0373\t\6\2\2\u03739\3\2\2\2kPhr\u0083\u008a\u0094\u0098\u00a0\u00c1"+
-		"\u00da\u00e2\u00ec\u00f6\u0100\u0108\u010c\u0119\u0131\u0142\u015b\u0164"+
-		"\u016d\u016f\u0175\u017b\u0181\u018b\u0191\u019e\u01a3\u01aa\u01ae\u01b3"+
-		"\u01b9\u01be\u01c4\u01d6\u01db\u01e3\u01f0\u01f5\u01fb\u0202\u0209\u020d"+
-		"\u0214\u021b\u021e\u0225\u0229\u022b\u0231\u0234\u0236\u023f\u0244\u0248"+
-		"\u024d\u0251\u025d\u0266\u0268\u0273\u0276\u027e\u0281\u0285\u028f\u0297"+
-		"\u0299\u029e\u02a8\u02af\u02b3\u02be\u02c1\u02c7\u02cb\u02d6\u02dd\u02e1"+
-		"\u02e6\u02ef\u02f3\u02fa\u02fe\u0303\u0307\u030e\u0312\u0315\u0319\u031e"+
-		"\u0326\u032d\u0331\u0335\u0339\u0340\u034a\u0350\u0356\u035a\u035f\u036c";
+		"\u0348\5*\26\2\u0347\u0346\3\2\2\2\u0348\u034b\3\2\2\2\u0349\u0347\3\2"+
+		"\2\2\u0349\u034a\3\2\2\2\u034a\u034f\3\2\2\2\u034b\u0349\3\2\2\2\u034c"+
+		"\u034e\5\34\17\2\u034d\u034c\3\2\2\2\u034e\u0351\3\2\2\2\u034f\u034d\3"+
+		"\2\2\2\u034f\u0350\3\2\2\2\u0350\u0355\3\2\2\2\u0351\u034f\3\2\2\2\u0352"+
+		"\u0354\5\30\r\2\u0353\u0352\3\2\2\2\u0354\u0357\3\2\2\2\u0355\u0353\3"+
+		"\2\2\2\u0355\u0356\3\2\2\2\u0356\u0358\3\2\2\2\u0357\u0355\3\2\2\2\u0358"+
+		"\u035b\b\30\1\2\u0359\u035b\5\60\31\2\u035a\u0349\3\2\2\2\u035a\u0359"+
+		"\3\2\2\2\u035b/\3\2\2\2\u035c\u035e\5*\26\2\u035d\u035c\3\2\2\2\u035e"+
+		"\u0361\3\2\2\2\u035f\u035d\3\2\2\2\u035f\u0360\3\2\2\2\u0360\u0362\3\2"+
+		"\2\2\u0361\u035f\3\2\2\2\u0362\u0363\5\30\r\2\u0363\u0364\5\34\17\2\u0364"+
+		"\u0365\b\31\1\2\u0365\61\3\2\2\2\u0366\u036d\7\37\2\2\u0367\u0368\7\37"+
+		"\2\2\u0368\u0369\7\"\2\2\u0369\u036a\5\16\b\2\u036a\u036b\7#\2\2\u036b"+
+		"\u036d\3\2\2\2\u036c\u0366\3\2\2\2\u036c\u0367\3\2\2\2\u036d\63\3\2\2"+
+		"\2\u036e\u036f\7\37\2\2\u036f\65\3\2\2\2\u0370\u0371\t\5\2\2\u0371\67"+
+		"\3\2\2\2\u0372\u0373\t\6\2\2\u03739\3\2\2\2kPhr\u0083\u008a\u0094\u0098"+
+		"\u00a0\u00c1\u00da\u00e2\u00ec\u00f6\u0100\u0108\u010c\u0119\u0131\u0142"+
+		"\u015b\u0164\u016d\u016f\u0175\u017b\u0181\u018b\u0191\u019e\u01a3\u01aa"+
+		"\u01ae\u01b3\u01b9\u01be\u01c4\u01d6\u01db\u01e3\u01f0\u01f5\u01fb\u0202"+
+		"\u0209\u020d\u0214\u021b\u021e\u0225\u0229\u022b\u0231\u0234\u0236\u023f"+
+		"\u0244\u0248\u024d\u0251\u025d\u0266\u0268\u0273\u0276\u027e\u0281\u0285"+
+		"\u028f\u0297\u0299\u029e\u02a8\u02af\u02b3\u02be\u02c1\u02c7\u02cb\u02d6"+
+		"\u02dd\u02e1\u02e6\u02ef\u02f3\u02fa\u02fe\u0303\u0307\u030e\u0312\u0315"+
+		"\u0319\u031e\u0326\u032d\u0331\u0335\u0339\u0340\u0349\u034f\u0355\u035a"+
+		"\u035f\u036c";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
