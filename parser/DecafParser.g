@@ -51,12 +51,12 @@ if_error:
 	| KW_IF PARENTESIS_I expr PARENTESIS_D block_error KW_ELSE block 	{ notifyErrorListeners("error en el if");};
 
 while_error:
-	KW_WHILE PARENTESIS_I PARENTESIS_D block 		{System.out.println("falta la condicion del while");}
-	| KW_WHILE expr PARENTESIS_D block 				{System.out.println("falto (");}
-	| KW_WHILE PARENTESIS_I expr  block 			{System.out.println("falto )");}
-	| KW_WHILE expr (block|block_error) 			{System.out.println("faltan ()");}
-	| KW_WHILE PARENTESIS_I expr PARENTESIS_D block_error {System.out.println("Error en el while");}
-	| KW_WHILE PARENTESIS_I expr PARENTESIS_D 		{System.out.println("while vacio");};
+	KW_WHILE PARENTESIS_I PARENTESIS_D block 		{notifyErrorListeners("falta la condicion del while");}
+	| KW_WHILE expr PARENTESIS_D block 				{notifyErrorListeners("falto (");}
+	| KW_WHILE PARENTESIS_I expr  block 			{notifyErrorListeners("falto )");}
+	| KW_WHILE expr (block|block_error) 			{notifyErrorListeners("faltan ()");}
+	| KW_WHILE PARENTESIS_I expr PARENTESIS_D block_error {notifyErrorListeners("Error en el while");}
+	| KW_WHILE PARENTESIS_I expr PARENTESIS_D 		{notifyErrorListeners("while vacio");};
 			
 expr:
 	location {System.out.println("location");}
@@ -140,11 +140,11 @@ callout_decl:
 	| KW_CALLOUT ID PUNTO_COMA {System.out.println("callout_decl");};
 
 callout_decl_error: 
-	KW_CALLOUT ID {System.out.println("falto ;");};
+	KW_CALLOUT ID {notifyErrorListeners("falto ;");};
 
 program: 
-	program_error
-	| callout_decl* field_decl* method_decl* {System.out.println("program");};
+	callout_decl* field_decl* method_decl* {System.out.println("program");}
+	| program_error;
 
 program_error:
 	callout_decl* method_decl field_decl {notifyErrorListeners("las declaraciones van primero");};
