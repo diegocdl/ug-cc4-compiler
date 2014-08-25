@@ -1,12 +1,5 @@
-	##############################################################################################
-	#####                                                                                   ######
-	#####                               Documentacion Fase 0                                ######
-	#####                           Command Line Interface - CLI	                        ######
-	#####                         Erwin Morataya y Diego Calderon                           ######
-	#####                                                                                   ######
-	##############################################################################################
-
-	
+# Documentacion Fase 0 / Command Line Interface - CLI
+Erwin Morataya y Diego Calderon
 
  - 	El archivo Compiler.java tiene el main y recibe los parametros de compilacion para la ejecucion
  	y esto se recibe como un arreglo en el main, utilizamos unas variables de configuracion de el 
