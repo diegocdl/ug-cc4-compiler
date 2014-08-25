@@ -108,18 +108,15 @@ public class Scanner {
 	                            String msg, RecognitionException e) {
 	        String sourceName = recognizer.getInputStream().getSourceName();
 	        if (!sourceName.isEmpty()) {
-
-	        	//System.out.println(e.getCtx().toStringTree());
 	            sourceName = String.format("%s:%d:%d: ", sourceName, line, charPositionInLine);
 	        }
-	        System.out.println(sourceName + offendingSymbol);
-	        // try {
-	        	// System.out.println(sourceName+ " " +charPositionInLine+ " " + msg);
-	        	// of.writeln(sourceName+ " " + msg);
-	        	
-	        // } catch (Exception ex) { 
-	        	// Ignoramos la excepcion
-	        // }
+	        try {
+	        	sourceName += " " + msg + " en la linea " + line;
+	        	System.out.println(sourceName);
+	        	of.writeln(sourceName);
+	        } catch (Exception ex) { 
+	        	// si se produce un error al escribir en el archivo ignoramos la exception
+	        }
 		}
 	}
 }
