@@ -25,8 +25,8 @@ public class CC4Parser {
 	public void start() {
 		try {	    
 			parser = new DecafParser(new CommonTokenStream(scan.lexer));
-			parser.removeErrorListeners();
-			parser.addErrorListener(scan.listener);
+			//parser.removeErrorListeners();
+			parser.addParseListener(new ParseListener(of, debug));
 			parser.start();
 		} catch (ArrayIndexOutOfBoundsException aiobe) {
 			System.err.println("usage: java Main <file>\nwhere file is the path to the filename with the tokens");

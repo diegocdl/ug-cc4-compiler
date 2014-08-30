@@ -1,0 +1,19 @@
+0 root
+1 if
+2 ciclos
+	- for
+	- while
+3 declaraciones
+	- var
+	- metodos
+
+4 literales
+	- var
+	- enteros
+	- Strings
+5 bloque
+6 returnBreakcContinue
+7 errores
+8 operaciones
+9 asign
+10 exp

@@ -24,9 +24,10 @@ parser\CC4Parser.class: parser\CC4Parser.java
 	javac parser\CC4Parser.java
 
 parser\DecafParser.java: parser\DecafParser.g
-	java org.antlr.v4.Tool -lib scanner parser\DecafParser.g
+	java org.antlr.v4.Tool -visitor -lib scanner parser\DecafParser.g
 
-parser\DecafParser.class: parser\DecafParser.java
+parser\DecafParser.class: parser/ParseListener.java parser\DecafParser.java 
+	javac parser\ParseListener.java
 	javac parser\DecafParser.java
 
 # ast	
@@ -71,6 +72,8 @@ clean:
 	del scanner\DecafLexer.tokens
 
 	del parser\*.class
+	del parser\DecafParser.java
+	del parser\DecafParser.tokens
 
 	del ast\*.class
 
