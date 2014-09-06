@@ -20,8 +20,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	@Override
 	public Node visitRoot(DecafParser.RootContext ctx){
 		Root root = new Root();											// raiz del arbol
-
-		List<DecafParser.Field_declContext> list = ctx.field_decl();	// lista con todas las expresiones, exp()		
+		List<DecafParser.Field_declContext> list = ctx.field_decl();	// lista con todas las expresiones, exp()
 		for(DecafParser.Field_declContext e : list) {
 			Node n = visit(e);
 			root.add(n);												// visitar cada expresion
@@ -56,8 +55,8 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 		return block;
 	}
 	
-
 	@Override
+	
 	public Node visitAsignacion(DecafParser.AsignacionContext ctx){
 		return new Asign(visit(ctx.location()), ctx.ASIG_OP().getText(), visit(ctx.expr()));	//crear nodo para expresion binaria, signo del operador y visita a cada expresion
 	}
@@ -78,7 +77,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 		}
 		
 	}
-
+	
 	@Override 
 	public Node visitLocation(DecafParser.LocationContext ctx) {
 		if(ctx.expr() == null){
@@ -122,7 +121,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	}
 
 	@Override
-	public Node visitField_decl(DecafParser.Field_declContext ctx) {
+	public Node visitField_dec(DecafParser.Field_decContext ctx) {
 		LinkedList<VarLiteral> ids = new LinkedList<VarLiteral>();
 		List<TerminalNode> idNodos = ctx.ID();
 		List<TerminalNode> intNodos = ctx.INT_LITERAL();
@@ -155,13 +154,24 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 		return dec;
 	}
 
+	
 	@Override
-	public Node visitMethod_call(DecafParser.Method_callContext ctx) {
-		return null;
+	public Node visitMethod_c(DecafParser.Method_cContext ctx){
+		/*List<DecafParser.ExpContext> list = ctx.expr();	// lista con todas las expresiones, exp()
+		for(DecafParser.ExpContext e : list) {
+			Node n = visit(e);									// visitar cada expresion
+		}*/
+	
+		List<Node> list2 = null;
+		for(int i=0; i<ctx.expr().size(); i++) {
+			Node n = (visit(ctx.expr(i)));
+			list2.add(n);
+		}
+		return new MethodCall(ctx.method_name().getText(),list2);
 	}
 
 	@Override
-	public Node visitMethod_decl(DecafParser.Method_declContext ctx) {
+	public Node visitMethod_dec(DecafParser.Method_decContext ctx) {
 		String tipo;
 
 		if(ctx.KW_VOID() != null){
@@ -178,7 +188,6 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 				);
 		return dec;
 	}
-
 
 	@Override
 	public Node visitType(DecafParser.TypeContext ctx) {
@@ -203,4 +212,3 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	}
 	
 }
-
