@@ -45,10 +45,10 @@ bin_op:
 	(addOp | mulOp | REL_OP | EQ_OP | COND_OP);
 
 method_decl:
-	(type | KW_VOID) ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block;	
+	(type | KW_VOID) ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block #method_dec;	
 
 field_decl:
-	 type ID (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA ID (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA;
+	 type ID (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA ID (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA #field_dec;
 
 keywords:
 	  KW_INT
@@ -70,11 +70,12 @@ type:
 
 
 method_call:
-	(
-		(method_name | KW_CALLOUT) PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D
-		| (method_name | KW_CALLOUT) PARENTESIS_I ( (callout_arg)? | (callout_arg COMA )+ (callout_arg) ) PARENTESIS_D
-	) 
-	|  method_call_error;
+
+		method_name PARENTESIS_I ( (expr)? | (expr COMA )+(expr) ) PARENTESIS_D #method_c
+		| method_name  PARENTESIS_I ( (callout_arg)? | (callout_arg COMA )+ (callout_arg) ) PARENTESIS_D #method_c
+
+	|  method_call_error # mc_error
+	;
 				
 callout_arg:
 	expr | STRING_LITERAL;
