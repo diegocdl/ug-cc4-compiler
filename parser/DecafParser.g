@@ -15,13 +15,13 @@ start:
 	;
 
 statement: 
-	  location ASIG_OP expr PUNTO_COMA 																						#asignacion
-	| KW_IF PARENTESIS_I expr PARENTESIS_D block (KW_ELSE block)? 															#ifs
-	| KW_FOR PARENTESIS_I ID ASIG_OP expr COMA expr PARENTESIS_D block 														#ciclo
-	| KW_WHILE PARENTESIS_I expr PARENTESIS_D block 																		#ciclo
-	| method_call PUNTO_COMA																								#statements
-	| KW_RETURN (expr)? PUNTO_COMA 																							#statements
-	| (KW_BREAK | KW_CONTINUE) PUNTO_COMA																					#statements
+	  location ASIG_OP expr PUNTO_COMA 											#asignacion
+	| KW_IF PARENTESIS_I expr PARENTESIS_D block (KW_ELSE block)? 				#ifs
+	| KW_FOR PARENTESIS_I ID ASIG_OP expr COMA expr PARENTESIS_D block 			#ciclo
+	| KW_WHILE PARENTESIS_I expr PARENTESIS_D block 							#ciclo
+	| method_call PUNTO_COMA													#statements
+	| KW_RETURN (expr)? PUNTO_COMA 												#statements
+	| (KW_BREAK | KW_CONTINUE) PUNTO_COMA										#statements
 	  ;
 
 			

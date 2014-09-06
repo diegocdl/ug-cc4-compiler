@@ -20,9 +20,14 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	@Override
 	public Node visitRoot(DecafParser.RootContext ctx){
 		Root root = new Root();											// raiz del arbol
-		List<DecafParser.Field_declContext> list = ctx.field_decl();	// lista con todas las expresiones, exp()
-		
+
+		List<DecafParser.Field_declContext> list = ctx.field_decl();	// lista con todas las expresiones, exp()		
 		for(DecafParser.Field_declContext e : list) {
+			Node n = visit(e);
+			root.add(n);												// visitar cada expresion
+		}
+		List<DecafParser.Method_declContext> listMethods = ctx.method_decl();
+		for(DecafParser.Method_declContext e : listMethods) {
 			Node n = visit(e);
 			root.add(n);												// visitar cada expresion
 		}
@@ -41,16 +46,17 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	
 	@Override
 	public Node visitBloque(DecafParser.BloqueContext ctx){
-		// Root root2 = new Root();		
-		// for(DecafParser.Field_declContext e : ctx.field_decl()){
-		// 	root2.add(visit(e));							//visitar cada expresion
-		// }
-		// for(DecafParser.StatementContext e : ctx.statement()){
-		// 	root2.add(visit(e));						//visitar cada expresion
-		// }
-		return null;
+		Root block = new Root();		
+		for(DecafParser.Field_declContext e : ctx.field_decl()){
+			block.add(visit(e));							//visitar cada expresion
+		}
+		for(DecafParser.StatementContext e : ctx.statement()){
+			block.add(visit(e));						//visitar cada expresion
+		}
+		return block;
 	}
 	
+
 	@Override
 	public Node visitAsignacion(DecafParser.AsignacionContext ctx){
 		return new Asign(visit(ctx.location()), ctx.ASIG_OP().getText(), visit(ctx.expr()));	//crear nodo para expresion binaria, signo del operador y visita a cada expresion
@@ -58,19 +64,28 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	
 	@Override
 	public Node visitStatements(DecafParser.StatementsContext ctx){
-		if((ctx.KW_RETURN()==null)&&(ctx.KW_CONTINUE()==null)&&(ctx.method_call()==null)){
+		if( (ctx.KW_RETURN()==null) && (ctx.KW_CONTINUE()==null) && (ctx.method_call()==null) ){
 			TerminalNode op = ctx.KW_BREAK();
 			return new Statement(op.getText());
-		}else if((ctx.KW_BREAK()==null)&&(ctx.KW_CONTINUE()==null)&&(ctx.method_call()==null)){
+		}else if( (ctx.KW_BREAK()==null) && (ctx.KW_CONTINUE()==null) && (ctx.method_call()==null) ){
 			TerminalNode op = ctx.KW_RETURN();
 			return new Statement(op.getText(), visit(ctx.expr()));
-		}else if((ctx.KW_BREAK()==null)&&(ctx.KW_RETURN()==null)&&(ctx.method_call()==null)){
+		}else if( (ctx.KW_BREAK()==null) && (ctx.KW_RETURN()==null) && (ctx.method_call()==null) ){
 			TerminalNode op = ctx.KW_CONTINUE();
 			return new Statement(op.getText());
 		}else{
 			return visit(ctx.method_call());
 		}
 		
+	}
+
+	@Override 
+	public Node visitLocation(DecafParser.LocationContext ctx) {
+		if(ctx.expr() == null){
+			return new VarLiteral(ctx.ID().getText());
+		} else {
+			return new VarLiteral(ctx.ID().getText(), visit(ctx.expr()));
+		}
 	}
 	
 	@Override
@@ -137,6 +152,30 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 					visit(ctx.type()).toString(),
 					ids
 					);
+		return dec;
+	}
+
+	@Override
+	public Node visitMethod_call(DecafParser.Method_callContext ctx) {
+		return null;
+	}
+
+	@Override
+	public Node visitMethod_decl(DecafParser.Method_declContext ctx) {
+		String tipo;
+
+		if(ctx.KW_VOID() != null){
+			tipo = ctx.KW_VOID().getText();
+		}else{
+			tipo = visit(ctx.type(0)).toString();
+		}
+
+		Declaracion dec;
+		dec = 	new Declaracion(
+					tipo,
+					ctx.ID(0).getText(),
+					visit(ctx.block())
+				);
 		return dec;
 	}
 

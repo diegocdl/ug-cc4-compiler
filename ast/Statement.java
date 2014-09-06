@@ -16,7 +16,7 @@ public class Statement extends Node{
 	}
 	
 	public void print(String padding){
-		System.out.println(padding + value);
+		System.out.println(padding + keyword);
 		if(value != null){
 			value.print(padding + "\t");
 		}

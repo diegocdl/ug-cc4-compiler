@@ -16,9 +16,10 @@ public class Root extends Node{
 	}
 	
 	public void print(String padding){
-		System.out.println("Root");
+		System.out.println(padding + "Root");
 		for(Node n : declaraciones){
-			if(n != null) n.print("\t" + padding);
+			if(n != null)
+				n.print("\t" + padding);
 		}
 	}
 	

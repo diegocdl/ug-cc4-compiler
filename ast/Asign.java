@@ -13,7 +13,7 @@ public class Asign extends Node{
 	
 	public void print(String padding){
 		System.out.println(padding + asig);
-		System.out.println(padding + id);
+		id.print(padding + "\t");
 		if(value != null) value.print(padding + "\t");
 	}
 } 

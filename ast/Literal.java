@@ -11,4 +11,9 @@ public class Literal extends Node {
 	public void print(String padding){
 		System.out.println(padding + value);
 	}
+
+	@Override
+	public String toString(){
+		return value;
+	}
 } 
