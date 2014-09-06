@@ -106,6 +106,7 @@ public class Compiler {
 							exit(0);
 						}
 						ast = new Ast(parse);
+						ast.start();
 						if (buscarString(debug, "ast")) ast.setDebuger(deb);
 						if (target.equals("ast")) {
 							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
@@ -157,11 +158,13 @@ public class Compiler {
 			}else {
 				throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
 			}
-
+			
 		}
-			}catch(ErrorHandler e){
+
+			} catch(ErrorHandler e) {
 				System.err.println(e.getMessage());
 			}
+		
     }
 
 	/**
@@ -195,6 +198,11 @@ public class Compiler {
 	}
 
 	public static void exit(int i){
+		try{
+					Thread.sleep(10000);
+				}catch (Exception e) {
+					
+				}
 		System.exit(i);
 	}
 

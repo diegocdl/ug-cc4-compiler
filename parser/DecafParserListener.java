@@ -11,6 +11,18 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface DecafParserListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by the {@code asignacion}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAsignacion(@NotNull DecafParser.AsignacionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code asignacion}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAsignacion(@NotNull DecafParser.AsignacionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DecafParser#keywords}.
 	 * @param ctx the parse tree
 	 */
@@ -21,15 +33,41 @@ public interface DecafParserListener extends ParseTreeListener {
 	 */
 	void exitKeywords(@NotNull DecafParser.KeywordsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DecafParser#program}.
+	 * Enter a parse tree produced by the {@code literales}
+	 * labeled alternative in {@link DecafParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterProgram(@NotNull DecafParser.ProgramContext ctx);
+	void enterLiterales(@NotNull DecafParser.LiteralesContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DecafParser#program}.
+	 * Exit a parse tree produced by the {@code literales}
+	 * labeled alternative in {@link DecafParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitProgram(@NotNull DecafParser.ProgramContext ctx);
+	void exitLiterales(@NotNull DecafParser.LiteralesContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code statements}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatements(@NotNull DecafParser.StatementsContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code statements}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatements(@NotNull DecafParser.StatementsContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code operacion}
+	 * labeled alternative in {@link DecafParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperacion(@NotNull DecafParser.OperacionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code operacion}
+	 * labeled alternative in {@link DecafParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperacion(@NotNull DecafParser.OperacionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#method_call}.
 	 * @param ctx the parse tree
@@ -51,17 +89,17 @@ public interface DecafParserListener extends ParseTreeListener {
 	 */
 	void exitMethod_call_error(@NotNull DecafParser.Method_call_errorContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code hola}
-	 * labeled alternative in {@link DecafParser#statement}.
+	 * Enter a parse tree produced by the {@code error}
+	 * labeled alternative in {@link DecafParser#start}.
 	 * @param ctx the parse tree
 	 */
-	void enterHola(@NotNull DecafParser.HolaContext ctx);
+	void enterError(@NotNull DecafParser.ErrorContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code hola}
-	 * labeled alternative in {@link DecafParser#statement}.
+	 * Exit a parse tree produced by the {@code error}
+	 * labeled alternative in {@link DecafParser#start}.
 	 * @param ctx the parse tree
 	 */
-	void exitHola(@NotNull DecafParser.HolaContext ctx);
+	void exitError(@NotNull DecafParser.ErrorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#type}.
 	 * @param ctx the parse tree
@@ -133,25 +171,29 @@ public interface DecafParserListener extends ParseTreeListener {
 	 */
 	void exitWhile_error(@NotNull DecafParser.While_errorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DecafParser#expr}.
+	 * Enter a parse tree produced by the {@code root}
+	 * labeled alternative in {@link DecafParser#start}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpr(@NotNull DecafParser.ExprContext ctx);
+	void enterRoot(@NotNull DecafParser.RootContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DecafParser#expr}.
+	 * Exit a parse tree produced by the {@code root}
+	 * labeled alternative in {@link DecafParser#start}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpr(@NotNull DecafParser.ExprContext ctx);
+	void exitRoot(@NotNull DecafParser.RootContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DecafParser#block}.
+	 * Enter a parse tree produced by the {@code exp}
+	 * labeled alternative in {@link DecafParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterBlock(@NotNull DecafParser.BlockContext ctx);
+	void enterExp(@NotNull DecafParser.ExpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DecafParser#block}.
+	 * Exit a parse tree produced by the {@code exp}
+	 * labeled alternative in {@link DecafParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitBlock(@NotNull DecafParser.BlockContext ctx);
+	void exitExp(@NotNull DecafParser.ExpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#for_error}.
 	 * @param ctx the parse tree
@@ -163,6 +205,18 @@ public interface DecafParserListener extends ParseTreeListener {
 	 */
 	void exitFor_error(@NotNull DecafParser.For_errorContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code bloque}
+	 * labeled alternative in {@link DecafParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBloque(@NotNull DecafParser.BloqueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code bloque}
+	 * labeled alternative in {@link DecafParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBloque(@NotNull DecafParser.BloqueContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DecafParser#if_error}.
 	 * @param ctx the parse tree
 	 */
@@ -173,6 +227,30 @@ public interface DecafParserListener extends ParseTreeListener {
 	 */
 	void exitIf_error(@NotNull DecafParser.If_errorContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code par}
+	 * labeled alternative in {@link DecafParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterPar(@NotNull DecafParser.ParContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code par}
+	 * labeled alternative in {@link DecafParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitPar(@NotNull DecafParser.ParContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ciclo}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCiclo(@NotNull DecafParser.CicloContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ciclo}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCiclo(@NotNull DecafParser.CicloContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DecafParser#addOp}.
 	 * @param ctx the parse tree
 	 */
@@ -182,16 +260,6 @@ public interface DecafParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAddOp(@NotNull DecafParser.AddOpContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link DecafParser#start}.
-	 * @param ctx the parse tree
-	 */
-	void enterStart(@NotNull DecafParser.StartContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DecafParser#start}.
-	 * @param ctx the parse tree
-	 */
-	void exitStart(@NotNull DecafParser.StartContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#callout_arg}.
 	 * @param ctx the parse tree
@@ -282,6 +350,18 @@ public interface DecafParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitField_decl_error(@NotNull DecafParser.Field_decl_errorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ifs}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfs(@NotNull DecafParser.IfsContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ifs}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfs(@NotNull DecafParser.IfsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DecafParser#location}.
 	 * @param ctx the parse tree

@@ -14,17 +14,39 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface DecafParserVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by the {@code asignacion}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAsignacion(@NotNull DecafParser.AsignacionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link DecafParser#keywords}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitKeywords(@NotNull DecafParser.KeywordsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link DecafParser#program}.
+	 * Visit a parse tree produced by the {@code literales}
+	 * labeled alternative in {@link DecafParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProgram(@NotNull DecafParser.ProgramContext ctx);
+	T visitLiterales(@NotNull DecafParser.LiteralesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code statements}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatements(@NotNull DecafParser.StatementsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code operacion}
+	 * labeled alternative in {@link DecafParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOperacion(@NotNull DecafParser.OperacionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DecafParser#method_call}.
 	 * @param ctx the parse tree
@@ -38,12 +60,12 @@ public interface DecafParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMethod_call_error(@NotNull DecafParser.Method_call_errorContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code hola}
-	 * labeled alternative in {@link DecafParser#statement}.
+	 * Visit a parse tree produced by the {@code error}
+	 * labeled alternative in {@link DecafParser#start}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHola(@NotNull DecafParser.HolaContext ctx);
+	T visitError(@NotNull DecafParser.ErrorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DecafParser#type}.
 	 * @param ctx the parse tree
@@ -87,17 +109,19 @@ public interface DecafParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhile_error(@NotNull DecafParser.While_errorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link DecafParser#expr}.
+	 * Visit a parse tree produced by the {@code root}
+	 * labeled alternative in {@link DecafParser#start}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr(@NotNull DecafParser.ExprContext ctx);
+	T visitRoot(@NotNull DecafParser.RootContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link DecafParser#block}.
+	 * Visit a parse tree produced by the {@code exp}
+	 * labeled alternative in {@link DecafParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBlock(@NotNull DecafParser.BlockContext ctx);
+	T visitExp(@NotNull DecafParser.ExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DecafParser#for_error}.
 	 * @param ctx the parse tree
@@ -105,23 +129,38 @@ public interface DecafParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFor_error(@NotNull DecafParser.For_errorContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code bloque}
+	 * labeled alternative in {@link DecafParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBloque(@NotNull DecafParser.BloqueContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link DecafParser#if_error}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIf_error(@NotNull DecafParser.If_errorContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code par}
+	 * labeled alternative in {@link DecafParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPar(@NotNull DecafParser.ParContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ciclo}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCiclo(@NotNull DecafParser.CicloContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link DecafParser#addOp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAddOp(@NotNull DecafParser.AddOpContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link DecafParser#start}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStart(@NotNull DecafParser.StartContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DecafParser#callout_arg}.
 	 * @param ctx the parse tree
@@ -176,6 +215,13 @@ public interface DecafParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitField_decl_error(@NotNull DecafParser.Field_decl_errorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ifs}
+	 * labeled alternative in {@link DecafParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfs(@NotNull DecafParser.IfsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DecafParser#location}.
 	 * @param ctx the parse tree

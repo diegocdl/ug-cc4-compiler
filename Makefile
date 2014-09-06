@@ -1,6 +1,7 @@
 make: scanner\DecafLexer.java scanner\DecafLexer.class scanner\Scanner.class	\
 	parser\DecafParser.java parser\DecafParser.class parser\CC4Parser.class 	\
-	ast\Ast.class semantic\Semantic.class	\
+	ast\Ast.class \
+	semantic\Semantic.class	\
 	irt\Irt.class codegen\Codegen.class		\
 	opt\Algebraic.class opt\ConstantFolding.class 		\
 	lib\Debug.class lib\ErrorHandler.class lib\OutputFile.class		\
@@ -31,8 +32,8 @@ parser\DecafParser.class: parser/ParseListener.java parser\DecafParser.java
 	javac parser\DecafParser.java
 
 # ast	
-ast\Ast.class: ast\Ast.java
-	javac ast\Ast.java
+ast\Ast.class: ast\Ast.java ast\AstVisitor.java ast\Declaracion.java
+	javac ast/*.java
 
 # Semantic
 semantic\Semantic.class: semantic\Semantic.java
@@ -66,23 +67,15 @@ lib\OutputFile.class: lib\OutputFile.java
 
 clean:
 	del Compiler.class
-
 	del scanner\*.class
 	del scanner\DecafLexer.java
 	del scanner\DecafLexer.tokens
-
 	del parser\*.class
 	del parser\DecafParser.java
 	del parser\DecafParser.tokens
-
 	del ast\*.class
-
 	del semantic\*.class
-
 	del irt\*.class
-
 	del codegen\*.class
-
 	del opt\*.class
-
 	del lib\*.class
