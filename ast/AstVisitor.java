@@ -162,7 +162,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 			Node n = visit(e);									// visitar cada expresion
 		}*/
 	
-		List<Node> list2 = null;
+		LinkedList<Node> list2 = new LinkedList<Node>();
 		for(int i=0; i<ctx.expr().size(); i++) {
 			Node n = (visit(ctx.expr(i)));
 			list2.add(n);
@@ -173,17 +173,26 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	@Override
 	public Node visitMethod_dec(DecafParser.Method_decContext ctx) {
 		String tipo;
+		LinkedList<Declaracion> declist = new LinkedList<Declaracion>();
+		LinkedList<VarLiteral> listaVarLit = new LinkedList<VarLiteral>();
 
 		if(ctx.KW_VOID() != null){
 			tipo = ctx.KW_VOID().getText();
 		}else{
 			tipo = visit(ctx.type(0)).toString();
 		}
-
+		
+		for (int i=1; i<ctx.type().size(); i++){
+			listaVarLit.add(new VarLiteral(ctx.ID(i).getText()));
+			declist.add(new Declaracion(ctx.type(i).toString(), listaVarLit));
+			listaVarLit.clear();
+		}
+		
 		Declaracion dec;
 		dec = 	new Declaracion(
 					tipo,
 					ctx.ID(0).getText(),
+					declist,
 					visit(ctx.block())
 				);
 		return dec;
