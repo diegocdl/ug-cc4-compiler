@@ -14,7 +14,17 @@ public class Declaracion extends Node {
 
 	// para field_decl
 	public List<VarLiteral> nameFields;
+	
+	// para callout_decl
+	public String id;
 
+	public Declaracion(String id){
+		this.type2 = "Declaracion";
+		this.nameMethod = "callout";
+		this.id = id;
+		this.type="";
+	}
+	
 	public Declaracion(String type, String name, LinkedList<Declaracion> listaparametros, Node bloque){
 		this.type = type;
 		this.type2 = "Declaracion";
@@ -22,15 +32,17 @@ public class Declaracion extends Node {
 		this.bloque = bloque;
 		this.parametros = listaparametros;
 		this.nameFields = null;
+		this.id = null;
 	}
 	
-	public Declaracion(String type, List<VarLiteral> names){
+	public Declaracion(String type, List<VarLiteral> names, int tp){
 		this.type = type;
 		this.nameFields = names;
 		this.parametros = null;
 		this.nameMethod = null;
 		this.bloque = null;
-		if(names.size() == 1){
+		this.id = null;
+		if(tp == 0){
 			this.type2 = "Parametro";
 		}else{
 			this.type2 = "Declaracion";
@@ -54,6 +66,9 @@ public class Declaracion extends Node {
 		}
 		if(bloque != null){
 			bloque.print(padding + "\t");
+		}
+		if(id != null){
+			System.out.println(padding + "\t" + id);
 		}
 	}
 
