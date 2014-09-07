@@ -5,8 +5,15 @@ import java.util.List;
 
 public class Declaracion extends Node {
 	
+	public static final String CALLOUT = "callout";
+	public static final String METODO = "metodo";
+	public static final String FIELD = "field";
+	public static final String PARAMETRO = "parametro";
+	 
+
 	public String type;
-	public String type2;
+	public String typeDec;
+
 	// para method_decl
 	public String nameMethod;
 	public Node bloque;
@@ -19,7 +26,7 @@ public class Declaracion extends Node {
 	public String id;
 
 	public Declaracion(String id){
-		this.type2 = "Declaracion";
+		this.typeDec = CALLOUT;
 		this.nameMethod = "callout";
 		this.id = id;
 		this.type="";
@@ -27,7 +34,7 @@ public class Declaracion extends Node {
 	
 	public Declaracion(String type, String name, LinkedList<Declaracion> listaparametros, Node bloque){
 		this.type = type;
-		this.type2 = "Declaracion";
+		this.typeDec = METODO;
 		this.nameMethod = name;
 		this.bloque = bloque;
 		this.parametros = listaparametros;
@@ -35,29 +42,25 @@ public class Declaracion extends Node {
 		this.id = null;
 	}
 	
-	public Declaracion(String type, List<VarLiteral> names, int tp){
+	public Declaracion(String type, List<VarLiteral> names, String tp){
 		this.type = type;
 		this.nameFields = names;
+		this.typeDec = tp;
 		this.parametros = null;
 		this.nameMethod = null;
 		this.bloque = null;
 		this.id = null;
-		if(tp == 0){
-			this.type2 = "Parametro";
-		}else{
-			this.type2 = "Declaracion";
-		}
 	}
 
 	public void print(String padding) {
-		System.out.println(padding + type2);
+		System.out.println(padding + typeDec);
 		if(type != null) System.out.println(padding + "\t" + type);
 		if(nameFields != null){
 			for ( VarLiteral v : nameFields ) {
 				v.print(padding + "\t");
 			}
 		} else {
-			// System.out.println(padding + "\t" +nameMethod);
+			System.out.println(padding + "\t" +nameMethod);
 		}
 		if(parametros != null){
 			for(Declaracion d : parametros){

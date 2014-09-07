@@ -18,7 +18,7 @@ public class Compiler {
 		try{
 		String inputFilename = "";
 		String outputFilename = "";
-		String target = "";
+		String target = "ast";
 		String opt = "";
 		String debug [] = null;
 

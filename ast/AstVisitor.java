@@ -157,7 +157,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 		Declaracion dec = new Declaracion(
 					visit(ctx.type()).toString(),
 					ids,
-					1
+					Declaracion.FIELD
 					);
 		return dec;
 	}
@@ -192,20 +192,18 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 			offsetType = 0;
 		}
 		
+		// se inicia el ciclo en 1 por que el primer ID sera el nombre del metodo
+		// y se usa un offsetType si el metodo no es void
 		for (int i=1; i<ctx.ID().size(); i++){
 			listaVarLit = new LinkedList<VarLiteral>();
 			listaVarLit.add(new VarLiteral(ctx.ID(i).getText()));
-			// lista.add( new VarLiteral( ctx.ID(i).getText() ) );
-			// System.out.println(listaVarLit);
 			Declaracion d; 
 			d =	new Declaracion(
 					visit(ctx.type(i + offsetType)).toString(), 
 					listaVarLit,
-					0
+					Declaracion.PARAMETRO
 				);
 			declist.add(d);
-			// d.print("");
-			// listaVarLit.clear();
 		}
 		
 		Declaracion dec;
@@ -221,7 +219,6 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 
 	@Override
 	public Node visitCallout_decl(DecafParser.Callout_declContext ctx) {
-
 		Declaracion cd = new Declaracion(ctx.ID().getText());	
 		return cd;
 	}
