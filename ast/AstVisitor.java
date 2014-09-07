@@ -21,6 +21,12 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	public Node visitRoot(DecafParser.RootContext ctx){
 		Root root = new Root();											// raiz del arbol
 		List<DecafParser.Field_declContext> list = ctx.field_decl();	// lista con todas las expresiones, exp()
+		for(int i=0; i<ctx.callout_decl().size(); i++){
+			/*Declaracion cd = new Declaracion(ctx.callout_decl(i).ID().getText());		
+			cd.print("");*/
+			Node n2 = visit(ctx.callout_decl(i));
+			root.add(n2);
+		}
 		for(DecafParser.Field_declContext e : list) {
 			Node n = visit(e);
 			root.add(n);												// visitar cada expresion
@@ -30,6 +36,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 			Node n = visit(e);
 			root.add(n);												// visitar cada expresion
 		}
+		
 		return root;
 	}
 	
@@ -149,7 +156,8 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 		}
 		Declaracion dec = new Declaracion(
 					visit(ctx.type()).toString(),
-					ids
+					ids,
+					1
 					);
 		return dec;
 	}
@@ -184,7 +192,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 		
 		for (int i=1; i<ctx.type().size(); i++){
 			listaVarLit.add(new VarLiteral(ctx.ID(i).getText()));
-			declist.add(new Declaracion(ctx.type(i).toString(), listaVarLit));
+			declist.add(new Declaracion(ctx.type(i).toString(), listaVarLit, 0));
 			listaVarLit.clear();
 		}
 		
@@ -198,6 +206,13 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 		return dec;
 	}
 
+	@Override
+	public Node visitCallout_decl(DecafParser.Callout_declContext ctx) {
+
+		Declaracion cd = new Declaracion(ctx.ID().getText());	
+		return cd;
+	}
+	
 	@Override
 	public Node visitType(DecafParser.TypeContext ctx) {
 		if(ctx.KW_INT() == null ){
