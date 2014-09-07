@@ -51,13 +51,13 @@ public class Declaracion extends Node {
 
 	public void print(String padding) {
 		System.out.println(padding + type2);
-		System.out.println(padding + "\t" + type);
+		if(type != null) System.out.println(padding + "\t" + type);
 		if(nameFields != null){
 			for ( VarLiteral v : nameFields ) {
 				v.print(padding + "\t");
 			}
 		} else {
-			System.out.println(padding + "\t" +nameMethod);
+			// System.out.println(padding + "\t" +nameMethod);
 		}
 		if(parametros != null){
 			for(Declaracion d : parametros){

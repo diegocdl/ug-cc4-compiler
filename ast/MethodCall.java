@@ -23,3 +23,4 @@ public class MethodCall extends Node {
 			}
 		} 
 	}
+}

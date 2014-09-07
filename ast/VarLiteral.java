@@ -22,4 +22,9 @@ public class VarLiteral extends Node {
 		System.out.println("\t"+ padding + name);
 		if(dimension != null) dimension.print(padding + "\t");
 	}
+
+	@Override
+	public String toString(){
+		return name;
+	}
 }

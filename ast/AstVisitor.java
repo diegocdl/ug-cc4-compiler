@@ -183,17 +183,29 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 		String tipo;
 		LinkedList<Declaracion> declist = new LinkedList<Declaracion>();
 		LinkedList<VarLiteral> listaVarLit = new LinkedList<VarLiteral>();
-
+		int offsetType = 0;
 		if(ctx.KW_VOID() != null){
 			tipo = ctx.KW_VOID().getText();
+			offsetType = -1;
 		}else{
 			tipo = visit(ctx.type(0)).toString();
+			offsetType = 0;
 		}
 		
-		for (int i=1; i<ctx.type().size(); i++){
+		for (int i=1; i<ctx.ID().size(); i++){
+			listaVarLit = new LinkedList<VarLiteral>();
 			listaVarLit.add(new VarLiteral(ctx.ID(i).getText()));
-			declist.add(new Declaracion(ctx.type(i).toString(), listaVarLit, 0));
-			listaVarLit.clear();
+			// lista.add( new VarLiteral( ctx.ID(i).getText() ) );
+			// System.out.println(listaVarLit);
+			Declaracion d; 
+			d =	new Declaracion(
+					visit(ctx.type(i + offsetType)).toString(), 
+					listaVarLit,
+					0
+				);
+			declist.add(d);
+			// d.print("");
+			// listaVarLit.clear();
 		}
 		
 		Declaracion dec;
@@ -205,6 +217,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 				);
 		return dec;
 	}
+
 
 	@Override
 	public Node visitCallout_decl(DecafParser.Callout_declContext ctx) {
