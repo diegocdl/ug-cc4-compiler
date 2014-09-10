@@ -27,9 +27,14 @@ public class MethodCall extends Node {
 	public int getDotTree(int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
-		// dec.add("n" + ( ++i ) + "[label=\"Declaracion\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);		
-
+		dec.add("n" + ( ++i ) + "[label=\"Llamada\"];");
+		rel.add("n" + nodoActual + " -> n" + i);		
+		dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
+		rel.add("n" + nodoActual + " -> n" + i);	
+		for (Node n : expresiones ) {
+			n.getDotTree(i, dec, rel);
+			i++;
+		}
 		// if(tipoCiclo.equals(FOR)){
 		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");
 		// 	rel.add("n" + nodoActual + " -> n" + i);		
