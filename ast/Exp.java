@@ -41,9 +41,19 @@ public class Exp extends Node{
 	public int getDotTree(int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
-		// dec.add("n" + ( ++i ) + "[label=\"Declaracion\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);		
-
+		dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
+		rel.add("n" + nodoActual + " -> n" + i);		
+		if(exprModifier.equals("")){
+			dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
+			rel.add("n" + nodoActual + " -> n" + i);		
+			i = expr.getDotTree(i, dec, rel);
+		}else{
+			dec.add("n" + ( ++i ) + "[label=\"" + exprModifier + "\"];");
+			rel.add("n" + nodoActual + " -> n" + i);		
+			dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
+			rel.add("n" + nodoActual + " -> n" + i);		
+			i = expr.getDotTree(i, dec, rel);
+		}
 		// if(tipoCiclo.equals(FOR)){
 		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");
 		// 	rel.add("n" + nodoActual + " -> n" + i);		
