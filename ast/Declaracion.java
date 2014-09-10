@@ -89,6 +89,22 @@ public class Declaracion extends Node {
 				// rel.add("n" + (nodoActual + 1) + " -> n" + i);				
 			}
 
+		}else if(typeDec.equals(METODO)){
+			dec.add("n" + ( ++i ) + "[label=\"" + type + "\"];");
+			rel.add("n" + (nodoActual + 1) + " -> n" + i);
+			dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
+			rel.add("n" + (nodoActual + 1) + " -> n" + i);
+			for ( Node n : parametros ) {
+				i = n.getDotTree(i, dec, rel);
+				// dec.add("n" + (++i ) + "[label=\"" + n.toString() + "\"];");
+				// rel.add("n" + (nodoActual + 1) + " -> n" + i);				
+			}
+			i = bloque.getDotTree(i, dec, rel);
+		}else if(typeDec.equals(CALLOUT)){
+			dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
+			rel.add("n" + (nodoActual + 1) + " -> n" + i);
+			dec.add("n" + ( ++i ) + "[label=\"" + id + "\"];");
+			rel.add("n" + (nodoActual + 1) + " -> n" + i);
 		}
 
 		// if(tipoCiclo.equals(FOR)){
