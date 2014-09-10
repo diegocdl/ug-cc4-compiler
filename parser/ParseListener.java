@@ -15,19 +15,19 @@ public class ParseListener extends DecafParserBaseListener {
 	}
 	
 	 
-	// public void enterProgram(DecafParser.ProgramContext ctx) { 
+	// public void exitProgram(DecafParser.ProgramContext ctx) { 
 	// 	if(debug != null) debug.println(ctx.getStart().getLine() + "program: ");
 	// 	//System.out.println("Program:" + ctx.program());
 	// 	System.out.println( "en linea" + ctx.getStart().getLine());
 	// }
 
-	public void enterMethod_call_error(DecafParser.Method_call_errorContext ctx) {
+	public void exitMethod_call_error(DecafParser.Method_call_errorContext ctx) {
 		System.out.println("Error en la llamada al metodo en la linea " + ctx.getStart().getText());
 	}
 
 
 	@Override
-	public void enterStatement_error(DecafParser.Statement_errorContext ctx) {
+	public void exitStatement_error(DecafParser.Statement_errorContext ctx) {
 		//System.out.println("Error en la llamada al metodo en la linea " + ctx.getStart().getText());
 		if(ctx.location() != null){
 			if(ctx.PUNTO_COMA() == null){
@@ -42,12 +42,12 @@ public class ParseListener extends DecafParserBaseListener {
 	}
 
 	@Override
-	public void enterProgram_error(DecafParser.Program_errorContext ctx) {
+	public void exitProgram_error(DecafParser.Program_errorContext ctx) {
 		System.out.println("Las declaraciones van primero en la linea: " + ctx.getStart().getLine());
 	}
 
 	@Override
-	public void enterWhile_error(DecafParser.While_errorContext ctx) {
+	public void exitWhile_error(DecafParser.While_errorContext ctx) {
 		if(ctx.PARENTESIS_I() == null && ctx.PARENTESIS_D() == null ){
 			System.out.println("Error faltaron los parentesis () en la linea: " + ctx.getStart().getLine());
 		} else if(ctx.PARENTESIS_I() == null){
@@ -69,7 +69,7 @@ public class ParseListener extends DecafParserBaseListener {
 	}
 
 	@Override
-	public void enterFor_error(DecafParser.For_errorContext ctx) {
+	public void exitFor_error(DecafParser.For_errorContext ctx) {
 		// kw_for
 		if(ctx.KW_FOR() == null){
 			System.out.println("Error for invalido en la linea: " + ctx.getStart().getLine());
@@ -94,7 +94,7 @@ public class ParseListener extends DecafParserBaseListener {
 	}
 
 	@Override
-	public void enterIf_error(DecafParser.If_errorContext ctx) {
+	public void exitIf_error(DecafParser.If_errorContext ctx) {
 		if (ctx.expr() == null) {
 			System.out.println("Error no indico la condicion del if en la linea: " + ctx.getStart().getLine());
 		}
@@ -117,7 +117,7 @@ public class ParseListener extends DecafParserBaseListener {
 	}
 
 	@Override
-	public void enterMethod_decl_error(DecafParser.Method_decl_errorContext ctx) {
+	public void exitMethod_decl_error(DecafParser.Method_decl_errorContext ctx) {
 		System.out.println("Error decl");
 		if (ctx.KW_VOID() == null && ctx.ID().size() != ctx.type().size() || ctx.ID().size() != (ctx.type().size() - 1)) {
 			System.out.println("Error falto un tipo de parametro de la declaracion del metodo en la linea: " + ctx.getStart().getLine());
@@ -129,17 +129,17 @@ public class ParseListener extends DecafParserBaseListener {
 	}
 
 	@Override
-	public void enterCallout_decl_error(DecafParser.Callout_decl_errorContext ctx) {
+	public void exitCallout_decl_error(DecafParser.Callout_decl_errorContext ctx) {
 		System.out.println("Falto el ; en la linea " + ctx.getStart().getLine());
 	}
 
 	@Override
-	public void enterBlock_error( DecafParser.Block_errorContext ctx) {
+	public void exitBlock_error( DecafParser.Block_errorContext ctx) {
 		// ignorado por que se reporta en otros lugares
 	}
 
 	@Override
-	public void enterField_decl_error( DecafParser.Field_decl_errorContext ctx) {
+	public void exitField_decl_error( DecafParser.Field_decl_errorContext ctx) {
 		System.out.println("Error field ");
 		if(ctx.ASIG_OP() != null) {
 			System.out.println("Erro no se puede inicializar variables al declararlas en la linea: " + ctx.getStart().getLine());

@@ -1,5 +1,7 @@
 package compiler.ast;
 
+import java.util.List;
+
 public class Asign extends Node{
 	public Node id;
 	public String asig;
@@ -16,4 +18,17 @@ public class Asign extends Node{
 		id.print(padding + "\t");
 		if(value != null) value.print(padding + "\t");
 	}
+
+	public int getDotTree(int i, List<String> dec, List<String> rel) {
+		int nodoActual = i;
+
+		dec.add("n" + ( ++i ) + "[label=\"ID\"];");
+		rel.add("n" + nodoActual + " -> n" + i);
+		i = id.getDotTree(i, dec, rel);
+		dec.add("n" + (++i) + "[label=\"" + asig + "\"];");
+		rel.add("n" + nodoActual + " -> n" + i);
+		i = value.getDotTree(i, dec, rel);
+		return i;
+	}
+
 } 

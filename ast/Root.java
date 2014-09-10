@@ -22,9 +22,26 @@ public class Root extends Node{
 				n.print("\t" + padding);
 		}
 	}
+
+	public int size(){
+		return declaraciones.size();
+	}
+
+	public Node getChild(int i){
+		return declaraciones.get(i);
+	}
 	
 	public void print(){
 		print("");
 	}
 	
+	public int getDotTree(int i, List<String> dec, List<String> rel) {
+		int nodoActual = i;
+		dec.add("n" + ( nodoActual ) + "[label=\"Root\"];");
+		for (Node n : declaraciones ) {
+			n.getDotTree(i, dec, rel);
+			i++;
+		}
+		return i;
+	}
 } 

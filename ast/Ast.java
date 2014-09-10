@@ -40,6 +40,10 @@ public class Ast {
 		Root root = (Root)visitor.visit(parser.tree);
 		root.print();
 		System.out.println(root);
+		GraphicTree gt = new GraphicTree(root);
+		String dotRepresentation = gt.build();
+
+		of.writeln(dotRepresentation);
     } catch (ArrayIndexOutOfBoundsException aiobe) {
 		System.err.println("usage: java Main <file>\nwhere file is the path to the filename with the tokens");
 		aiobe.printStackTrace();

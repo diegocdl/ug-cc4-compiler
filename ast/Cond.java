@@ -1,5 +1,7 @@
 package compiler.ast;
 
+import java.util.List;
+
 public class Cond extends Node{
 	
 	public Node condicion;
@@ -24,5 +26,22 @@ public class Cond extends Node{
 			System.out.println(padding + "\tElse");
 			alternativa.print(padding + "\t");
 		}
+	}
+
+	public int getDotTree(int i, List<String> dec, List<String> rel) {
+		int nodoActual = i;
+
+		dec.add("n" + ( ++i ) + "[label=\"if\"];");
+		rel.add("n" + nodoActual + " -> n" + i);		
+		i = condicion.getDotTree(nodoActual, dec, rel);
+
+		dec.add("n" + ( ++i ) + "[label=\"ID\"];");
+		rel.add("n" + nodoActual + " -> n" + i);
+
+		// dec.add("n" + ( ++i ) + "[label=\"Exp\"];");
+		// rel.add("n" + nodoActual + " -> n" + i);
+		// i = hijo1.getDotTree(i, dec, rel);		
+		
+		return i;
 	}
 } 

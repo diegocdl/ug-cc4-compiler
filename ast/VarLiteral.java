@@ -1,4 +1,6 @@
 package compiler.ast;
+
+import java.util.List;
 public class VarLiteral extends Node {
 	public String name;
 	public Node dimension;
@@ -26,5 +28,31 @@ public class VarLiteral extends Node {
 	@Override
 	public String toString(){
 		return name;
+	}
+
+	public int getDotTree(int i, List<String> dec, List<String> rel) {
+		int nodoActual = i;
+
+		dec.add("n" + ( ++i ) + "[label=\"VarLiteral\"];");
+		rel.add("n" + (nodoActual) + " -> n" + i);		
+
+		// if(dimension != null) {
+		// 	i = dimension.getDotTree(nodoActual, dec, rel);
+		// }
+
+		// if(tipoCiclo.equals(FOR)){
+		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");
+		// 	rel.add("n" + nodoActual + " -> n" + i);		
+		// 	i = inicializacionVar.getDotTree(nodoActual, dec, rel);
+		// }
+		// dec.add("n" + ( ++i ) + "[label=\"condicion\"];");
+		// rel.add("n" + nodoActual + " -> n" + i);
+		// i = condicion.getDotTree(i, dec, rel);
+
+		// dec.add("n" + ( ++i ) + "[label=\"bloque\"];");
+		// rel.add("n" + nodoActual + " -> n" + i);
+		// i = bloque.getDotTree(i, dec, rel);
+		
+		return i;
 	}
 }
