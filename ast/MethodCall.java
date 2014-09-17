@@ -2,6 +2,7 @@ package compiler.ast;
 
 import java.util.LinkedList;
 import java.util.List;
+import compiler.semantic.*;
 
 public class MethodCall extends Node {
 	
@@ -14,6 +15,10 @@ public class MethodCall extends Node {
 		this.expresiones = ex;
 	}
 
+	public void checkMethodCall(Table tb){
+	
+	}
+	
 	public void print(String padding) {
 		System.out.println(padding + "Llamada ");
 		System.out.println(padding +  nameMethod);
@@ -22,6 +27,16 @@ public class MethodCall extends Node {
 				e.print(padding + "\t");
 			}
 		} 
+	}
+	
+	@Override
+	public String toString(){
+		return "Method Call";
+		/*String str = this.nameMethod;
+		for ( Node e : expresiones ) {
+				str = str + " " + e.toString();
+			}
+		return str;*/
 	}
 
 	public int getDotTree(int i, List<String> dec, List<String> rel) {
