@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import compiler.semantic.*;
 
 public class Cond extends Node{
 	
@@ -16,6 +17,15 @@ public class Cond extends Node{
 		this.condicion = condicion;
 		this.consecuencia = consecuencia;
 		this.alternativa = alternativa;
+	}
+	
+	public void checkCond(Table tb, String nombre){
+	
+	}
+	
+	@Override
+	public String toString(){
+		return "Cond";
 	}
 	
 	public void print(String padding){
