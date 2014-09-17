@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import compiler.semantic.*;
 
 public class Asign extends Node{
 	public Node id;
@@ -19,6 +20,15 @@ public class Asign extends Node{
 		if(value != null) value.print(padding + "\t");
 	}
 
+	public void checkAsign(Table tb){
+	
+	}
+	
+	@Override
+	public String toString(){
+		return "Asignacion";
+	}
+	
 	public int getDotTree(int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
