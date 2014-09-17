@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import compiler.semantic.*;
 /*
 	for(<id> = <expr>, <expr>) <block>
 	while (<expr>) <block>
@@ -37,6 +38,22 @@ public class Cycle extends Node{
 	*/
 	public Cycle(Node condicion, Node bloque){
 		this(WHILE, null, condicion, bloque);
+	}
+	
+	public void checkCycle(Table tb, String nombre){
+	
+	}
+	
+	@Override
+	public String toString(){
+		return "Ciclo";
+		/*String str = "";
+		if(this.inicializacionVar != null){
+			str = this.tipoCiclo + " " + this.inicializacionVar.toString() + " " + this.condicion.toString();
+		}else{
+			str = this.tipoCiclo + " " + this.condicion.toString();
+		}
+		return str;*/
 	}
 	
 	public int getDotTree(int i, List<String> dec, List<String> rel) {
