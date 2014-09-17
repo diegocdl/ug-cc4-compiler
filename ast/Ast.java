@@ -4,6 +4,7 @@ import compiler.parser.CC4Parser;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
 import java.util.List;
+import java.util.LinkedList;
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import compiler.parser.DecafParser;
@@ -13,9 +14,16 @@ public class Ast {
 	public Debug debug;
 	public OutputFile of;
 	public CC4Parser parser;
+	public Root root;
+	//public LinkedList<Node> lista;
+	//public LinkedList<Node> lista2;
 
 	public Ast(CC4Parser parser) throws Exception {
 		this.parser = parser;
+		//this.lista = new LinkedList<Node>();
+		//this.lista2 = new LinkedList<Node>();
+		AstVisitor visitor = new AstVisitor();
+		this.root = (Root)visitor.visit(parser.tree);
 		of = parser.getOutFile();
 		String msg = "stage: Ast";
 		System.out.println(msg);
@@ -36,10 +44,12 @@ public class Ast {
 		// ParseTree tree = this.parser.parser.start();
 		// System.out.println(tree.toStringTree(parser.parser));
 		//usar visitor para recorrer el arbol y tomar los elementos que interesan
-		AstVisitor visitor = new AstVisitor();
-		Root root = (Root)visitor.visit(parser.tree);
-		root.print();
-		System.out.println(root);
+		
+		//AstVisitor visitor = new AstVisitor(lista,lista2);
+		
+		this.root.print();
+		//System.out.println(lista.toString());
+		//System.out.println(lista.get(1).toString());
 		GraphicTree gt = new GraphicTree(root);
 		String dotRepresentation = gt.build();
 
@@ -56,4 +66,3 @@ public class Ast {
   }
 	
 }
-
