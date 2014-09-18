@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import compiler.semantic.*;
 
 public class Statement extends Node{
 	/* continue, break, return */
@@ -24,6 +25,15 @@ public class Statement extends Node{
 		}
 	}
 
+	public void checkStatement(Table tb){
+	
+	}
+	
+	@Override
+	public String toString(){
+		return "Statement";
+	}
+	
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 

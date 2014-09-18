@@ -2,6 +2,7 @@ package compiler.ast;
 
 import java.util.LinkedList;
 import java.util.List;
+import compiler.semantic.*;
 
 public class Declaracion extends Node {
 	
@@ -28,6 +29,9 @@ public class Declaracion extends Node {
 	public Declaracion(String id){
 		this.typeDec = CALLOUT;
 		this.nameMethod = "callout";
+		this.nameFields = null;
+		this.parametros = null;
+		this.bloque = null;
 		this.id = id;
 		this.type="";
 	}
@@ -52,6 +56,40 @@ public class Declaracion extends Node {
 		this.id = null;
 	}
 
+	public void checkMethod(Table tb, String nombre, SymbolTable stable){
+		Root block = (Root)this.bloque;
+		for (Node n : block.declaraciones){
+			if (n instanceof Declaracion){
+				Declaracion d = (Declaracion)n;
+				for(VarLiteral vl : d.nameFields){
+					if (tb.tabla.containsKey(vl.name) == false){
+						tb.tabla.put(vl.name,d.type);
+						System.out.println(tb.tabla.toString());
+					}
+				}
+			}else if (n instanceof Cond){
+				Cond c = (Cond)n;
+				Table t = new Table("", nombre);
+				stable.listaTablas.add(t);
+				c.checkCond(t,"");
+			}else if (n instanceof Cycle){
+				Cycle cy = (Cycle)n;
+				Table t = new Table("", nombre);
+				stable.listaTablas.add(t);
+				cy.checkCycle(t,"");
+			}else if (n instanceof MethodCall){
+				MethodCall mc = (MethodCall)n;
+				mc.checkMethodCall(tb);
+			}else if (n instanceof Statement){
+				Statement st = (Statement)n;
+				st.checkStatement(tb);
+			}else if (n instanceof Asign){
+				Asign a = (Asign)n;
+				a.checkAsign(tb);
+			}
+		}
+	}
+	
 	public void print(String padding) {
 		System.out.println(padding + typeDec);
 		if(type != null) System.out.println(padding + "\t" + type);
@@ -74,6 +112,30 @@ public class Declaracion extends Node {
 			System.out.println(padding + "\t" + id);
 		}
 	}
+	
+	/*@Override
+	public String toString(){
+		return "Declaracion";
+		String str = "";
+		str = str + this.type + " ";
+		if(this.nameMethod != null){
+			str = str + this.nameMethod + " ";
+		}
+		if(this.parametros != null){
+			for (Declaracion y : this.parametros){
+				str = str + y.toString() + " ";
+			}
+		}
+		if(this.nameFields != null){
+			for (VarLiteral x : this.nameFields){
+				str = str + x.toString() + " ";
+			}
+		}
+		if(this.id != null){
+			str = str + this.id + " ";
+		}
+		return str;
+	}*/
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
