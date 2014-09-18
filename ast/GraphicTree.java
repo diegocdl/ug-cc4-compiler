@@ -21,7 +21,7 @@ public class GraphicTree {
 
 	public String build(){
 		String result = "";
-		root.getDotTree(0, definiciones, relacion);
+		root.getDotTree(0, 0, definiciones, relacion);
 		// System.out.println(definiciones);
 		for ( String s : definiciones) {
 			result += s + "\n";

@@ -35,11 +35,11 @@ public class Root extends Node{
 		print("");
 	}
 	
-	public int getDotTree(int i, List<String> dec, List<String> rel) {
+	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 		dec.add("n" + ( nodoActual ) + "[label=\"Root\"];");
 		for (Node n : declaraciones ) {
-			n.getDotTree(i, dec, rel);
+			n.getDotTree(i, i, dec, rel);
 			i++;
 		}
 		return i;

@@ -75,16 +75,17 @@ public class Declaracion extends Node {
 		}
 	}
 
-	public int getDotTree(int i, List<String> dec, List<String> rel) {
+	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 		dec.add("n" + ( ++i ) + "[label=\"Declaracion\"];");
 		rel.add("n" + nodoActual + " -> n" + i);		
 		if(typeDec.equals(FIELD)){
 			dec.add("n" + ( ++i ) + "[label=\"" + type + "\"];");
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
-
+			int fieldsParent = nodoActual + 1;
 			for ( Node n : nameFields ) {
-				i = n.getDotTree(i, dec, rel);
+				i = n.getDotTree(fieldsParent, i, dec, rel);
+				// fieldsParent++;
 				// dec.add("n" + (++i ) + "[label=\"" + n.toString() + "\"];");
 				// rel.add("n" + (nodoActual + 1) + " -> n" + i);				
 			}
@@ -94,12 +95,13 @@ public class Declaracion extends Node {
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
 			dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
+
 			for ( Node n : parametros ) {
-				i = n.getDotTree(i, dec, rel);
+				i = n.getDotTree(i, i, dec, rel);
 				// dec.add("n" + (++i ) + "[label=\"" + n.toString() + "\"];");
 				// rel.add("n" + (nodoActual + 1) + " -> n" + i);				
 			}
-			i = bloque.getDotTree(i, dec, rel);
+			i = bloque.getDotTree(i, i, dec, rel);
 		}else if(typeDec.equals(CALLOUT)){
 			dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);

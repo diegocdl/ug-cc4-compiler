@@ -39,7 +39,7 @@ public class Cycle extends Node{
 		this(WHILE, null, condicion, bloque);
 	}
 	
-	public int getDotTree(int i, List<String> dec, List<String> rel) {
+	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 
 		dec.add("n" + ( ++i ) + "[label=\""+ tipoCiclo + "\"];");
@@ -48,15 +48,15 @@ public class Cycle extends Node{
 		if(tipoCiclo.equals(FOR)){
 			dec.add("n" + ( ++i ) + "[label=\"exp\"];");
 			rel.add("n" + nodoActual + " -> n" + i);		
-			i = inicializacionVar.getDotTree(nodoActual, dec, rel);
+			i = inicializacionVar.getDotTree(i, nodoActual, dec, rel);
 		}
 		dec.add("n" + ( ++i ) + "[label=\"condicion\"];");
 		rel.add("n" + nodoActual + " -> n" + i);
-		i = condicion.getDotTree(i, dec, rel);
+		i = condicion.getDotTree(i, i, dec, rel);
 
 		dec.add("n" + ( ++i ) + "[label=\"bloque\"];");
 		rel.add("n" + nodoActual + " -> n" + i);
-		i = bloque.getDotTree(i, dec, rel);
+		i = bloque.getDotTree(i, i, dec, rel);
 		
 		return i;
 	}

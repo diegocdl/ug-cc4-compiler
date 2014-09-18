@@ -24,7 +24,7 @@ public class Statement extends Node{
 		}
 	}
 
-	public int getDotTree(int i, List<String> dec, List<String> rel) {
+	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
 		dec.add("n" + ( ++i ) + "[label=\"Statement\"];");
@@ -35,7 +35,7 @@ public class Statement extends Node{
 		}else{
 			dec.add("n" + ( ++i ) + "[label=\"" + keyword +"\"];");
 			rel.add("n" + nodoActual + " -> n" + i);	
-			i = value.getDotTree(nodoActual, dec, rel);			
+			i = value.getDotTree(i, nodoActual, dec, rel);			
 		}
 		// if(tipoCiclo.equals(FOR)){
 		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");

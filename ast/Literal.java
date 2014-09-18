@@ -19,11 +19,11 @@ public class Literal extends Node {
 		return value;
 	}
 
-	public int getDotTree(int i, List<String> dec, List<String> rel) {
+	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
 		dec.add("n" + ( ++i ) + "[label=\"" + value + "\"];");
-		rel.add("n" + nodoActual + " -> n" + i);		
+		rel.add("n" + parent + " -> n" + i);		
 
 		// if(tipoCiclo.equals(FOR)){
 		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");
