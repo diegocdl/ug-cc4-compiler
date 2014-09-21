@@ -13,18 +13,22 @@ public class Asign extends Node{
 		this.asig = asig;
 		this.value = value;
 	}
-	
-	public void print(String padding){
-		System.out.println(padding + asig);
-		id.print(padding + "\t");
-		if(value != null) value.print(padding + "\t");
+
+	@Override
+	public String print(String padding){
+		String str = padding + asig+"\n";
+		str += id.print(padding + "\t");
+		if(value != null){
+			str += value.print(padding + "\t");
+		}
+		return str;
 	}
 
 	public void checkAsign(Table tb){
 	
 	}
 	
-	
+
 	@Override
 	public String toString(){
 		return "Asignacion";
@@ -33,12 +37,12 @@ public class Asign extends Node{
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
-		dec.add("n" + ( ++i ) + "[label=\"ID\"];");
-		rel.add("n" + nodoActual + " -> n" + i);
-		i = id.getDotTree(i, i, dec, rel);
+		// dec.add("n" + ( ++i ) + "[label=\"ID\"];");
+		// rel.add("n" + nodoActual + " -> n" + i);
 		dec.add("n" + (++i) + "[label=\"" + asig + "\"];");
-		rel.add("n" + nodoActual + " -> n" + i);
-		i = value.getDotTree(i, i, dec, rel);
+		rel.add("n" + (parent) + " -> n" + i);
+		i = id.getDotTree(parent+1, i, dec, rel);
+		i = value.getDotTree(parent+1, i, dec, rel);
 		return i;
 	}
 

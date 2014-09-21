@@ -18,11 +18,13 @@ public class Statement extends Node{
 		this.value = n1;
 	}
 	
-	public void print(String padding){
-		System.out.println(padding + keyword);
+	@Override
+	public String print(String padding){
+		String str = padding + keyword + "\n";
 		if(value != null){
-			value.print(padding + "\t");
+			str += value.print(padding + "\t");
 		}
+		return str;
 	}
 
 	public void checkStatement(Table tb){

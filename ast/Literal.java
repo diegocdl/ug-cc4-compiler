@@ -10,8 +10,9 @@ public class Literal extends Node {
 		this.value = s;
 	}
 	
-	public void print(String padding){
-		System.out.println(padding + value);
+	@Override
+	public String print(String padding){
+		return padding + value + "\n";
 	}
 
 	@Override

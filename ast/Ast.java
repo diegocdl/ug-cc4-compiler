@@ -46,8 +46,9 @@ public class Ast {
 		//usar visitor para recorrer el arbol y tomar los elementos que interesan
 		
 		//AstVisitor visitor = new AstVisitor(lista,lista2);
-		
-		this.root.print();
+		String strTree = this.root.print();
+		System.out.println(strTree);
+		of.writeln(strTree);
 		//System.out.println(lista.toString());
 		//System.out.println(lista.get(1).toString());
 		GraphicTree gt = new GraphicTree(root);

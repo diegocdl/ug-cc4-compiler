@@ -79,13 +79,17 @@ public class Cycle extends Node{
 		return i;
 	}
 
-	public void print(String padding){
-		System.out.println(padding + tipoCiclo);
-		if(inicializacionVar != null) 
-			inicializacionVar.print(padding + "\t");
-		if(condicion != null)
-			condicion.print(padding + "\t");
-		if(bloque != null) 
-			bloque.print(padding + "\t");
+	public String print(String padding){
+		String str = padding + tipoCiclo + "\n";
+		if(inicializacionVar != null) {
+			str += inicializacionVar.print(padding + "\t");
+		}
+		if(condicion != null) {
+			str += condicion.print(padding + "\t");
+		}
+		if(bloque != null) {
+			str += bloque.print(padding + "\t");
+		}
+		return str;
 	}
 } 

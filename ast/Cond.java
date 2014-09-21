@@ -28,14 +28,20 @@ public class Cond extends Node{
 		return "Cond";
 	}
 	
-	public void print(String padding){
-		System.out.println(padding + "If");
-		if(condicion != null) condicion.print(padding + "\t");
-		if(consecuencia != null) consecuencia.print(padding + "\t");
-		if(alternativa != null){
-			System.out.println(padding + "\tElse");
-			alternativa.print(padding + "\t");
+	@Override
+	public String print(String padding){
+		String str = padding + "If\n";
+		if(condicion != null) {
+			str += condicion.print(padding + "\t");
 		}
+		if(consecuencia != null) {
+			str += consecuencia.print(padding + "\t");
+		}
+		if(alternativa != null){
+			str += padding + "\tElse\n";
+			str += alternativa.print(padding + "\t");
+		}
+		return str;
 	}
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){

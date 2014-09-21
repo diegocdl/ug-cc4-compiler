@@ -90,52 +90,33 @@ public class Declaracion extends Node {
 		}
 	}
 	
-	public void print(String padding) {
-		System.out.println(padding + typeDec);
-		if(type != null) System.out.println(padding + "\t" + type);
+	@Override
+	public String print(String padding) {
+		String str = padding + typeDec + "\n";
+		if(type != null) {
+			str += padding + "\t" + type + "\n";
+		}
 		if(nameFields != null){
 			for ( VarLiteral v : nameFields ) {
-				v.print(padding + "\t");
+				str += v.print(padding + "\t");
 			}
 		} else {
-			System.out.println(padding + "\t" +nameMethod);
+			str += padding + "\t" +nameMethod + "\n";
 		}
 		if(parametros != null){
 			for(Declaracion d : parametros){
-				d.print(padding + "\t");
+				str += d.print(padding + "\t");
 			}
 		}
 		if(bloque != null){
-			bloque.print(padding + "\t");
+			str += bloque.print(padding + "\t");
 		}
 		if(id != null){
-			System.out.println(padding + "\t" + id);
-		}
-	}
-	
-	/*@Override
-	public String toString(){
-		return "Declaracion";
-		String str = "";
-		str = str + this.type + " ";
-		if(this.nameMethod != null){
-			str = str + this.nameMethod + " ";
-		}
-		if(this.parametros != null){
-			for (Declaracion y : this.parametros){
-				str = str + y.toString() + " ";
-			}
-		}
-		if(this.nameFields != null){
-			for (VarLiteral x : this.nameFields){
-				str = str + x.toString() + " ";
-			}
-		}
-		if(this.id != null){
-			str = str + this.id + " ";
+			str += padding + "\t" + id + "\n";
 		}
 		return str;
-	}*/
+	}
+	
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
@@ -163,7 +144,7 @@ public class Declaracion extends Node {
 				// dec.add("n" + (++i ) + "[label=\"" + n.toString() + "\"];");
 				// rel.add("n" + (nodoActual + 1) + " -> n" + i);				
 			}
-			i = bloque.getDotTree(i, i, dec, rel);
+			i = bloque.getDotTree(nodoActual + 1, i, dec, rel);
 		}else if(typeDec.equals(CALLOUT)){
 			dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);

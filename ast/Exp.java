@@ -29,43 +29,40 @@ public class Exp extends Node{
 		this("", false, expr);
 	}
 	
-	public void print(String padding){
+	@Override
+	public String print(String padding){
+		String str = "";
 		if(!(exprModifier.equals(""))){
-			System.out.println(padding + "\t" + exprModifier);
+			str = padding + exprModifier + "\n";
 		}
-		if(parentesis) System.out.print('(');
-		if(expr != null) expr.print(padding + "\t");
-		if(parentesis) System.out.print(')');
+		if(parentesis) {
+			str += '(';
+		}
+		if(expr != null) {
+			str += expr.print(padding);
+		}
+		if(parentesis) {
+			str += ')';
+		}
+		return str;
 	}
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 
-		dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
-		rel.add("n" + nodoActual + " -> n" + i);		
+		// dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
+		// rel.add("n" + nodoActual + " -> n" + i);		
 		if(exprModifier.equals("")){
-			dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
-			rel.add("n" + nodoActual + " -> n" + i);		
-			i = expr.getDotTree(i, i, dec, rel);
+			// dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
+			// rel.add("n" + nodoActual + " -> n" + i);		
+			i = expr.getDotTree(parent, i, dec, rel);
 		}else{
 			dec.add("n" + ( ++i ) + "[label=\"" + exprModifier + "\"];");
 			rel.add("n" + nodoActual + " -> n" + i);		
-			dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
-			rel.add("n" + nodoActual + " -> n" + i);		
+			// dec.add("n" + ( ++i ) + "[label=\"Expresion\"];");
+			// rel.add("n" + nodoActual + " -> n" + i);		
 			i = expr.getDotTree(i, i, dec, rel);
 		}
-		// if(tipoCiclo.equals(FOR)){
-		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");
-		// 	rel.add("n" + nodoActual + " -> n" + i);		
-		// 	i = inicializacionVar.getDotTree(nodoActual, dec, rel);
-		// }
-		// dec.add("n" + ( ++i ) + "[label=\"condicion\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);
-		// i = condicion.getDotTree(i, dec, rel);
-
-		// dec.add("n" + ( ++i ) + "[label=\"bloque\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);
-		// i = bloque.getDotTree(i, dec, rel);
 		
 		return i;
 	}

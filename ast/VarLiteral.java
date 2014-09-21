@@ -18,11 +18,15 @@ public class VarLiteral extends Node {
 		this.name = name;
 		this.dimension = null;
 	}
-
-	public void print(String padding){
-		System.out.println(padding + "VarLiteral");
-		System.out.println("\t"+ padding + name);
-		if(dimension != null) dimension.print(padding + "\t");
+	
+	@Override
+	public String print(String padding){
+		String str = padding + "VarLiteral\n";
+		str += "\t" + padding + name + "\n";
+		if(dimension != null){
+			str += dimension.print(padding + "\t");
+		}
+		return str;
 	}
 
 	@Override
@@ -41,7 +45,7 @@ public class VarLiteral extends Node {
 
 
 		if(dimension != null) {
-			i = dimension.getDotTree(parent+2, i, dec, rel);
+			i = dimension.getDotTree(parent+1, i, dec, rel);
 		}
 
 

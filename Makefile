@@ -32,7 +32,9 @@ parser\DecafParser.class: parser/ParseListener.java parser\DecafParser.java
 	javac parser\DecafParser.java
 
 # ast	
-ast\Ast.class: ast\Ast.java ast\AstVisitor.java ast\Declaracion.java
+ast\Ast.class: 	ast\Ast.java ast\AstVisitor.java ast\BinOp.java ast\Cond.java ast\Cycle.java 				\
+				ast\Declaracion.java ast\Exp.java ast\GraphicTree.java ast\Literal.java ast\MethodCall.java 	\
+				ast\Node.java ast\Root.java ast\Statement.java ast\VarLiteral.java
 	javac ast/*.java
 
 # Semantic

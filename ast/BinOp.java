@@ -20,28 +20,30 @@ public class BinOp extends Node{
 		this.operation = op;
 	}
 	
-	public void print(String padding){
+	@Override
+	public String print(String padding){
 		/*
 			imprimir tanto el signo como los hijos
 		*/
-		System.out.println(padding + operation);
-		if(hijo1 != null) hijo1.print(padding + "\t");
-		if(hijo2 != null) hijo2.print(padding + "\t");
+		String str = padding + operation + "\n";
+		if(hijo1 != null) {
+			str += hijo1.print(padding + "\t");
+		}
+		if(hijo2 != null) {
+			str += hijo2.print(padding + "\t");
+		}
+		return str;
 	}
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 
-		dec.add("n" + ( ++i ) + "[label=\"Exp\"];");
-		rel.add("n" + nodoActual + " -> n" + i);		
-		i = hijo1.getDotTree(i, i, dec, rel);
+		dec.add("n" + ( ++i ) + "[label=\"" + operation + "\"];");
+		rel.add("n" + parent + " -> n" + i);
 
-		dec.add("n" + ( ++i ) + "[label=\"ID\"];");
-		rel.add("n" + nodoActual + " -> n" + i);
-
-		dec.add("n" + ( ++i ) + "[label=\"Exp\"];");
-		rel.add("n" + nodoActual + " -> n" + i);
-		i = hijo1.getDotTree(i, i, dec, rel);		
+		i = hijo1.getDotTree(nodoActual + 1, i, dec, rel);
+		
+		i = hijo2.getDotTree(nodoActual + 1, i, dec, rel);		
 		
 		return i;
 	}

@@ -19,50 +19,27 @@ public class MethodCall extends Node {
 	
 	}
 	
-	public void print(String padding) {
-		System.out.println(padding + "Llamada ");
-		System.out.println(padding +  nameMethod);
+	@Override
+	public String print(String padding) {
+		String str = padding + "Llamada " +  nameMethod + "\n";
 		if(expresiones != null){
 			for ( Node e : expresiones ) {
-				e.print(padding + "\t");
+				str += e.print(padding + "\t");
 			}
-		} 
+		}
+		return str;
 	}
 	
 	@Override
 	public String toString(){
 		return "Method Call";
-		/*String str = this.nameMethod;
-		for ( Node e : expresiones ) {
-				str = str + " " + e.toString();
-			}
-		return str;*/
 	}
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
-		dec.add("n" + ( ++i ) + "[label=\"Llamada\"];");
-		rel.add("n" + nodoActual + " -> n" + i);		
 		dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
-		rel.add("n" + nodoActual + " -> n" + i);	
-		for (Node n : expresiones ) {
-			n.getDotTree(i, i, dec, rel);
-			i++;
-		}
-		// if(tipoCiclo.equals(FOR)){
-		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");
-		// 	rel.add("n" + nodoActual + " -> n" + i);		
-		// 	i = inicializacionVar.getDotTree(nodoActual, dec, rel);
-		// }
-		// dec.add("n" + ( ++i ) + "[label=\"condicion\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);
-		// i = condicion.getDotTree(i, dec, rel);
-
-		// dec.add("n" + ( ++i ) + "[label=\"bloque\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);
-		// i = bloque.getDotTree(i, dec, rel);
-		
+		rel.add("n" + parent + " -> n" + i);		
 		return i;
 	}
 }
