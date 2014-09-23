@@ -12,6 +12,7 @@ public class Exp extends Node{
 	public boolean parentesis;
 	
 	public Exp(String s, boolean parentesis, Node expr) {
+		super();
 		this.expr = expr;
 		this.exprModifier = s;
 		this.parentesis = parentesis;

@@ -27,6 +27,7 @@ public class Declaracion extends Node {
 	public String id;
 
 	public Declaracion(String id){
+		super();
 		this.typeDec = CALLOUT;
 		this.nameMethod = "callout";
 		this.nameFields = null;
@@ -56,39 +57,39 @@ public class Declaracion extends Node {
 		this.id = null;
 	}
 
-	public void checkMethod(Table tb, String nombre, SymbolTable stable){
-		Root block = (Root)this.bloque;
-		for (Node n : block.declaraciones){
-			if (n instanceof Declaracion){
-				Declaracion d = (Declaracion)n;
-				for(VarLiteral vl : d.nameFields){
-					if (tb.tabla.containsKey(vl.name) == false){
-						tb.tabla.put(vl.name,d.type);
-						System.out.println(tb.tabla.toString());
-					}
-				}
-			}else if (n instanceof Cond){
-				Cond c = (Cond)n;
-				Table t = new Table("", nombre);
-				stable.listaTablas.add(t);
-				c.checkCond(t,"");
-			}else if (n instanceof Cycle){
-				Cycle cy = (Cycle)n;
-				Table t = new Table("", nombre);
-				stable.listaTablas.add(t);
-				cy.checkCycle(t,"");
-			}else if (n instanceof MethodCall){
-				MethodCall mc = (MethodCall)n;
-				mc.checkMethodCall(tb);
-			}else if (n instanceof Statement){
-				Statement st = (Statement)n;
-				st.checkStatement(tb);
-			}else if (n instanceof Asign){
-				Asign a = (Asign)n;
-				a.checkAsign(tb);
-			}
-		}
-	}
+	// public void checkMethod(Table tb, String nombre, SymbolTableManager stable){
+	// 	Root block = (Root)this.bloque;
+	// 	for (Node n : block.declaraciones){
+	// 		if (n instanceof Declaracion){
+	// 			Declaracion d = (Declaracion)n;
+	// 			for(VarLiteral vl : d.nameFields){
+	// 				if (tb.tabla.containsKey(vl.name) == false){
+	// 					tb.tabla.put(vl.name,d.type);
+	// 					System.out.println(tb.tabla.toString());
+	// 				}
+	// 			}
+	// 		}else if (n instanceof Cond){
+	// 			Cond c = (Cond)n;
+	// 			Table t = new Table("", tb);
+	// 			stable.listaTablas.add(t);
+	// 			c.checkCond(t,"");
+	// 		}else if (n instanceof Cycle){
+	// 			Cycle cy = (Cycle)n;
+	// 			Table t = new Table("", tb);
+	// 			stable.listaTablas.add(t);
+	// 			cy.checkCycle(t,"");
+	// 		}else if (n instanceof MethodCall){
+	// 			MethodCall mc = (MethodCall)n;
+	// 			mc.checkMethodCall(tb);
+	// 		}else if (n instanceof Statement){
+	// 			Statement st = (Statement)n;
+	// 			st.checkStatement(tb);
+	// 		}else if (n instanceof Asign){
+	// 			Asign a = (Asign)n;
+	// 			a.checkAsign(tb);
+	// 		}
+	// 	}
+	// }
 	
 	@Override
 	public String print(String padding) {
@@ -116,21 +117,25 @@ public class Declaracion extends Node {
 		}
 		return str;
 	}
+
+	public String getTypeDec(){
+		return typeDec;
+	}
 	
+	public String getTypeData(){
+		return type;
+	}
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 		dec.add("n" + ( ++i ) + "[label=\"Declaracion\"];");
-		rel.add("n" + nodoActual + " -> n" + i);		
+		rel.add("n" + parent + " -> n" + i);		
 		if(typeDec.equals(FIELD)){
 			dec.add("n" + ( ++i ) + "[label=\"" + type + "\"];");
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
 			int fieldsParent = nodoActual + 1;
 			for ( Node n : nameFields ) {
-				i = n.getDotTree(fieldsParent, i, dec, rel);
-				// fieldsParent++;
-				// dec.add("n" + (++i ) + "[label=\"" + n.toString() + "\"];");
-				// rel.add("n" + (nodoActual + 1) + " -> n" + i);				
+				i = n.getDotTree(fieldsParent, i, dec, rel);		
 			}
 
 		}else if(typeDec.equals(METODO)){
@@ -140,7 +145,7 @@ public class Declaracion extends Node {
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
 
 			for ( Node n : parametros ) {
-				i = n.getDotTree(i, i, dec, rel);
+				i = n.getDotTree(nodoActual + 1, i, dec, rel);
 				// dec.add("n" + (++i ) + "[label=\"" + n.toString() + "\"];");
 				// rel.add("n" + (nodoActual + 1) + " -> n" + i);				
 			}

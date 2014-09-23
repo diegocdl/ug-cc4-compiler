@@ -9,13 +9,14 @@ public class Statement extends Node{
 	/* valor a retornar */
 	public Node value;
 	
-	public Statement(String k){
-		this(k, null);
-	}
-	
 	public Statement(String k, Node n1){
+		super();
 		this.keyword = k;
 		this.value = n1;
+	}
+
+	public Statement(String k){
+		this(k, null);
 	}
 	
 	@Override
@@ -40,28 +41,15 @@ public class Statement extends Node{
 		int nodoActual = i;
 
 		dec.add("n" + ( ++i ) + "[label=\"Statement\"];");
-		rel.add("n" + nodoActual + " -> n" + i);		
+		rel.add("n" + parent + " -> n" + i);		
 		if (value==null){
 			dec.add("n" + ( ++i ) + "[label=\"" + keyword +"\"];");
-			rel.add("n" + nodoActual + " -> n" + i);		
+			rel.add("n" + (parent + 1) + " -> n" + i);		
 		}else{
 			dec.add("n" + ( ++i ) + "[label=\"" + keyword +"\"];");
-			rel.add("n" + nodoActual + " -> n" + i);	
-			i = value.getDotTree(i, nodoActual, dec, rel);			
+			rel.add("n" + (parent + 1) + " -> n" + i);	
+			i = value.getDotTree(parent+1, nodoActual, dec, rel);			
 		}
-		// if(tipoCiclo.equals(FOR)){
-		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");
-		// 	rel.add("n" + nodoActual + " -> n" + i);		
-		// 	i = inicializacionVar.getDotTree(nodoActual, dec, rel);
-		// }
-		// dec.add("n" + ( ++i ) + "[label=\"condicion\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);
-		// i = condicion.getDotTree(i, dec, rel);
-
-		// dec.add("n" + ( ++i ) + "[label=\"bloque\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);
-		// i = bloque.getDotTree(i, dec, rel);
-		
 		return i;
 	}
 } 

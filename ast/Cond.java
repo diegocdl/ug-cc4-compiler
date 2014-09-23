@@ -14,13 +14,15 @@ public class Cond extends Node{
 	}
 	
 	public Cond(Node condicion, Node consecuencia, Node alternativa){
+		super();
 		this.condicion = condicion;
 		this.consecuencia = consecuencia;
 		this.alternativa = alternativa;
+		
 	}
 	
 	public void checkCond(Table tb, String nombre){
-	
+		
 	}
 	
 	@Override

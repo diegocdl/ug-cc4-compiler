@@ -12,9 +12,9 @@ public class BinOp extends Node{
 	public String operation;
 	
 	public BinOp(String op, Node n1, Node n2){
-		/*
-			incluir argumentos con el signo y los hijos
-		*/
+		super();
+		
+		// incluir argumentos con el signo y los hijos
 		this.hijo1 = n1;
 		this.hijo2 = n2;
 		this.operation = op;

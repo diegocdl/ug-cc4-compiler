@@ -9,6 +9,7 @@ public class Asign extends Node{
 	public Node value;
 	
 	public Asign(Node id, String asig, Node value){
+		super();
 		this.id = id;
 		this.asig = asig;
 		this.value = value;

@@ -31,8 +31,8 @@ public class CC4Parser {
 	public void start() {
 		try {	    
 			parser = new DecafParser(new CommonTokenStream(scan.lexer));
-			// parser.removeErrorListeners();
-			// parser.addParseListener(new ParseListener(of, debug));
+			parser.removeErrorListeners();
+			parser.addParseListener(new ParseListener(of, debug));
 			tree = parser.start();
 			TreeViewer view = 	new TreeViewer(
 									Arrays.asList(DecafParser.ruleNames),

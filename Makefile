@@ -1,7 +1,7 @@
 make: scanner\DecafLexer.java scanner\DecafLexer.class scanner\Scanner.class	\
 	parser\DecafParser.java parser\DecafParser.class parser\CC4Parser.class 	\
 	ast\Ast.class \
-	semantic\Semantic.class	\
+	semantic\Semantic.class	semantic\SymbolTableManager.class semantic\Table.class \
 	irt\Irt.class codegen\Codegen.class		\
 	opt\Algebraic.class opt\ConstantFolding.class 		\
 	lib\Debug.class lib\ErrorHandler.class lib\OutputFile.class		\
@@ -40,6 +40,12 @@ ast\Ast.class: 	ast\Ast.java ast\AstVisitor.java ast\BinOp.java ast\Cond.java as
 # Semantic
 semantic\Semantic.class: semantic\Semantic.java
 	javac semantic\Semantic.java
+
+semantic\SymbolTableManager.class: semantic\SymbolTableManager.java
+	javac semantic\SymbolTableManager.java	
+
+semantic\Table.class: semantic\Table.java
+	javac semantic\Table.java
 
 # Irt
 irt\Irt.class: irt\Irt.java
