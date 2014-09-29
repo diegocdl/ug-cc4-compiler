@@ -23,27 +23,8 @@ public class Semantic {
 		of.writeln(msg);
 	}
 	
-	/*public void check(){
-		for (Node n : listaNodos){
-			if(n instanceof Declaracion){
-				Declaracion decl = (Declaracion)n;
-				Table t = new Table("", "");
-				this.tablaSimbolos.listaTablas.add(t);
-				if(decl.typeDec.equals("field"))
-				for(VarLiteral vl : decl.nameFields){
-				if (t.tabla.containsKey(vl.name) == false){
-					t.tabla.put(vl.name,decl.type);
-					System.out.println(t.tabla.toString());
-				}/*else{
-					result=false;
-				}*/
-				/*}
-			}
-		}
-		System.out.println(this.tablaSimbolos.listaTablas.toString());
-	}*/
-	
 	public void check(){
+		boolean main = false;
 		Table tglobal = new Table("ROOT", "NULL");
 		this.tablaSimbolos.listaTablas.add(tglobal);
 		for (Node n : listaNodos){
@@ -52,116 +33,34 @@ public class Semantic {
 				if(decl.typeDec.equals("metodo")){
 					Table t = new Table(decl.nameMethod, "ROOT");
 					this.tablaSimbolos.listaTablas.add(t);
+					if (tglobal.tabla.containsKey(decl.nameMethod) == false){
+							tglobal.tabla.put(decl.nameMethod,new Tipos(decl.type, decl.parametros));
+							for (Declaracion d : decl.parametros){
+								t.tabla.put(d.nameFields.get(0).name, new Tipos(d.type));
+							}
+					}else {
+						System.out.println(decl.nameMethod + " no puede ser declarada de nuevo");
+					}
 					decl.checkMethod(t,decl.nameMethod,this.tablaSimbolos);
 				}else if(decl.typeDec.equals("field")){
 					for(VarLiteral vl : decl.nameFields){
 						if (tglobal.tabla.containsKey(vl.name) == false){
-							tglobal.tabla.put(vl.name,decl.type);
-							System.out.println(tglobal.tabla.toString());
+							tglobal.tabla.put(vl.name,new Tipos(decl.type));
+							
+						}else {
+						System.out.println(vl.name + " no puede ser declarada de nuevo");
 						}
 					}
 				}
 			}
 		}
+		for (Table tab : this.tablaSimbolos.listaTablas){
+			System.out.println(tab.toTableString());
+			if (tab.name.equals("main")){main = true;}
+		}
+		if (!main){System.out.println("No hay main");}
 	}
 	
-	/*public void check(){
-		/*String str = "", straux = "";
-		int numt = 0, numaux = 0, count = 0, countif = 0, conds = 0, condinstructions = 0;
-		Table tglobal = new Table("ROOT", "NULL");
-		this.tablaSimbolos.listaTablas.add(tglobal);
-		for (Node n : listaNodos0){
-			count++;
-			if(n instanceof Declaracion){
-				Declaracion decl = (Declaracion)n;
-				for(VarLiteral vl : decl.nameFields){
-				if (tglobal.tabla.containsKey(vl.name) == false){
-					tglobal.tabla.put(vl.name,decl.type);
-					System.out.println(tglobal.tabla.toString());
-				}
-				}
-			}
-		}
-		for (int i=listaNodos.size()-count; i>0; i--){
-			if(listaNodos.get(i) instanceof Declaracion){
-				Declaracion decl = (Declaracion)listaNodos.get(i);
-				if(decl.typeDec.equals("metodo")){
-				str = decl.nameMethod;
-				straux = str;
-				numt++;
-				numaux++;
-				Table t = new Table(str, "ROOT");
-				this.tablaSimbolos.listaTablas.add(t);
-				}else if(decl.typeDec.equals("field")){
-				for(VarLiteral vl : decl.nameFields){
-				if (this.tablaSimbolos.listaTablas.get(numt).containsKey(vl.name) == false){
-					t.tabla.put(vl.name,decl.type);
-					System.out.println(t.tabla.toString());
-				}/*else{
-					result=false;
-				}*/
-				/*}
-				}
-			}else if(listaNodos.get(i) instanceof Asign){
-				Asign a = (Asign)listaNodos.get(i);
-				if (this.tablaSimbolos.listaTablas.get(numt).containsKey(a.name) == true){
-					
-				}else{
-					
-				}
-			}else if(listaNodos.get(i) instanceof MethodCall){
-				MethodCall mc = (MethodCall)listaNodos.get(i);
-				if (this.tablaSimbolos.listaTablas.get(numt).containsKey(a.nameMethod) == true){
-					
-				}else{
-					
-				}
-			/*else if (listaNodos.get(i) instanceof Cond){
-				boolean ifanidado = false;
-				boolean elseif = false;
-				Cond cnd = (Cond)n;
-				countif++;
-				for(Node n : cnd.consecuencia.declaraciones){
-					if (n instanceof Cond){
-						ifanidado = true;
-					}
-				}
-				if (cnd.alternativa != null){
-				for(Node n : cnd.alternativa.declaraciones){
-					if (n instanceof Cond){
-						conds++;
-						elseif = true;
-					}
-				}
-				}
-				if(!ifanidado){
-					Table t = new Table("IF"+countif, str);
-					this.tablaSimbolos.listaTablas.add(t);
-				}else{
-					Table t = new Table("IF"+countif, str);
-					this.tablaSimbolos.listaTablas.add(t);
-					str="IF"+countif;
-				}
-				if (!elseif){
-					Table t = new Table("ELSE"+countif, str);
-					this.tablaSimbolos.listaTablas.add(t);
-				}
-				if(!ifanidado&&!elseif&&conds==0){
-					str=straux;
-				}else if(!ifanidado&&!elseif&&conds>0){
-					str="IF"+(countif-1);
-					conds--;
-				}
-			}else if (listaNodos.get(i) instanceof Root){
-				Root r = (Root)n;
-				Table t = new Table("IF", str);
-				if (cnd.alternativa != null){
-					Table t = new Table("ELSE", str);
-				}
-			}*/
-		/*}
-		System.out.println(this.tablaSimbolos.listaTablas.toString());
-	}*/
 
 	public void setDebuger(Debug d) {
 		debug = d;
