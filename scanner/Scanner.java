@@ -15,7 +15,7 @@ public class Scanner {
 	public Scanner(String inputFile, OutputFile outFile) throws Exception {
 		of = outFile;
 		this.inputFile = inputFile;
-	    lexer =  new DecafLexer(new ANTLRFileStream(inputFile));;
+	    lexer =  new DecafLexer(new ANTLRFileStream(inputFile));
 	}
 
 	public void start() {

@@ -27,8 +27,9 @@ parser\CC4Parser.class: parser\CC4Parser.java
 parser\DecafParser.java: parser\DecafParser.g
 	java org.antlr.v4.Tool -visitor -lib scanner parser\DecafParser.g
 
-parser\DecafParser.class: parser/ParseListener.java parser\DecafParser.java 
+parser\DecafParser.class: parser\DecafErrorListener.java parser\ParseListener.java parser\DecafParser.java 
 	javac parser\ParseListener.java
+	javac parser\DecafErrorListener.java
 	javac parser\DecafParser.java
 
 # ast	
