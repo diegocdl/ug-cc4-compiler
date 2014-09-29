@@ -1,7 +1,5 @@
-class Program {
-  boolean b;
+boolean b;
 
-  void main() {
-    b = !5;	// operand of ! must be boolean
-  }								
+void main() {
+	b = !5;	// operand of ! must be boolean
 }
