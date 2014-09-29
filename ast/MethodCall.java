@@ -15,8 +15,43 @@ public class MethodCall extends Node {
 		this.expresiones = ex;
 	}
 
-	public void checkMethodCall(Table tb){
-	
+	public String checkMethodCall(Table tb, SymbolTable st){
+		boolean p = false;
+		String resultado = "";
+		LinkedList<String> lista = new LinkedList<String>();
+		Table tabla = null;
+		for (Node n : this.expresiones){
+			if (n instanceof Exp){
+				Exp ex = (Exp)n;
+				lista.add(ex.checkExp(tb,st));
+			}else if (n instanceof Literal){
+				Literal lit = (Literal)n;
+				lista.add(lit.checkLiteral(tb,st));
+			}else if (n instanceof BinOp){
+				BinOp bin = (BinOp)n;
+				lista.add(bin.checkBinOp(tb,st));
+			}
+		}
+		
+		for (Table t : st.listaTablas){
+			if (t.name.equals("ROOT")){
+				tabla = t;
+			}
+		}
+		if (tabla.tabla.containsKey(this.nameMethod) == true){
+			resultado = tabla.tabla.get(this.nameMethod).tipo;
+			//System.out.println("----> " + lista.toString());
+			//System.out.println("----> " + tabla.tabla.get(this.nameMethod).tiposparametros.toString());
+			if (lista.size() != tabla.tabla.get(this.nameMethod).tiposparametros.size()){
+				System.out.println("Error en el numero de argumentos");
+			}
+			if (!lista.equals(tabla.tabla.get(this.nameMethod).tiposparametros)){
+				System.out.println("parametro invalido en la llamada a " + this.nameMethod);
+			}
+		}else{
+			System.out.println(this.nameMethod + "es un metodo no declarado");
+		}
+		return resultado;
 	}
 	
 	@Override
