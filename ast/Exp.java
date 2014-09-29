@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import compiler.semantic.*;
 
 public class Exp extends Node{
 	/* location or method_call */
@@ -45,6 +46,42 @@ public class Exp extends Node{
 			str += ')';
 		}
 		return str;
+	}
+	
+	public String checkExp(Table tb, SymbolTable st){
+		String str = "";
+		if (this.exprModifier.equals("")){
+			if (this.expr instanceof VarLiteral){
+				VarLiteral v = (VarLiteral)this.expr;
+				//System.out.println("Soy VarLiteral");
+				str = v.checkVarLiteral(tb,st);
+			}else if (this.expr instanceof MethodCall){
+				MethodCall llamada = (MethodCall)this.expr;
+				str = llamada.checkMethodCall(tb,st);
+				//System.out.println("Soy una Llamada a Metodo");
+			}
+		}else if (this.exprModifier.equals("!")){
+			if (this.expr instanceof Exp){
+				Exp ex = (Exp)this.expr;
+				str = ex.checkExp(tb,st);
+			}else if (this.expr instanceof BinOp){
+				BinOp bo = (BinOp)this.expr;
+				str = bo.checkBinOp(tb,st);
+			}else if (this.expr instanceof Literal){
+				Literal lit = (Literal)this.expr;
+				str = lit.checkLiteral(tb,st);
+			}
+			if (!str.equals("boolean")){
+				str = "error";
+				System.out.println("la expresion de \"!\" debe ser boolean");
+			}
+		}
+		return str;
+	}
+	
+	@Override
+	public String toString(){
+		return "Exp";
 	}
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
