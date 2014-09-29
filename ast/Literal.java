@@ -1,6 +1,8 @@
 package compiler.ast;
 
 import java.util.List;
+import java.util.regex.*;
+import compiler.semantic.*;
 
 public class Literal extends Node {
 	/*char, string, Int, hex */ 
@@ -15,6 +17,22 @@ public class Literal extends Node {
 		return padding + value + "\n";
 	}
 
+	public String checkLiteral(Table tb, SymbolTable st){
+		String resultado = "";
+		if(Pattern.matches("[0-9]+",this.value)){
+			resultado = "int";
+		}else if(Pattern.matches("0x([0-9]|[A-F]|[a-f])+",this.value)){
+			resultado = "int";
+		}else if(Pattern.matches(".",this.value)){
+			resultado = "char";
+		}else if ((this.value.equals("\'"))||(this.value.equals("\""))||(this.value.equals("\\"))||(this.value.equals("\t"))||(this.value.equals("\n"))){
+			resultado = "char";
+		}else if ((this.value.equals("true"))||(this.value.equals("false"))){
+			resultado = "boolean";
+		}
+		return resultado;
+	}
+	
 	@Override
 	public String toString(){
 		return value;
