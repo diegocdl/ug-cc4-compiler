@@ -18,7 +18,7 @@ public class Compiler {
 		try{
 		String inputFilename = "";
 		String outputFilename = "";
-		String target = "ast";
+		String target = "";
 		String opt = "";
 		String debug [] = null;
 
@@ -115,8 +115,10 @@ public class Compiler {
 						semantic = new Semantic(ast);
 						if (buscarString(debug, "semantic")) semantic.setDebuger(deb);
 						if (target.equals("semantic")) {
+							semantic.check();
 							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
 							exit(0);
+							
 						}
 						irt = new Irt(semantic);
 						if (buscarString(debug, "irt")) irt.setDebuger(deb);
