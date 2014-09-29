@@ -1,6 +1,8 @@
 package compiler.ast;
 
 import java.util.List;
+import compiler.semantic.*;
+
 public class VarLiteral extends Node {
 	public String name;
 	public Node dimension;
@@ -18,7 +20,7 @@ public class VarLiteral extends Node {
 		this.name = name;
 		this.dimension = null;
 	}
-	
+
 	@Override
 	public String print(String padding){
 		String str = padding + "VarLiteral\n";
@@ -31,9 +33,37 @@ public class VarLiteral extends Node {
 
 	@Override
 	public String toString(){
-		return name;
+		if (dimension != null)
+			return name + " " + dimension;
+		else
+			return name;
 	}
 
+	public String checkVarLiteral(Table tb, SymbolTable st){
+		String resultado = "";
+		boolean b = false;
+		if (tb.tabla.containsKey(this.name) == false){
+			Table tableaux = tb;
+			Table tableaux2 = null;
+			while(!(tableaux.parent.equals("NULL")) && !b){
+				for (int i=0; i<st.listaTablas.size(); i++){
+					tableaux2 = st.listaTablas.get(i);
+					if (tableaux2.name.equals(tableaux.parent)){
+						if (tableaux2.tabla.containsKey(this.name) == true){
+							resultado = tableaux2.tabla.get(this.name).tipo;
+							//System.out.println(tableaux2.name);
+							i=st.listaTablas.size();
+							b = true;
+						}else{tableaux = tableaux2;i=st.listaTablas.size();}
+					}
+				}
+			}
+		}else{
+			resultado = tb.tabla.get(this.name).tipo;
+		}
+		return resultado;
+	}
+	
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
