@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import compiler.semantic.*;
 
 public class BinOp extends Node{
 	/*
@@ -12,9 +13,6 @@ public class BinOp extends Node{
 	public String operation;
 	
 	public BinOp(String op, Node n1, Node n2){
-		/*
-			incluir argumentos con el signo y los hijos
-		*/
 		this.hijo1 = n1;
 		this.hijo2 = n2;
 		this.operation = op;
@@ -22,9 +20,6 @@ public class BinOp extends Node{
 	
 	@Override
 	public String print(String padding){
-		/*
-			imprimir tanto el signo como los hijos
-		*/
 		String str = padding + operation + "\n";
 		if(hijo1 != null) {
 			str += hijo1.print(padding + "\t");
@@ -33,6 +28,63 @@ public class BinOp extends Node{
 			str += hijo2.print(padding + "\t");
 		}
 		return str;
+	}
+
+	
+	public String checkBinOp(Table tb, SymbolTable st){
+		boolean e = true;
+		String resultado = "";
+		String str = "", str2 = "", str3 = "";
+		if (this.hijo1 instanceof BinOp){
+			BinOp b = (BinOp)this.hijo1;
+			str = b.checkBinOp(tb,st);
+		}else if (this.hijo1 instanceof Literal){
+			Literal litr = (Literal)this.hijo1;
+			str = litr.checkLiteral(tb,st);
+		}else if (this.hijo1 instanceof Exp){
+			Exp exps = (Exp)this.hijo1;
+			str = exps.checkExp(tb,st);
+		}
+		str2 = this.operation;
+		if (this.hijo2 instanceof BinOp){
+			BinOp b2 = (BinOp)this.hijo2;
+			str3 = b2.checkBinOp(tb,st);
+		}else if (this.hijo2 instanceof Literal){
+			Literal litr2 = (Literal)this.hijo2;
+			str3 = litr2.checkLiteral(tb,st);
+		}else if (this.hijo2 instanceof Exp){
+			Exp exps2 = (Exp)this.hijo2;
+			str3 = exps2.checkExp(tb,st);
+		}
+		if (!str.equals("error") && !str3.equals("error")){
+		if ((str2.equals("&&") || str2.equals("||")) && ((str.equals("boolean")) && (str3.equals("boolean")))){
+			resultado = "boolean";
+			//System.out.println("Se esta operando algo que no es boolean");
+		}else if ( (str2.equals("==") || str2.equals("!=")) && (((str.equals("boolean")) && (str3.equals("boolean"))) || ((str.equals("int")) && (str3.equals("int")))) ){
+			resultado = "boolean";
+			//System.out.println("comparacion incorrecta");
+		}else if ((str2.equals("+") || str2.equals("-") || str2.equals("*") || str2.equals("/") || str2.equals("%") ) && ((str.equals("int")) && (str3.equals("int")))){
+			resultado = "int";
+			//System.out.println("Se esta operando algo que es boolean");
+		}else if ((str2.equals("<") || str2.equals(">") || str2.equals("<=") || str2.equals(">=") ) && ((str.equals("int")) && (str3.equals("int")))){
+			resultado = "boolean";
+			//System.out.println("Se esta operando algo que es boolean");
+		}else {
+			resultado = "error";
+			System.out.println("Operacion Invalida");
+		}
+		}else {
+			resultado = "error";
+		}
+		//System.out.println("Verifique BinOp :)" + resultado + " de: " + str + " " + str2 + " " + str3);
+		return resultado;
+	}
+	
+	@Override
+	public String toString(){
+		return "BinOp";
+		/*String str = hijo1.toString() + " " + this.operation + " " + hijo2.toString();
+		return str;*/
 	}
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
