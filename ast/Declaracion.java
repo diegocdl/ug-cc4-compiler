@@ -57,37 +57,67 @@ public class Declaracion extends Node {
 	}
 
 	public void checkMethod(Table tb, String nombre, SymbolTable stable){
+		String returntype = "";
 		Root block = (Root)this.bloque;
 		for (Node n : block.declaraciones){
 			if (n instanceof Declaracion){
 				Declaracion d = (Declaracion)n;
 				for(VarLiteral vl : d.nameFields){
 					if (tb.tabla.containsKey(vl.name) == false){
-						tb.tabla.put(vl.name,d.type);
-						System.out.println(tb.tabla.toString());
+						tb.tabla.put(vl.name,new Tipos(d.type));
+					}else {
+						System.out.println(vl.name + " no puede ser declarada de nuevo");
 					}
 				}
 			}else if (n instanceof Cond){
 				Cond c = (Cond)n;
-				Table t = new Table("", nombre);
+				Table t = new Table("IF_"+c.id, nombre);
 				stable.listaTablas.add(t);
-				c.checkCond(t,"");
+				c.checkCond(tb,t,"IF_"+c.id,stable);
 			}else if (n instanceof Cycle){
 				Cycle cy = (Cycle)n;
-				Table t = new Table("", nombre);
+				Asign init = (Asign)cy.inicializacionVar;
+				init.checkAsign(tb,stable);
+				Table t = new Table("CICLO_"+cy.id, nombre);
 				stable.listaTablas.add(t);
-				cy.checkCycle(t,"");
+				cy.checkCycle(t,"CICLO_"+cy.id,stable);
 			}else if (n instanceof MethodCall){
 				MethodCall mc = (MethodCall)n;
-				mc.checkMethodCall(tb);
+				mc.checkMethodCall(tb,stable);
 			}else if (n instanceof Statement){
 				Statement st = (Statement)n;
-				st.checkStatement(tb);
+				returntype = st.checkStatement(tb,stable);
+				if (st.checkBreakContinue() == true){
+					System.out.println("no puede haber un break o continue fuera de un For o While");
+				}
 			}else if (n instanceof Asign){
 				Asign a = (Asign)n;
-				a.checkAsign(tb);
+				a.checkAsign(tb,stable);
+			}
+			
+		}
+		if (this.type.equals("void")){
+			if (!returntype.equals("")){
+				System.out.println("no tiene que haber return");
+			}
+		}else{
+			if (returntype.equals("")){
+				System.out.println("Falta el valor de retorno");
+			}else{
+				if (!this.type.equals(returntype)){
+					System.out.println("tipo de retorno invalido");
+				}
 			}
 		}
+		/*if ((!this.type.equals(returntype))&&(!returntype.equals(""))){
+			System.out.println("tipo de retorno invalido");
+		}
+		if (!(this.type.equals("void"))&&(!returntype.equals(""))){
+			System.out.println("no tiene que haber return");
+		}
+		if (!(!this.type.equals("void"))&&(returntype.equals(""))){
+			System.out.println("Falta el valor de retorno");
+		}*/
 	}
 	
 	@Override
@@ -116,7 +146,6 @@ public class Declaracion extends Node {
 		}
 		return str;
 	}
-	
 
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
