@@ -27,8 +27,31 @@ public class Statement extends Node{
 		return str;
 	}
 
-	public void checkStatement(Table tb){
+	public String checkStatement(Table tb, SymbolTable st){
+		String resultado = "";
+		if (this.keyword.equals("return")){
+			if (this.value instanceof Exp){
+				Exp expr = (Exp)this.value;
+				resultado = expr.checkExp(tb,st);
+			}else if (this.value instanceof BinOp){
+				BinOp bo = (BinOp)this.value;
+				resultado = bo.checkBinOp(tb,st);
+			}else if (this.value instanceof Literal){
+				Literal lit = (Literal)this.value;
+				resultado = lit.checkLiteral(tb,st);
+			}
+		}
+		return resultado;
+	}
 	
+	public boolean checkBreakContinue(){
+		boolean b = false;
+		if (this.value == null){
+			if ((this.keyword.equals("break")) || (this.keyword.equals("continue"))){
+				b = true;
+			}
+		}
+		return b;
 	}
 	
 	@Override
