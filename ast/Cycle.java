@@ -77,12 +77,15 @@ public class Cycle extends Node{
 							if (vl.dimension == null){
 								tb.tabla.put(vl.name,new Tipos(decl.type));
 							}else {
+								try{
+									Literal literal = (Literal)vl.dimension;
+									int dim = Integer.parseInt(literal.value);
+									if(dim == 0){
+										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
+									}
+								} catch(Exception e){ }
 								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
-							}/*else if (vl.dimension > 0) {
-								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
-							}else {
-								System.out.println("Un arreglo no puede tener tamaño 0");
-							}*/
+							}
 						}
 					}
 			}else if (n instanceof Asign){
@@ -139,12 +142,15 @@ public class Cycle extends Node{
 							if (vl.dimension == null){
 								tb.tabla.put(vl.name,new Tipos(decl.type));
 							}else {
+								try{
+									Literal literal = (Literal)vl.dimension;
+									int dim = Integer.parseInt(literal.value);
+									if(dim == 0){
+										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
+									}
+								} catch(Exception e){ }
 								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
-							}/*else if (vl.dimension > 0) {
-								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
-							}else {
-								System.out.println("Un arreglo no puede tener tamaño 0");
-							}*/
+							}
 						}
 					}
 			}else if (n instanceof Asign){

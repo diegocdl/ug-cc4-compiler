@@ -50,6 +50,13 @@ public class Semantic {
 							if (vl.dimension == null){
 								tglobal.tabla.put(vl.name,new Tipos(decl.type));
 							}else {
+								try{
+									Literal literal = (Literal)vl.dimension;
+									int dim = Integer.parseInt(literal.value);
+									if(dim == 0){
+										this.listaErrores.add(vl.name + "[0]  la dimension no puede ser 0");
+									}
+								} catch(Exception e){ }
 								tglobal.tabla.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}else {

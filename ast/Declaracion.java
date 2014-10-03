@@ -75,12 +75,16 @@ public class Declaracion extends Node {
 						if (vl.dimension == null){
 							tb.tabla.put(vl.name,new Tipos(d.type));
 						}else {
+							// verificar que la dimension no se 0 
+							try{
+								Literal literal = (Literal)vl.dimension;
+								int dim = Integer.parseInt(literal.value);
+								if(dim == 0){
+									errorList.add(vl.name + "[0]  la dimension no puede ser 0");
+								}
+							} catch(Exception e){ }
 							tb.tabla.put(vl.name,new Tipos(d.type + "[]"));
-						}/*else if (vl.dimension > 0){
-							tb.tabla.put(vl.name,new Tipos(d.type + "[]"));
-						}else {
-							System.out.println("Un arreglo no puede tener tamaño 0");
-						}*/
+						}
 					}else {
 						//System.out.println(vl.name + " no puede ser declarada de nuevo");
 						errorList.add(vl.name + " no puede ser declarada de nuevo");
@@ -190,7 +194,6 @@ public class Declaracion extends Node {
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
 			dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
-
 			for ( Node n : parametros ) {
 				i = n.getDotTree(i, i, dec, rel);
 				// dec.add("n" + (++i ) + "[label=\"" + n.toString() + "\"];");
