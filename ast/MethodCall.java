@@ -15,7 +15,7 @@ public class MethodCall extends Node {
 		this.expresiones = ex;
 	}
 
-	public String checkMethodCall(Table tb, SymbolTable st){
+	public String checkMethodCall(Table tb, SymbolTable st, LinkedList<String> errorList){
 		boolean p = false;
 		String resultado = "";
 		LinkedList<String> lista = new LinkedList<String>();
@@ -23,13 +23,13 @@ public class MethodCall extends Node {
 		for (Node n : this.expresiones){
 			if (n instanceof Exp){
 				Exp ex = (Exp)n;
-				lista.add(ex.checkExp(tb,st));
+				lista.add(ex.checkExp(tb,st,errorList));
 			}else if (n instanceof Literal){
 				Literal lit = (Literal)n;
 				lista.add(lit.checkLiteral(tb,st));
 			}else if (n instanceof BinOp){
 				BinOp bin = (BinOp)n;
-				lista.add(bin.checkBinOp(tb,st));
+				lista.add(bin.checkBinOp(tb,st,errorList));
 			}
 		}
 		
@@ -43,13 +43,16 @@ public class MethodCall extends Node {
 			//System.out.println("----> " + lista.toString());
 			//System.out.println("----> " + tabla.tabla.get(this.nameMethod).tiposparametros.toString());
 			if (lista.size() != tabla.tabla.get(this.nameMethod).tiposparametros.size()){
-				System.out.println("Error en el numero de argumentos");
+				//System.out.println("Error en el numero de argumentos");
+				errorList.add("Error en el numero de argumentos en el Metodo " + this.nameMethod);
 			}
 			if (!lista.equals(tabla.tabla.get(this.nameMethod).tiposparametros)){
-				System.out.println("parametro invalido en la llamada a " + this.nameMethod);
+				//System.out.println("parametro invalido en la llamada a " + this.nameMethod);
+				errorList.add("parametro invalido en la llamada a " + this.nameMethod);
 			}
 		}else{
-			System.out.println(this.nameMethod + "es un metodo no declarado");
+			//System.out.println(this.nameMethod + "es un metodo no declarado");
+			errorList.add(this.nameMethod + "es un metodo no declarado");
 		}
 		return resultado;
 	}

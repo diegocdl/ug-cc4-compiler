@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import java.util.LinkedList;
 import compiler.semantic.*;
 
 public class Statement extends Node{
@@ -27,15 +28,15 @@ public class Statement extends Node{
 		return str;
 	}
 
-	public String checkStatement(Table tb, SymbolTable st){
+	public String checkStatement(Table tb, SymbolTable st, LinkedList<String> errorList){
 		String resultado = "";
 		if (this.keyword.equals("return")){
 			if (this.value instanceof Exp){
 				Exp expr = (Exp)this.value;
-				resultado = expr.checkExp(tb,st);
+				resultado = expr.checkExp(tb,st,errorList);
 			}else if (this.value instanceof BinOp){
 				BinOp bo = (BinOp)this.value;
-				resultado = bo.checkBinOp(tb,st);
+				resultado = bo.checkBinOp(tb,st,errorList);
 			}else if (this.value instanceof Literal){
 				Literal lit = (Literal)this.value;
 				resultado = lit.checkLiteral(tb,st);
@@ -44,11 +45,25 @@ public class Statement extends Node{
 		return resultado;
 	}
 	
-	public boolean checkBreakContinue(){
-		boolean b = false;
-		if (this.value == null){
-			if ((this.keyword.equals("break")) || (this.keyword.equals("continue"))){
-				b = true;
+	//Devuelve true si el break o continue esta bien
+	public boolean checkBreakContinue(Table tb, SymbolTable st){
+		boolean b = true;
+		Table tableaux = tb;
+		Table tableaux2 = null;
+		if ((this.value == null) &&  ((this.keyword.equals("break")) || (this.keyword.equals("continue")))){
+			b = false;
+			while(!(tableaux.parent.equals("NULL")) && !b){
+				if (tableaux.name.matches("CICLO_[0-9]+")){
+					b = true;
+					break;
+				}
+				for (int i=0; i<st.listaTablas.size(); i++){
+					tableaux2 = st.listaTablas.get(i);
+					if (tableaux2.name.equals(tableaux.parent)){
+						tableaux = tableaux2;
+						i=st.listaTablas.size();
+					}
+				}
 			}
 		}
 		return b;

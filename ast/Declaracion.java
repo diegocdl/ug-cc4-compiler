@@ -56,7 +56,7 @@ public class Declaracion extends Node {
 		this.id = null;
 	}
 
-	public void checkMethod(Table tb, String nombre, SymbolTable stable){
+	public void checkMethod(Table tb, String nombre, SymbolTable stable, LinkedList<String> errorList){
 		String returntype = "";
 		Root block = (Root)this.bloque;
 		for (Node n : block.declaraciones){
@@ -64,48 +64,61 @@ public class Declaracion extends Node {
 				Declaracion d = (Declaracion)n;
 				for(VarLiteral vl : d.nameFields){
 					if (tb.tabla.containsKey(vl.name) == false){
-						tb.tabla.put(vl.name,new Tipos(d.type));
+						if (vl.dimension == null){
+							tb.tabla.put(vl.name,new Tipos(d.type));
+						}else {
+							tb.tabla.put(vl.name,new Tipos(d.type + "[]"));
+						}/*else if (vl.dimension > 0){
+							tb.tabla.put(vl.name,new Tipos(d.type + "[]"));
+						}else {
+							System.out.println("Un arreglo no puede tener tamaño 0");
+						}*/
 					}else {
-						System.out.println(vl.name + " no puede ser declarada de nuevo");
+						//System.out.println(vl.name + " no puede ser declarada de nuevo");
+						errorList.add(vl.name + " no puede ser declarada de nuevo");
 					}
 				}
 			}else if (n instanceof Cond){
 				Cond c = (Cond)n;
 				Table t = new Table("IF_"+c.id, nombre);
 				stable.listaTablas.add(t);
-				c.checkCond(tb,t,"IF_"+c.id,stable);
+				c.checkCond(tb,t,"IF_"+c.id,stable,errorList);
 			}else if (n instanceof Cycle){
 				Cycle cy = (Cycle)n;
 				Asign init = (Asign)cy.inicializacionVar;
-				init.checkAsign(tb,stable);
+				init.checkAsign(tb,stable,errorList);
 				Table t = new Table("CICLO_"+cy.id, nombre);
 				stable.listaTablas.add(t);
-				cy.checkCycle(t,"CICLO_"+cy.id,stable);
+				cy.checkCycle(t,"CICLO_"+cy.id,stable,errorList);
 			}else if (n instanceof MethodCall){
 				MethodCall mc = (MethodCall)n;
-				mc.checkMethodCall(tb,stable);
+				mc.checkMethodCall(tb,stable,errorList);
 			}else if (n instanceof Statement){
 				Statement st = (Statement)n;
-				returntype = st.checkStatement(tb,stable);
-				if (st.checkBreakContinue() == true){
-					System.out.println("no puede haber un break o continue fuera de un For o While");
+				returntype = st.checkStatement(tb,stable,errorList);
+				if (st.checkBreakContinue(tb,stable) == false){
+					//System.out.println("no puede haber un break o continue fuera de un For o While");
+					errorList.add("no puede haber un break o continue fuera de un For o While");
 				}
 			}else if (n instanceof Asign){
 				Asign a = (Asign)n;
-				a.checkAsign(tb,stable);
+				a.checkAsign(tb,stable,errorList);
 			}
 			
 		}
 		if (this.type.equals("void")){
 			if (!returntype.equals("")){
-				System.out.println("no tiene que haber return");
+				//System.out.println("no tiene que haber return");
+				errorList.add("no tiene que haber return");
 			}
 		}else{
 			if (returntype.equals("")){
-				System.out.println("Falta el valor de retorno");
+				//System.out.println("Falta el valor de retorno");
+				errorList.add("Falta el valor de retorno");
 			}else{
 				if (!this.type.equals(returntype)){
-					System.out.println("tipo de retorno invalido");
+					//System.out.println("tipo de retorno invalido");
+					errorList.add("tipo de retorno invalido");
 				}
 			}
 		}

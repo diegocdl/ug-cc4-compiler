@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import java.util.LinkedList;
 import compiler.semantic.*;
 
 public class Exp extends Node{
@@ -48,7 +49,7 @@ public class Exp extends Node{
 		return str;
 	}
 	
-	public String checkExp(Table tb, SymbolTable st){
+	public String checkExp(Table tb, SymbolTable st, LinkedList<String> errorList){
 		String str = "";
 		if (this.exprModifier.equals("")){
 			if (this.expr instanceof VarLiteral){
@@ -57,23 +58,24 @@ public class Exp extends Node{
 				str = v.checkVarLiteral(tb,st);
 			}else if (this.expr instanceof MethodCall){
 				MethodCall llamada = (MethodCall)this.expr;
-				str = llamada.checkMethodCall(tb,st);
+				str = llamada.checkMethodCall(tb,st,errorList);
 				//System.out.println("Soy una Llamada a Metodo");
 			}
 		}else if (this.exprModifier.equals("!")){
 			if (this.expr instanceof Exp){
 				Exp ex = (Exp)this.expr;
-				str = ex.checkExp(tb,st);
+				str = ex.checkExp(tb,st,errorList);
 			}else if (this.expr instanceof BinOp){
 				BinOp bo = (BinOp)this.expr;
-				str = bo.checkBinOp(tb,st);
+				str = bo.checkBinOp(tb,st,errorList);
 			}else if (this.expr instanceof Literal){
 				Literal lit = (Literal)this.expr;
 				str = lit.checkLiteral(tb,st);
 			}
 			if (!str.equals("boolean")){
 				str = "error";
-				System.out.println("la expresion de \"!\" debe ser boolean");
+				//System.out.println("la expresion de \"!\" debe ser boolean");
+				errorList.add("la expresion de \"!\" debe ser boolean");
 			}
 		}
 		return str;
