@@ -59,10 +59,13 @@ public class Cond extends Node{
 				Table t = new Table("IF_"+c.id, nombre);
 				st.listaTablas.add(t);
 				c.checkCond(tb,t,"IF_"+c.id,st);
-			}else if (n instanceof Cycle){
+			} else if (n instanceof Cycle) {
 				Cycle cy = (Cycle)n;
-				Asign init = (Asign)cy.inicializacionVar;
-				init.checkAsign(tb,st);
+				// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
+				if (cy.tipoCiclo.equals(Cycle.FOR)) {
+					Asign init = (Asign)cy.inicializacionVar;
+					init.checkAsign(tb,st);
+				}
 				Table t = new Table("CICLO_"+cy.id, nombre);
 				st.listaTablas.add(t);
 				cy.checkCycle(t,"CICLO_"+cy.id,st);

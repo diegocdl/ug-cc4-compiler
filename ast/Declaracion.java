@@ -13,6 +13,7 @@ public class Declaracion extends Node {
 	 
 
 	public String type;
+
 	public String typeDec;
 
 	// para method_decl
@@ -56,6 +57,12 @@ public class Declaracion extends Node {
 		this.id = null;
 	}
 
+	/**
+	*	Verificacion el scope del bloque del metodo, se verifica existencia y unicidad;
+	*	@param tb Tabla del metodo que se va a verificar
+	*	@param nombre Nombre del padre
+	*	@param stable Encapsula una lista de todas las tablas
+	*/
 	public void checkMethod(Table tb, String nombre, SymbolTable stable){
 		String returntype = "";
 		Root block = (Root)this.bloque;
@@ -73,11 +80,11 @@ public class Declaracion extends Node {
 				Cond c = (Cond)n;
 				Table t = new Table("IF_"+c.id, nombre);
 				stable.listaTablas.add(t);
-				c.checkCond(tb,t,"IF_"+c.id,stable);
+				c.checkCond(tb , t, "IF_"+c.id, stable);
 			}else if (n instanceof Cycle){
 				Cycle cy = (Cycle)n;
 				Asign init = (Asign)cy.inicializacionVar;
-				init.checkAsign(tb,stable);
+				init.checkAsign(tb, stable);
 				Table t = new Table("CICLO_"+cy.id, nombre);
 				stable.listaTablas.add(t);
 				cy.checkCycle(t,"CICLO_"+cy.id,stable);

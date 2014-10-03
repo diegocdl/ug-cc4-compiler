@@ -28,24 +28,24 @@ public class Semantic {
 		Table tglobal = new Table("ROOT", "NULL");
 		this.tablaSimbolos.listaTablas.add(tglobal);
 		for (Node n : listaNodos){
-			if(n instanceof Declaracion){
+			if(n instanceof Declaracion) {
 				Declaracion decl = (Declaracion)n;
-				if(decl.typeDec.equals("metodo")){
+				if(decl.typeDec.equals(Declaracion.METODO)){
 					Table t = new Table(decl.nameMethod, "ROOT");
 					this.tablaSimbolos.listaTablas.add(t);
 					if (tglobal.tabla.containsKey(decl.nameMethod) == false){
-							tglobal.tabla.put(decl.nameMethod,new Tipos(decl.type, decl.parametros));
-							for (Declaracion d : decl.parametros){
-								t.tabla.put(d.nameFields.get(0).name, new Tipos(d.type));
-							}
+						tglobal.tabla.put(decl.nameMethod, new Tipos(decl.type, decl.parametros));
+						for (Declaracion d : decl.parametros){
+							t.tabla.put(d.nameFields.get(0).name, new Tipos(d.type));
+						}
 					}else {
 						System.out.println(decl.nameMethod + " no puede ser declarada de nuevo");
 					}
 					decl.checkMethod(t,decl.nameMethod,this.tablaSimbolos);
-				}else if(decl.typeDec.equals("field")){
+				}else if(decl.typeDec.equals(Declaracion.FIELD)){
 					for(VarLiteral vl : decl.nameFields){
 						if (tglobal.tabla.containsKey(vl.name) == false){
-							tglobal.tabla.put(vl.name,new Tipos(decl.type));
+							tglobal.tabla.put(vl.name, new Tipos(decl.type));
 							
 						}else {
 						System.out.println(vl.name + " no puede ser declarada de nuevo");

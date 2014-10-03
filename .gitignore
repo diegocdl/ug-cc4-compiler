@@ -42,3 +42,5 @@ Icon
 .Spotlight-V100
 .Trashes
 parser/DecafParser_2.g
+compiler.sublime-workspace
+compiler.sublime-project

@@ -201,7 +201,7 @@ public class Compiler {
 
 	public static void exit(int i){
 		try{
-					Thread.sleep(10000);
+					Thread.sleep(80000);
 				}catch (Exception e) {
 					
 				}
