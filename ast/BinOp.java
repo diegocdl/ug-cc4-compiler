@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import java.util.LinkedList;
 import compiler.semantic.*;
 
 public class BinOp extends Node{
@@ -31,30 +32,30 @@ public class BinOp extends Node{
 	}
 
 	
-	public String checkBinOp(Table tb, SymbolTable st){
+	public String checkBinOp(Table tb, SymbolTable st, LinkedList<String> errorList){
 		boolean e = true;
 		String resultado = "";
 		String str = "", str2 = "", str3 = "";
 		if (this.hijo1 instanceof BinOp){
 			BinOp b = (BinOp)this.hijo1;
-			str = b.checkBinOp(tb,st);
+			str = b.checkBinOp(tb,st,errorList);
 		}else if (this.hijo1 instanceof Literal){
 			Literal litr = (Literal)this.hijo1;
 			str = litr.checkLiteral(tb,st);
 		}else if (this.hijo1 instanceof Exp){
 			Exp exps = (Exp)this.hijo1;
-			str = exps.checkExp(tb,st);
+			str = exps.checkExp(tb,st,errorList);
 		}
 		str2 = this.operation;
 		if (this.hijo2 instanceof BinOp){
 			BinOp b2 = (BinOp)this.hijo2;
-			str3 = b2.checkBinOp(tb,st);
+			str3 = b2.checkBinOp(tb,st,errorList);
 		}else if (this.hijo2 instanceof Literal){
 			Literal litr2 = (Literal)this.hijo2;
 			str3 = litr2.checkLiteral(tb,st);
 		}else if (this.hijo2 instanceof Exp){
 			Exp exps2 = (Exp)this.hijo2;
-			str3 = exps2.checkExp(tb,st);
+			str3 = exps2.checkExp(tb,st,errorList);
 		}
 		if (!str.equals("error") && !str3.equals("error")){
 		if ((str2.equals("&&") || str2.equals("||")) && ((str.equals("boolean")) && (str3.equals("boolean")))){
@@ -71,7 +72,8 @@ public class BinOp extends Node{
 			//System.out.println("Se esta operando algo que es boolean");
 		}else {
 			resultado = "error";
-			System.out.println("Operacion Invalida");
+			//System.out.println("Operacion Invalida");
+			errorList.add("Operacion Invalida");
 		}
 		}else {
 			resultado = "error";

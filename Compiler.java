@@ -26,7 +26,7 @@ public class Compiler {
 		String option = "";
 		String option2 = "";
 		if ( args.length > 1 ) {
-			// recorre el arreglo args y setea las variables de configuraci√≥n 
+			// recorre el arreglo args y setea las variables de configuraciÛn 
 			for ( int i = 0; i< args.length; i++ ) {
 				switch(args[i]){
 					case "-o":
@@ -115,7 +115,9 @@ public class Compiler {
 						semantic = new Semantic(ast);
 						if (buscarString(debug, "semantic")) semantic.setDebuger(deb);
 						if (target.equals("semantic")) {
-							semantic.check();
+							if (semantic.check()){
+								System.out.println("Programa Invalido");
+							}
 							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
 							exit(0);
 							
@@ -181,17 +183,17 @@ public class Compiler {
 		System.out.println("\t\t\t- semantic");
 		System.out.println("\t\t\t- irt");
 		System.out.println("\t\t\t- codegen"); 
-		System.out.println("\t\tla compilaci√≥n debe proceder hasta la etapa indicada.");
+		System.out.println("\t\tla compilaciÛn debe proceder hasta la etapa indicada.");
 		System.out.println("\t\tPor ejemplo, si <stage> es scan, una instancia de scan debe ser");
 		System.out.println("\t\tcreada imprimiendo en el archivo de salida \"stage: scanning\".");
 		System.out.println("\t\tSi es parse una instancia de parser debe ser creada a partir de");
-		System.out.println("\t\tla instancia de scanner imprimiendo \"stage: parsing\", adem√°s ");
-		System.out.println("\t\tdel mensaje de scanner y as√≠ sucesivamente.\n");
+		System.out.println("\t\tla instancia de scanner imprimiendo \"stage: parsing\", adem·s ");
+		System.out.println("\t\tdel mensaje de scanner y asÌ sucesivamente.\n");
 		System.out.println("\t-opt <optimzation>  <optimization> es uno de: constant, algebraic;");
-		System.out.println("\t\tla compilacion debe hacer solo la optimizaci√≥n que se le pida,"); 
+		System.out.println("\t\tla compilacion debe hacer solo la optimizaciÛn que se le pida,"); 
 		System.out.println("\t\ty debe imprimir como en -target \"optimizing: constant folding\""); 
 		System.out.println("\t\t\"o optimizing: algebraic simplification\".\n"); 
-		System.out.println("\t-debug <stage>  Imprimir informaci√≥n de debugging. Debe haber un"); 
+		System.out.println("\t-debug <stage>  Imprimir informaciÛn de debugging. Debe haber un"); 
 		System.out.println("\t\tmensaje por cada etapa listada en <stage> de la forma ");
 		System.out.println("\t\t\"Debugging <stage>\". <stage> tiene las mismas opciones de"); 
 		System.out.println("\t\t-target, con la diferencia que se pueden \"debuggear\" varias");

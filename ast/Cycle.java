@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import java.util.LinkedList;
 import compiler.semantic.*;
 /*
 	for(<id> = <expr>, <expr>) <block>
@@ -43,24 +44,27 @@ public class Cycle extends Node{
 		this(WHILE, null, condicion, bloque);
 	}
 	
-	public void checkCycle(Table tb, String nombre, SymbolTable st){
+	public void checkCycle(Table tb, String nombre, SymbolTable st, LinkedList<String> errorList){
 		if (this.tipoCiclo.equals("for")){
 			
 			boolean condicionForValida = false;
 			if (this.condicion instanceof Exp){
 				Exp expr = (Exp)this.condicion;
-				if (!(expr.checkExp(tb,st).equals("int"))){
-					System.out.println("condicion invalida");
+				if (!(expr.checkExp(tb,st,errorList).equals("int"))){
+					//System.out.println("condicion invalida");
+					errorList.add("Condicion Invalida");
 				}else{condicionForValida = true;}
 			}else if (this.condicion instanceof Literal){
 				Literal lit = (Literal)this.condicion;
 				if (!(lit.checkLiteral(tb,st).equals("int"))){
-					System.out.println("condicion invalida");
+					//System.out.println("condicion invalida");
+					errorList.add("Condicion Invalida");
 				}else{condicionForValida = true;}
 			}else if (this.condicion instanceof BinOp){
 				BinOp bo = (BinOp)this.condicion;
-				if (!(bo.checkBinOp(tb,st).equals("int"))){
-					System.out.println("condicion invalida");
+				if (!(bo.checkBinOp(tb,st,errorList).equals("int"))){
+					//System.out.println("condicion invalida");
+					errorList.add("Condicion Invalida");
 				}else{condicionForValida = true;}
 			}
 			
@@ -70,48 +74,59 @@ public class Cycle extends Node{
 				Declaracion decl = (Declaracion)n;
 				for(VarLiteral vl : decl.nameFields){
 						if (tb.tabla.containsKey(vl.name) == false){
-							tb.tabla.put(vl.name,new Tipos(decl.type));
+							if (vl.dimension == null){
+								tb.tabla.put(vl.name,new Tipos(decl.type));
+							}else {
+								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+							}/*else if (vl.dimension > 0) {
+								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+							}else {
+								System.out.println("Un arreglo no puede tener tamaño 0");
+							}*/
 						}
 					}
 			}else if (n instanceof Asign){
 				Asign as = (Asign)n;
-				as.checkAsign(tb,st);
+				as.checkAsign(tb,st,errorList);
 			}else if (n instanceof MethodCall){
 				MethodCall mc = (MethodCall)n;
-				mc.checkMethodCall(tb,st);
+				mc.checkMethodCall(tb,st,errorList);
 			}else if (n instanceof Cond){
 				Cond c = (Cond)n;
 				Table t = new Table("IF_"+c.id, nombre);
 				st.listaTablas.add(t);
-				c.checkCond(tb,t,"IF_"+c.id,st);
+				c.checkCond(tb,t,"IF_"+c.id,st,errorList);
 			}else if (n instanceof Cycle){
 				Cycle cy = (Cycle)n;
 				Asign init = (Asign)cy.inicializacionVar;
-				init.checkAsign(tb,st);
+				init.checkAsign(tb,st,errorList);
 				Table t = new Table("CICLO_"+cy.id, nombre);
 				st.listaTablas.add(t);
-				cy.checkCycle(t,"CICLO_"+cy.id,st);
+				cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
 			}else if (n instanceof Statement){
 				Statement state = (Statement)n;
-				state.checkStatement(tb,st);
+				state.checkStatement(tb,st,errorList);
 			}
 		}
 		}else if (this.tipoCiclo.equals("while")){
 			boolean condicionValida = false;
 			if (this.condicion instanceof Exp){
 				Exp expr = (Exp)this.condicion;
-				if (!(expr.checkExp(tb,st).equals("boolean"))){
-					System.out.println("condicion invalida");
+				if (!(expr.checkExp(tb,st,errorList).equals("boolean"))){
+					//System.out.println("condicion invalida");
+					errorList.add("Condicion Invalida");
 				}else{condicionValida = true;}
 			}else if (this.condicion instanceof Literal){
 				Literal lit = (Literal)this.condicion;
 				if (!(lit.checkLiteral(tb,st).equals("boolean"))){
-					System.out.println("condicion invalida");
+					//System.out.println("condicion invalida");
+					errorList.add("Condicion Invalida");
 				}else{condicionValida = true;}
 			}else if (this.condicion instanceof BinOp){
 				BinOp bo = (BinOp)this.condicion;
-				if (!(bo.checkBinOp(tb,st).equals("boolean"))){
-					System.out.println("condicion invalida");
+				if (!(bo.checkBinOp(tb,st,errorList).equals("boolean"))){
+					//System.out.println("condicion invalida");
+					errorList.add("Condicion Invalida");
 				}else{condicionValida = true;}
 			}
 			//condicionValida = true;
@@ -121,30 +136,38 @@ public class Cycle extends Node{
 				Declaracion decl = (Declaracion)n;
 				for(VarLiteral vl : decl.nameFields){
 						if (tb.tabla.containsKey(vl.name) == false){
-							tb.tabla.put(vl.name,new Tipos(decl.type));
+							if (vl.dimension == null){
+								tb.tabla.put(vl.name,new Tipos(decl.type));
+							}else {
+								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+							}/*else if (vl.dimension > 0) {
+								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+							}else {
+								System.out.println("Un arreglo no puede tener tamaño 0");
+							}*/
 						}
 					}
 			}else if (n instanceof Asign){
 				Asign as = (Asign)n;
-				as.checkAsign(tb,st);
+				as.checkAsign(tb,st,errorList);
 			}else if (n instanceof MethodCall){
 				MethodCall mc = (MethodCall)n;
-				mc.checkMethodCall(tb,st);
+				mc.checkMethodCall(tb,st,errorList);
 			}else if (n instanceof Cond){
 				Cond c = (Cond)n;
 				Table t = new Table("IF_"+c.id, nombre);
 				st.listaTablas.add(t);
-				c.checkCond(tb,t,"IF_"+c.id,st);
+				c.checkCond(tb,t,"IF_"+c.id,st,errorList);
 			}else if (n instanceof Cycle){
 				Cycle cy = (Cycle)n;
 				Asign init = (Asign)cy.inicializacionVar;
-				init.checkAsign(tb,st);
+				init.checkAsign(tb,st,errorList);
 				Table t = new Table("CICLO_"+cy.id, nombre);
 				st.listaTablas.add(t);
-				cy.checkCycle(t,"CICLO_"+cy.id,st);
+				cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
 			}else if (n instanceof Statement){
 				Statement state = (Statement)n;
-				state.checkStatement(tb,st);
+				state.checkStatement(tb,st,errorList);
 			}
 		}
 		}

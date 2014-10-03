@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import java.util.LinkedList;
 import compiler.semantic.*;
 
 public class Asign extends Node{
@@ -24,30 +25,42 @@ public class Asign extends Node{
 		return str;
 	}
 
-	public void checkAsign(Table tb, SymbolTable st){
+	public void checkAsign(Table tb, SymbolTable st, LinkedList<String> errorList){
 		boolean prueba = true;
-		String verificacion = "", tipo = "";
+		String verificacion = "", tipo = "",expArreglo = "";
 		if (this.id instanceof VarLiteral){
 			VarLiteral var = (VarLiteral)this.id;
 			boolean declaracion = false;
 			boolean b = false;
 			boolean no = false;
-			if (var.dimension == null){
+			//if (var.dimension == null){
 				if (this.value instanceof Exp){
 					Exp expr = (Exp)this.value;
 					//System.out.println("Estoy en Exp");
-					verificacion = expr.checkExp(tb,st);
+					verificacion = expr.checkExp(tb,st,errorList);
 				}else if (this.value instanceof Statement){
 					Statement stm = (Statement)this.value;
-					stm.checkStatement(tb,st);
+					stm.checkStatement(tb,st,errorList);
 				}else if (this.value instanceof BinOp){
 					BinOp bo = (BinOp)this.value;
 					//System.out.println("Estoy en BinOp");
-					verificacion = bo.checkBinOp(tb,st);
+					verificacion = bo.checkBinOp(tb,st,errorList);
 					//System.out.println(verificacion);
 				}else if (this.value instanceof Literal){
 					Literal lit = (Literal)this.value;
 					verificacion = lit.checkLiteral(tb,st);
+				}
+				if (var.dimension != null){
+					if (var.dimension instanceof Exp){
+						Exp expr2 = (Exp)var.dimension;
+						expArreglo = expr2.checkExp(tb,st,errorList);
+					}else if (var.dimension instanceof BinOp){
+						BinOp bo2 = (BinOp)var.dimension;
+						expArreglo = bo2.checkBinOp(tb,st,errorList);
+					}else if (var.dimension instanceof Literal){
+						Literal lit2 = (Literal)var.dimension;
+						expArreglo = lit2.checkLiteral(tb,st);
+					}
 				}
 			if (tb.tabla.containsKey(var.name) == false){
 				Table tableaux = tb;
@@ -64,13 +77,46 @@ public class Asign extends Node{
 								tipo = tableaux2.tabla.get(var.name).tipo;
 								//System.out.println("si " + tipo);
 								//System.out.println(tableaux2.name);
-								if (this.asig.equals("=")){
-									if (!tipo.equals(verificacion)){
-										System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+								if (var.dimension == null){
+									if (this.asig.equals("=")){
+										if (!tipo.equals(verificacion)){
+											//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+											errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+										}
+									}else {
+										if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
+											//System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
+											errorList.add("Error de tipos: " + tipo + " " + this.asig + " " + verificacion + " incompatible");
+										}
 									}
 								}else {
-									if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
-										System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
+									if (expArreglo.equals("int")){
+										if (this.asig.equals("=")){
+											if (tipo.equals("int[]")){
+												if (!verificacion.equals("int")){
+													//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+													errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+												}
+											}else if (tipo.equals("boolean[]")){
+												if (!verificacion.equals("boolean")){
+													//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+													errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+												}
+											}
+										}else {
+											if (tipo.equals("int[]")){
+												if (!verificacion.equals("int")){
+													//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+													errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+												}
+											}else if (tipo.equals("boolean[]")){
+												//System.out.print("error de tipos ");
+												errorList.add("Error de tipos");
+											}
+										}
+									}else{
+										//System.out.println("El indice del arreglo debe ser int");
+										errorList.add("El indice del arreglo debe ser int en la variable " + var.name);
 									}
 								}
 								i=st.listaTablas.size();
@@ -84,14 +130,54 @@ public class Asign extends Node{
 			}else{
 				declaracion = true;
 				tipo = tb.tabla.get(var.name).tipo;
-				if (!tipo.equals(verificacion)){
-					System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+				if (var.dimension == null){
+					if (this.asig.equals("=")){
+						if (!tipo.equals(verificacion)){
+							//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+							errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+						}
+					}else {
+						if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
+							//System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
+							errorList.add("Error de tipos: " + tipo + " " + this.asig + " " + verificacion + " incompatible");
+						}
+					}
+				}else{
+					if (expArreglo.equals("int")){
+						if (this.asig.equals("=")){
+							if (tipo.equals("int[]")){
+								if (!verificacion.equals("int")){
+									//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+									errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+								}
+							}else if (tipo.equals("boolean[]")){
+								if (!verificacion.equals("boolean")){
+									//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+									errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+								}
+							}
+						}else {
+							if (tipo.equals("int[]")){
+								if (!verificacion.equals("int")){
+									//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+									errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+								}
+							}else if (tipo.equals("boolean[]")){
+								//System.out.print("error de tipos ");
+								errorList.add("Error de tipos ");
+							}
+						}
+					}else{
+						//System.out.println("El indice del arreglo debe ser int");
+						errorList.add("El indice del arreglo debe ser int en la variable " + var.name);
+					}
 				}
 			}
 			if (!declaracion){
-				System.out.println(var.name + " no esta declarada");		
+				//System.out.println(var.name + " no esta declarada");		
+				errorList.add(var.name + " no esta declarada");
 			}
-			}
+			//}
 			
 		}
 	}

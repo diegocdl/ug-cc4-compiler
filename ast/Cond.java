@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import java.util.LinkedList;
 import compiler.semantic.*;
 
 public class Cond extends Node{
@@ -22,18 +23,18 @@ public class Cond extends Node{
 		this.alternativa = alternativa;
 	}
 	
-	public void checkCond(Table tab, Table tb, String nombre, SymbolTable st){
+	public void checkCond(Table tab, Table tb, String nombre, SymbolTable st, LinkedList<String> errorList){
 		boolean condicionValida = false;
 		String verificacionCondicion = "";
 		if (this.condicion instanceof Exp){
 			Exp expr = (Exp)this.condicion;
-			expr.checkExp(tab,st);
+			expr.checkExp(tab,st,errorList);
 		}else if (this.condicion instanceof Literal){
 			Literal lit = (Literal)this.condicion;
 			verificacionCondicion = lit.checkLiteral(tab,st);
 		}else if (this.condicion instanceof BinOp){
 			BinOp bo = (BinOp)this.condicion;
-			verificacionCondicion = bo.checkBinOp(tab,st);
+			verificacionCondicion = bo.checkBinOp(tab,st,errorList);
 		}
 		if (verificacionCondicion.equals("boolean")){
 			condicionValida = true;
@@ -45,35 +46,45 @@ public class Cond extends Node{
 				Declaracion decl = (Declaracion)n;
 				for(VarLiteral vl : decl.nameFields){
 						if (tb.tabla.containsKey(vl.name) == false){
-							tb.tabla.put(vl.name,new Tipos(decl.type));
+							if (vl.dimension == null){
+								tb.tabla.put(vl.name,new Tipos(decl.type));
+							}else {
+								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+							}/*else if (vl.dimension > 0) {
+								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+							}else {
+								System.out.println("Un arreglo no puede tener tamaño 0");
+							}*/
 						}
 					}
 			}else if (n instanceof Asign){
 				Asign as = (Asign)n;
-				as.checkAsign(tb,st);
+				as.checkAsign(tb,st,errorList);
 			}else if (n instanceof MethodCall){
 				MethodCall mc = (MethodCall)n;
-				mc.checkMethodCall(tb,st);
+				mc.checkMethodCall(tb,st,errorList);
 			}else if (n instanceof Cond){
 				Cond c = (Cond)n;
 				Table t = new Table("IF_"+c.id, nombre);
 				st.listaTablas.add(t);
-				c.checkCond(tb,t,"IF_"+c.id,st);
+				c.checkCond(tb,t,"IF_"+c.id,st, errorList);
 			} else if (n instanceof Cycle) {
 				Cycle cy = (Cycle)n;
 				// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
 				if (cy.tipoCiclo.equals(Cycle.FOR)) {
 					Asign init = (Asign)cy.inicializacionVar;
-					init.checkAsign(tb,st);
+					init.checkAsign(tb,st, errorList);
 				}
+
 				Table t = new Table("CICLO_"+cy.id, nombre);
 				st.listaTablas.add(t);
-				cy.checkCycle(t,"CICLO_"+cy.id,st);
+				cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
 			}else if (n instanceof Statement){
 				Statement state = (Statement)n;
 				//state.checkStatement(tb,st);
-				if (state.checkBreakContinue() == true){
-					System.out.println("no puede haber un break o continue fuera de un For o While");
+				if (state.checkBreakContinue(tb,st) == false){
+					//System.out.println("no puede haber un break o continue fuera de un For o While");
+					errorList.add("no puede haber un break o continue fuera de un For o While");
 				}
 			}
 		}
@@ -84,37 +95,49 @@ public class Cond extends Node{
 					Declaracion decl = (Declaracion)n;
 					for(VarLiteral vl : decl.nameFields){
 						if (tb.tabla.containsKey(vl.name) == false){
-							tb.tabla.put(vl.name,new Tipos(decl.type));
+							if (vl.dimension == null){
+								tb.tabla.put(vl.name,new Tipos(decl.type));
+							}else {
+								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+							}/*else if (vl.dimension > 0) {
+								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+							}else {
+								System.out.println("Un arreglo no puede tener tamaño 0");
+							}*/
 						}
 					}
 				}else if (n instanceof Asign){
 					Asign as = (Asign)n;
-					as.checkAsign(tb,st);
+					as.checkAsign(tb,st,errorList);
 				}else if (n instanceof MethodCall){
 					MethodCall mc = (MethodCall)n;
-					mc.checkMethodCall(tb,st);
+					mc.checkMethodCall(tb,st,errorList);
 				}else if (n instanceof Cond){
 					Cond c = (Cond)n;
 					Table t = new Table("IF_"+c.id, nombre);
 					st.listaTablas.add(t);
-					c.checkCond(tb,t,"IF_"+c.id,st);
+					c.checkCond(tb,t,"IF_"+c.id,st,errorList);
 				}else if (n instanceof Cycle){
 					Cycle cy = (Cycle)n;
 					Asign init = (Asign)cy.inicializacionVar;
-					init.checkAsign(tb,st);
+					init.checkAsign(tb,st,errorList);
 					Table t = new Table("CICLO_"+cy.id, nombre);
 					st.listaTablas.add(t);
-					cy.checkCycle(t,"CICLO_"+cy.id,st);
+					cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
 				}else if (n instanceof Statement){
 					Statement state = (Statement)n;
 					//state.checkStatement(tb,st);
-					if (state.checkBreakContinue() == true){
-					System.out.println("no puede haber un break o continue fuera de un For o While");
+					if (state.checkBreakContinue(tb,st) == false){
+						//System.out.println("no puede haber un break o continue fuera de un For o While");
+						errorList.add("no puede haber un break o continue fuera de un For o While");
 					}
 				}
 			}
 		}
-		}else{System.out.println("Condicion invalida");}
+		}else{
+			//System.out.println("Condicion invalida");
+			errorList.add("Condicion invalida");
+		}
 	}
 	
 	@Override
