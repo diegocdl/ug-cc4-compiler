@@ -1,6 +1,7 @@
 package compiler.ast;
 
 import java.util.List;
+import java.util.LinkedList;
 import compiler.semantic.*;
 
 public class VarLiteral extends Node {
@@ -39,7 +40,7 @@ public class VarLiteral extends Node {
 			return name;
 	}
 
-	public String checkVarLiteral(Table tb, SymbolTable st){
+	public String checkVarLiteral(Table tb, SymbolTable st, LinkedList<String> errorList){
 		String resultado = "";
 		boolean b = false;
 		if (tb.tabla.containsKey(this.name) == false){
@@ -50,7 +51,20 @@ public class VarLiteral extends Node {
 					tableaux2 = st.listaTablas.get(i);
 					if (tableaux2.name.equals(tableaux.parent)){
 						if (tableaux2.tabla.containsKey(this.name) == true){
-							resultado = tableaux2.tabla.get(this.name).tipo;
+							if (this.dimension != null){
+								if (this.dimension instanceof Exp){
+									Exp expr2 = (Exp)this.dimension;
+									resultado = expr2.checkExp(tb,st,errorList);
+								}else if (this.dimension instanceof BinOp){
+									BinOp bo2 = (BinOp)this.dimension;
+									resultado = bo2.checkBinOp(tb,st,errorList);
+								}else if (this.dimension instanceof Literal){
+									Literal lit2 = (Literal)this.dimension;
+									resultado = lit2.checkLiteral(tb,st);
+								}
+							}else{
+								resultado = tableaux2.tabla.get(this.name).tipo;
+							}
 							//System.out.println(tableaux2.name);
 							i=st.listaTablas.size();
 							b = true;
@@ -59,7 +73,20 @@ public class VarLiteral extends Node {
 				}
 			}
 		}else{
-			resultado = tb.tabla.get(this.name).tipo;
+			if (this.dimension != null){
+				if (this.dimension instanceof Exp){
+					Exp expr2 = (Exp)this.dimension;
+					resultado = expr2.checkExp(tb,st,errorList);
+				}else if (this.dimension instanceof BinOp){
+					BinOp bo2 = (BinOp)this.dimension;
+					resultado = bo2.checkBinOp(tb,st,errorList);
+				}else if (this.dimension instanceof Literal){
+					Literal lit2 = (Literal)this.dimension;
+					resultado = lit2.checkLiteral(tb,st);
+				}
+			}else {
+				resultado = tb.tabla.get(this.name).tipo;
+			}
 		}
 		return resultado;
 	}

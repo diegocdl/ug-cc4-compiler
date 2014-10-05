@@ -55,7 +55,7 @@ public class Exp extends Node{
 			if (this.expr instanceof VarLiteral){
 				VarLiteral v = (VarLiteral)this.expr;
 				//System.out.println("Soy VarLiteral");
-				str = v.checkVarLiteral(tb,st);
+				str = v.checkVarLiteral(tb,st,errorList);
 			}else if (this.expr instanceof MethodCall){
 				MethodCall llamada = (MethodCall)this.expr;
 				str = llamada.checkMethodCall(tb,st,errorList);
