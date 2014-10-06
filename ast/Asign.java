@@ -25,7 +25,7 @@ public class Asign extends Node{
 		return str;
 	}
 
-	public void checkAsign(Table tb, SymbolTable st, LinkedList<String> errorList){
+	public void checkAsign(Table tb, SymbolTable st, LinkedList<String> errorList, int isfor){
 		boolean prueba = true;
 		String verificacion = "", tipo = "",expArreglo = "";
 		if (this.id instanceof VarLiteral){
@@ -79,14 +79,20 @@ public class Asign extends Node{
 								//System.out.println(tableaux2.name);
 								if (var.dimension == null){
 									if (this.asig.equals("=")){
-										if (!tipo.equals(verificacion)){
+										if ((!tipo.equals(verificacion))&&(isfor == 0)){
 											//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
 											errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+										}else if(((!tipo.equals("int")) || (!verificacion.equals("int")))&&(isfor == 1)){
+											errorList.add("Error de tipos en la condicion del for, " + tipo + " = " + verificacion + " invalido");
 										}
 									}else {
-										if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
-											//System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
-											errorList.add("Error de tipos: " + tipo + " " + this.asig + " " + verificacion + " incompatible");
+										if (isfor == 0){
+											if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
+												//System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
+												errorList.add("Error de tipos: " + tipo + " " + this.asig + " " + verificacion + " incompatible");
+											}
+										}else{
+											errorList.add(" \"+=\" y \"-=\" invalidos en for");
 										}
 									}
 								}else {
@@ -132,14 +138,19 @@ public class Asign extends Node{
 				tipo = tb.tabla.get(var.name).tipo;
 				if (var.dimension == null){
 					if (this.asig.equals("=")){
-						if (!tipo.equals(verificacion)){
-							//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
+						if ((!tipo.equals(verificacion))&&(isfor == 0)){
 							errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+						}else if(((!tipo.equals("int")) || (!verificacion.equals("int")))&&(isfor == 1)){
+							errorList.add("Error de tipos en la condicion del for, " + tipo + " = " + verificacion + " invalido");
 						}
 					}else {
-						if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
-							//System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
-							errorList.add("Error de tipos: " + tipo + " " + this.asig + " " + verificacion + " incompatible");
+						if (isfor == 0){
+							if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
+								//System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
+								errorList.add("Error de tipos: " + tipo + " " + this.asig + " " + verificacion + " incompatible");
+							}
+						}else{
+							errorList.add(" \"+=\" y \"-=\" invalidos en for");
 						}
 					}
 				}else{

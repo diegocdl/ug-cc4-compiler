@@ -99,7 +99,7 @@ public class Declaracion extends Node {
 				Cycle cy = (Cycle)n;
 				if (cy.tipoCiclo.equals(Cycle.FOR)) {
 					Asign init = (Asign)cy.inicializacionVar;
-					init.checkAsign(tb,stable, errorList);
+					init.checkAsign(tb,stable, errorList,1);
 				}
 				Table t = new Table("CICLO_"+cy.id, nombre);
 				stable.listaTablas.add(t);
@@ -116,7 +116,7 @@ public class Declaracion extends Node {
 				}
 			}else if (n instanceof Asign){
 				Asign a = (Asign)n;
-				a.checkAsign(tb,stable,errorList);
+				a.checkAsign(tb,stable,errorList,0);
 			}
 			
 		}

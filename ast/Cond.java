@@ -62,7 +62,7 @@ public class Cond extends Node{
 					}
 			}else if (n instanceof Asign){
 				Asign as = (Asign)n;
-				as.checkAsign(tb,st,errorList);
+				as.checkAsign(tb,st,errorList,0);
 			}else if (n instanceof MethodCall){
 				MethodCall mc = (MethodCall)n;
 				mc.checkMethodCall(tb,st,errorList);
@@ -73,10 +73,10 @@ public class Cond extends Node{
 				c.checkCond(tb,t,"IF_"+c.id,st, errorList);
 			} else if (n instanceof Cycle) {
 				Cycle cy = (Cycle)n;
-				// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
+				// si es un for verifica la existencia y los tipos de la inicializacion de variables
 				if (cy.tipoCiclo.equals(Cycle.FOR)) {
 					Asign init = (Asign)cy.inicializacionVar;
-					init.checkAsign(tb,st, errorList);
+					init.checkAsign(tb,st, errorList,1);
 				}
 
 				Table t = new Table("CICLO_"+cy.id, nombre);
@@ -114,7 +114,7 @@ public class Cond extends Node{
 					}
 				}else if (n instanceof Asign){
 					Asign as = (Asign)n;
-					as.checkAsign(tb,st,errorList);
+					as.checkAsign(tb,st,errorList,0);
 				}else if (n instanceof MethodCall){
 					MethodCall mc = (MethodCall)n;
 					mc.checkMethodCall(tb,st,errorList);
@@ -125,8 +125,11 @@ public class Cond extends Node{
 					c.checkCond(tb,t,"IF_"+c.id,st,errorList);
 				}else if (n instanceof Cycle){
 					Cycle cy = (Cycle)n;
-					Asign init = (Asign)cy.inicializacionVar;
-					init.checkAsign(tb,st,errorList);
+					// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
+					if (cy.tipoCiclo.equals(Cycle.FOR)) {
+						Asign init = (Asign)cy.inicializacionVar;
+						init.checkAsign(tb,st, errorList,1);
+					}
 					Table t = new Table("CICLO_"+cy.id, nombre);
 					st.listaTablas.add(t);
 					cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
