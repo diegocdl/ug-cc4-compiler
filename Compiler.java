@@ -1,5 +1,6 @@
 import java.util.regex.Pattern;
 import java.io.File;
+import java.io.IOException;
 import compiler.scanner.Scanner;
 import compiler.parser.CC4Parser;
 import compiler.ast.Ast;
@@ -11,49 +12,54 @@ import compiler.opt.ConstantFolding;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
 import compiler.lib.ErrorHandler;
+import compiler.lib.Configuracion;
 
 public class Compiler {
-	public static void main(String[] args)  throws Exception {
+
+	public static void main(String[] args) {
 		// Variables de configuracion del Compilador
-		try{
-		String inputFilename = "";
-		String outputFilename = "";
-		String target = "";
-		String opt = "";
-		String debug [] = null;
+		Configuracion config = new Configuracion();
+		try {
+			// leer configuarcion de los argumentos recibidos desde la consola
+			readConfiguration(config, args);
 
+			OutputFile outFile;
+			if(config.checkData()){
+				System.out.println("input: " + config.getInputFileName());
+				System.out.println("output: " + config.getOutputFileName());
+				execute(config);
+			}
+		} catch(ErrorHandler e) {
+			System.err.println(e.getMessage());
+		} catch(Exception e) {
+			System.err.println(e.getMessage());
+		}
+    }
 
-		String option = "";
-		String option2 = "";
+	public static void readConfiguration(Configuracion config, String[] args) throws ErrorHandler, IOException, Exception {
 		if ( args.length > 1 ) {
 			// recorre el arreglo args y setea las variables de configuración 
 			for ( int i = 0; i< args.length; i++ ) {
 				switch(args[i]){
 					case "-o":
-						outputFilename = args[++i];
+						config.setOutputFile(args[++i]);
 						break;
 					case "-target":
-						target = args[++i];
+						config.setTarget(args[++i]);
 						break;
 					case "-opt":
-						opt = args[++i];
-						//System.out.println("optimizacion " + opt );
+						config.setOptimization(args[++i]);
 						break;
 					case "-debug":
-						debug = args[++i].split(":");
-						//System.out.print("Debug: " + args[++i]);
+						config.addDebugPhases(args[++i].split(":"));
 						break;
 					case "-h":
 						printHelp();
-						exit(0);
+						System.exit(0);
 						break;
 					default:
-						if ( Pattern.matches("[^\\-].*\\.dcf", args[i]) && args.length-1 == i ) {
-							inputFilename = args[i];
-						} else if(Pattern.matches("[^\\-].*(^\\.)", args[i])){
-							throw new ErrorHandler("Error en la opcion: " + args[i]);
-						}else if( !Pattern.matches("[^\\-].*\\.dcf", args[i]) && args.length-1 == i ){
-							throw new ErrorHandler("Error en el archivo: " + args[i]);
+						if ( args.length-1 == i ) {
+							config.setInputFile(args[i]);
 						} else{
 							throw new ErrorHandler("Error en la opcion: " + args[i]);
 						}
@@ -62,10 +68,14 @@ public class Compiler {
 			}
 		}else if (args.length==0){
 			printHelp();
+			System.exit(0);
 		}else if ((args[0].equals("-h"))&&(args.length==1)){
 			printHelp();
+			System.exit(0);
 		}
+	}
 
+	public static void execute(Configuracion config) throws ErrorHandler, Exception {
 		Scanner scan;
 		CC4Parser parse;
 		Ast ast;
@@ -75,104 +85,59 @@ public class Compiler {
 		ConstantFolding cf;
 		Algebraic algebraic;
 		Debug deb = new Debug();
-		OutputFile outFile;
+		OutputFile outFile = config.getOutputFile();
 
-		if ((args.length > 0)&&(!args[0].equals("-h"))){
-			if ( !target.equals("") ){
-				if(!inputFilename.equals("") && existeArchivo(inputFilename)) {
-					if(outputFilename.equals("")){
-						outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";
-					}
-					outFile = new OutputFile( outputFilename );
-
-					System.out.println("input: " + inputFilename);
-					System.out.println("output: " + outputFilename);
-					// Ejecuta el compilador hasta el target indicado
-					if( target.equals("scan") || target.equals("parse") || target.equals("ast") 
-							|| target.equals("semantic") || target.equals("irt") || target.equals("codegen") ){
-
-						scan = new Scanner(inputFilename, outFile);
-						if (buscarString(debug, "scan")) scan.setDebuger(deb);
-						scan.start();
-						if (target.equals("scan")) {
-							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
-							exit(0);
-						}
-						parse = new CC4Parser(scan);
-						parse.start();
-						if (buscarString(debug, "parse")) parse.setDebuger(deb);
-						if (target.equals("parse")) {
-							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
-							exit(0);
-						}
-						ast = new Ast(parse);
-						ast.start();
-						if (buscarString(debug, "ast")) ast.setDebuger(deb);
-						if (target.equals("ast")) {
-							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
-							exit(0);
-						}
-						semantic = new Semantic(ast);
-						if (buscarString(debug, "semantic")) semantic.setDebuger(deb);
-						if (target.equals("semantic")) {
-							if (semantic.check()){
-								System.out.println("Programa Invalido");
-							}
-							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
-							exit(0);
-							
-						}
-						irt = new Irt(semantic);
-						if (buscarString(debug, "irt")) irt.setDebuger(deb);
-						if (target.equals("irt")) {
-							if(!opt.equals("")) throw new ErrorHandler("Error: No se puede optimizar en " + target + ", debe ser codegen");
-							exit(0);
-						}
-						codegen = new Codegen(irt);
-						if (buscarString(debug, "codegen")) codegen.setDebuger(deb);
-
-						if ( !opt.equals("") ){
-							if(!inputFilename.equals("")) {
-								if(outputFilename.equals("")){
-									outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".s";	
-								}
-					
-								System.out.println("input: " + inputFilename);
-								System.out.println("output: " + outputFilename);
-
-								if( opt.equals("constant") ){
-									cf = new ConstantFolding(inputFilename); exit(0);
-								} else if( opt.equals("algebraic") ){
-									algebraic = new Algebraic(inputFilename); exit(0);
-								}else {
-									throw new ErrorHandler("Opcion de optimizacion invalida: " + opt);
-								}
-								
-							} else {
-								throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
-							}
-						} 
-					}else {
-						throw new ErrorHandler("Opcion de target invalida: " + target);
-				    }
-
-				} else {
-					throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
-				}
-			}else {
-				throw new ErrorHandler("Error: No se indico archivo, opcion o la opcion es invalida");
-			}
-			
+		scan = new Scanner(config.getInputFileName(), outFile);
+		if (config.isADebugPhase("scan")) scan.setDebuger(deb);
+		scan.start();
+		if(config.getTarget().equals("scan")) {
+			return;
 		}
 
-			} catch(ErrorHandler e) {
-				System.err.println(e.getMessage());
-			}
+		parse = new CC4Parser(scan);
+		parse.start();
+		if (config.isADebugPhase("parse")) parse.setDebuger(deb);
+		if(config.getTarget().equals("parse")) {
+			return;
+		}
+
+		ast = new Ast(parse);
+		ast.start();
+		if (config.isADebugPhase("ast")) ast.setDebuger(deb);
+		if(config.getTarget().equals("ast")) {
+			return;
+		}
+
+		semantic = new Semantic(ast);
+		if (config.isADebugPhase("semantic")) semantic.setDebuger(deb);
+		if (semantic.check()){
+			System.out.println("Programa Invalido");
+		}
+		if(config.getTarget().equals("semantic")) {
+			return;
+		}
+
+		irt = new Irt(semantic);
+		if (config.isADebugPhase("irt")) irt.setDebuger(deb);
+		if(config.getTarget().equals("irt")) {
+			return;
+		}
 		
-    }
+		codegen = new Codegen(irt);
+		if (config.isADebugPhase("codegen")) codegen.setDebuger(deb);
+
+		// Optimizaciones
+		if( config.getOptimization().equals("constant") ){
+			cf = new ConstantFolding(config.getInputFileName());
+		} else if( config.getOptimization().equals("algebraic") ){
+			algebraic = new Algebraic(config.getInputFileName());
+		}else {
+			throw new ErrorHandler("Opcion de optimizacion invalida: " + config.getOptimization());
+		}
+	}
 
 	/**
-	*	Despliega la ayuda del comand line
+	*	Despliega la ayuda en el comandline
 	*/
 	public static void printHelp() {
 		System.out.println("\t-o <outname>Escribir el output a un archivo de texto llamado <outname>.\n");
@@ -199,30 +164,5 @@ public class Compiler {
 		System.out.println("\t\t-target, con la diferencia que se pueden \"debuggear\" varias");
 		System.out.println("\t\tetapas, separandolas con ':' de la forma scan:parse:etc.\n");
 		System.out.println("\t-h Muestra esta ayuda al usuario.");
-	}
-
-	public static void exit(int i){
-		try{
-					Thread.sleep(80000);
-				}catch (Exception e) {
-					
-				}
-		System.exit(i);
-	}
-
-	public static boolean existeArchivo(String file){
-		File f = new File(file);
-		return f.exists();
-	}
-
-	public static boolean buscarString(String [] array, String str){
-		if( array != null) {
-			for (String e : array) {
-				if (e.equals(str)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 }

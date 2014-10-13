@@ -1,4 +1,4 @@
-package compiler.ast;
+ package compiler.ast;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -23,6 +23,7 @@ public class Cycle extends Node{
 	public Node bloque;
 	
 	public Cycle(String tipo, Node inicializacionVar, Node condicion, Node bloque){
+		super();
 		this.inicializacionVar = inicializacionVar;
 		this.condicion = condicion;
 		this.bloque = bloque;

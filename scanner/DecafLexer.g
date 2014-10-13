@@ -6,13 +6,13 @@ lexer grammar DecafLexer;
 }
 
 
-COMMENT 			: ('//' ~('\n')* WHITESPACE | '/*' ~('\n')* '*/')->skip;
+COMMENT 			: '//' .*? ('\n' | EOF) ->skip;
 WHITESPACE			: ('\n' | '\t' | ' ' | '\r') ->skip;
 
 // numeros
 HEX_ERROR			: '0x' ~([0-9] | [a-fA-F] )* ;					
 
-INT_LITERAL			: DECIMAL_LITERAL | HEX_LITERAL ;
+INT_LITERAL			: (DECIMAL_LITERAL) | HEX_LITERAL;
 DECIMAL_LITERAL		: DIGIT+; 
 
 // Char y String

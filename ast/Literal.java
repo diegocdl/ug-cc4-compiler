@@ -9,6 +9,7 @@ public class Literal extends Node {
 	public String value;
 	
 	public Literal(String s){
+		super();
 		this.value = s;
 	}
 	

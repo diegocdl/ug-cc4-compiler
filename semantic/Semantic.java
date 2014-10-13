@@ -20,6 +20,7 @@ public class Semantic {
 		of = ast.getOutFile();
 		String msg = "stage: Semantic";
 		System.out.println(msg);
+		of = ast.getOutFile();
 		of.writeln(msg);
 	}
 	

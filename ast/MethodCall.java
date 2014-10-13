@@ -11,6 +11,7 @@ public class MethodCall extends Node {
 
 	/* para method_decl */
 	public MethodCall(String name, LinkedList<Node> ex){
+		super();
 		this.nameMethod = name;
 		this.expresiones = ex;
 	}

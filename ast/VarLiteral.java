@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import compiler.semantic.*;
 
 public class VarLiteral extends Node {
+	
 	public String name;
 	public Node dimension;
 
@@ -12,6 +13,7 @@ public class VarLiteral extends Node {
 		this.name = name;
 		this.dimension = new Literal(Integer.toString(dim));
 	}
+
 	public VarLiteral(String name, Node n){
 		this.name = name;
 		this.dimension = n;
@@ -91,6 +93,15 @@ public class VarLiteral extends Node {
 		return resultado;
 	}
 	
+
+	public String getName() {
+		return name;
+	}
+
+	public boolean isArray(){
+		return dimension != null;
+	}
+
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 
@@ -105,8 +116,6 @@ public class VarLiteral extends Node {
 			i = dimension.getDotTree(parent+1, i, dec, rel);
 		}
 
-
-		
 		return i;
 	}
 }

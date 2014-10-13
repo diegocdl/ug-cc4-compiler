@@ -2,6 +2,8 @@ package compiler.ast;
 
 import java.util.List;
 import java.util.LinkedList;
+import compiler.semantic.Table;
+import compiler.semantic.SymbolTableManager;
 
 public class Root extends Node{
 
@@ -43,8 +45,7 @@ public class Root extends Node{
 		if(parent != 0) 
 			rel.add("n"+ parent + " -> n" + i );
 		for (Node n : declaraciones ) {
-			n.getDotTree(i, i, dec, rel);
-			i++;
+			i = n.getDotTree(nodoActual+1, i, dec, rel);
 		}
 		return i;
 	}

@@ -1,6 +1,8 @@
+callout printf
+
 void bar(int a) {
 	for(i = 0, a){
-		callout("printf", "%d\n", i);
+		printf("%d\n", i);
 	}
 }
 

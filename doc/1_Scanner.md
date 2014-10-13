@@ -46,3 +46,15 @@ descripcion del error y el numero de linea donde se encuentra.
  -	**Condiciona if:** se verifico que tenga una condicion y que tenga los parentecis de apertura y de cierre y las llaves de apertura
  	y cierre del bloque.
  -	**Ciclo while:** se verifico que contenga la condicion del ciclo y los parentecis.
+
+
+ Actualización
+ ====================================
+
+ Scanner
+ ------------------------------------
+ - 	Se corrigio la gramatica para los comentarios
+
+ Parser
+ ------------------------------------
+ - 	Se cambiaron el orden de algunas reglas por problemas en la jerarquia de operaciones matematicas

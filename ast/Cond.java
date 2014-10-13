@@ -21,6 +21,7 @@ public class Cond extends Node{
 		this.condicion = condicion;
 		this.consecuencia = consecuencia;
 		this.alternativa = alternativa;
+		
 	}
 	
 	public void checkCond(Table tab, Table tb, String nombre, SymbolTable st, LinkedList<String> errorList){

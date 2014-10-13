@@ -1,9 +1,8 @@
 package compiler.semantic;
 
-import java.util.*;
+import java.util.Hashtable;
 
-public class Table{
-	
+public class Table {
 	public Hashtable<String,Tipos> tabla;
 	public String name;
 	public String parent;
@@ -20,4 +19,16 @@ public class Table{
 		return str;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String toString(){
+		String str = "\n----------------------------------------\n";
+		str += "Parent: " + ((parent != null)? parent : "null") + "\n";
+		str += "Name: " + name + "\n";
+		str += "\t\t" + tabla.toString() + "\n";
+		return str;
+	}
 }
