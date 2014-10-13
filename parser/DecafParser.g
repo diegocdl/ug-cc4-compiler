@@ -10,7 +10,7 @@ options {
 
 
 start: 
-	callout_decl* field_decl* method_decl* 		#root
+	  callout_decl* field_decl* method_decl*	#root
 	| program_error								#error
 	;
 
@@ -29,7 +29,7 @@ expr:
 	| NEGATION expr												#exp
 	| PARENTESIS_I expr PARENTESIS_D							#par
 	| expr bin_op expr											#operacion
-	| literal 												#literales
+	| literal 													#literales
 	| location													#exp
 	| method_call												#exp
 	;
@@ -38,7 +38,7 @@ literal:
 	(INT_LITERAL | CHAR_LITERAL | BOOL_LITERAL );
 
 block:
-	(LLAVE_I (field_decl | statement)* LLAVE_D )				#bloque;
+	(LLAVE_I (field_decl | statement | field_decl_error | statement_error)* LLAVE_D )				#bloque;
 
 bin_op: 
 	( mulOp | addOp | REL_OP | EQ_OP | COND_OP);
@@ -93,20 +93,36 @@ addOp:
 mulOp:
 	MULT | DIV;
 
+
+/**
+*			reglas de ERRORES 
+*/
+
 program_error:
-	callout_decl_error* field_decl_error* method_decl_error* ;
+	/* error del orden de las declaraciones tendria que ir callout field method  */
+	  (callout_decl | callout_decl_error | method_decl | method_decl_error | field_decl | field_decl_error)*
+	/* errores en las declaraciones */
+	| callout_decl_error* field_decl_error* method_decl_error* ;
 
 field_decl_error: 
-	  type ( (ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)? | (ID COMA | ID CORCHETE_I INT_LITERAL? CORCHETE_D COMA)+(ID | ID CORCHETE_I INT_LITERAL? CORCHETE_D)) ASIG_OP literal PUNTO_COMA 
-	| type ID (CORCHETE_I INT_LITERAL CORCHETE_D)? ( ID (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA
+	  	/* Error no tiene coma para separar los ID */
+	  type ID (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA? ID (CORCHETE_I INT_LITERAL CORCHETE_D)? )+ PUNTO_COMA
+	  	/* Error falta algun identificador(ID) */
 	| type ID? (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA ID? (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA 
-	| type (ID | ID CORCHETE_I INT_LITERAL CORCHETE_D) ( COMA ID | COMA ID CORCHETE_I INT_LITERAL CORCHETE_D)* 
+		/* Error falta el punto y coma (;) */ 
+	| type ID (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA? ID (CORCHETE_I INT_LITERAL CORCHETE_D)? )*
+		/* error solo puede tener enteros para indicar la dimension de un arreglo */
 	| type ID (CORCHETE_I .+? CORCHETE_D)? (COMA ID (CORCHETE_I .+? CORCHETE_D)? )* PUNTO_COMA 
-	| type ( (ID CORCHETE_I CORCHETE_D)? | (ID COMA | ID CORCHETE_I CORCHETE_D COMA)+(ID CORCHETE_I CORCHETE_D)) PUNTO_COMA 
-	| type keywords (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA keywords (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA 
-	| type ID (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA? ID (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA 
+		// error se debe indicar la dimension del arreglo
+	| type ID (CORCHETE_I CORCHETE_D)? (COMA ID (CORCHETE_I CORCHETE_D)?)* PUNTO_COMA 
+		/* Error no se puede pueden inicializar variables al declararlas */
+	| type ID (CORCHETE_I INT_LITERAL CORCHETE_D)? (ASIG_OP literal)? (COMA  ID (CORCHETE_I INT_LITERAL CORCHETE_D)?  (ASIG_OP literal)? )* PUNTO_COMA
+		/* el tipo de dato debe ser int o bool */
 	| ~(KW_INT | KW_BOOL) ID (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA ID (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA
+		/* se debe indicar el tipo de dato */ 
 	| ID (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA ID (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA
+		/* Error los keywords no se pueden usar de identificadores de variables */
+	| type (ID | keywords) (CORCHETE_I INT_LITERAL CORCHETE_D)? ( COMA (ID | keywords) (CORCHETE_I INT_LITERAL CORCHETE_D)? )* PUNTO_COMA
 	;
 	
 callout_decl_error: 

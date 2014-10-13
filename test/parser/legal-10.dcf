@@ -1,6 +1,7 @@
+callout printf
 void bar(int a) {
-  for i = 0, a {
-    callout("printf", "%d\n", i);
+  for (i = 0, a) {
+    printf("%d\n", i);
     if (a == 4) {
       break;
     }

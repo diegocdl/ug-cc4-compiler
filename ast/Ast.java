@@ -36,15 +36,16 @@ public class Ast {
 	}
 	public void start() {
 		try {
+			if(root != null){
+				String strTree = this.root.print();
+				System.out.println(strTree);
+				of.writeln(strTree);
 			
-			String strTree = this.root.print();
-			System.out.println(strTree);
-			of.writeln(strTree);
-			
-			GraphicTree gt = new GraphicTree(root);
-			String dotRepresentation = gt.build();
+				GraphicTree gt = new GraphicTree(root);
+				String dotRepresentation = gt.build();
 
-			of.writeln(dotRepresentation);
+				of.writeln(dotRepresentation);
+			}
 		} catch (ArrayIndexOutOfBoundsException aiobe) {
 			System.err.println("ArrayIndexOutOfBoundsException");
 			aiobe.printStackTrace();

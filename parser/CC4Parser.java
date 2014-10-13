@@ -36,7 +36,6 @@ public class CC4Parser {
 			parser = new DecafParser(new CommonTokenStream(scan.lexer));
 			parser.removeErrorListeners();
 			parser.addErrorListener(new DecafErrorListener());
-
 			ParseTreeWalker walker = new ParseTreeWalker();
 			ParseListener listener = new ParseListener();
 			tree = parser.start();
@@ -70,8 +69,10 @@ public class CC4Parser {
 		} catch (ArrayIndexOutOfBoundsException aiobe) {
 			System.err.println("usage: java Main <file>\nwhere file is the path to the filename with the tokens");
 			aiobe.printStackTrace();
-			System.exit(1);
+			// System.exit(1);
 		} catch (IOException e) {
+			System.err.println("usage: java Main <file>\nwhere file is the path to the filename with the tokens");
+			e.printStackTrace();
 			
 		}
 	}
