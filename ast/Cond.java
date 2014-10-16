@@ -4,18 +4,45 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 
+/**
+*	Nodo para Condiciones if se numeran para poder crear las tablas de simbolos con nombres unicos
+*/
 public class Cond extends Node{
-
+	/**
+	*	Contador de Nodos del tipo Cond creados
+	*/
 	private static int correlativo = 0;
+
+	/**
+	*	Identificador unico para cada Cond
+	*/
 	protected int id;
+
+	/**
+	*	Condicion para que se ejecute la consecuencia o alternativa
+	*/
 	public Node condicion;
+
+	/**
+	*	Bloque de instrucciones correspondientes a la consecuencia del if
+	*/
 	public Node consecuencia;
+
+	/**
+	*	Bloque de instrucciones correspondientes a la alternativa del if
+	*/
 	public Node alternativa;
 	
+	/**
+	*	Constructor para un if sin alternativa
+	*/
 	public Cond(Node condicion, Node consecuencia){
 		this(condicion, consecuencia, null);
 	}
 	
+	/**
+	*	Constructor para un if con consecuencia y alternativa
+	*/
 	public Cond(Node condicion, Node consecuencia, Node alternativa){
 		this.id = correlativo++;
 		this.condicion = condicion;
@@ -24,6 +51,14 @@ public class Cond extends Node{
 		
 	}
 	
+	/**
+	*	Verifica que la condicion sea bolean y se verifica el bloque del if
+	*	@param 	tab 		Tabla del scope donde se encuentra el if
+	*	@param 	tb 			Tabla del scope del bloque correspondiente al if
+	*	@param 	nombre 		Nombre de la tabla padre
+	*	@param 	st 			Listado de todas las tablas
+	*	@param 	errorList 	Lista de errores
+	*/
 	public void checkCond(Table tab, Table tb, String nombre, SymbolTable st, LinkedList<String> errorList){
 		boolean condicionValida = false;
 		String verificacionCondicion = "";
@@ -87,7 +122,6 @@ public class Cond extends Node{
 				Statement state = (Statement)n;
 				//state.checkStatement(tb,st);
 				if (state.checkBreakContinue(tb,st) == false){
-					//System.out.println("no puede haber un break o continue fuera de un For o While");
 					errorList.add("no puede haber un break o continue fuera de un For o While");
 				}
 			}
@@ -138,23 +172,27 @@ public class Cond extends Node{
 					Statement state = (Statement)n;
 					//state.checkStatement(tb,st);
 					if (state.checkBreakContinue(tb,st) == false){
-						//System.out.println("no puede haber un break o continue fuera de un For o While");
 						errorList.add("no puede haber un break o continue fuera de un For o While");
 					}
 				}
 			}
 		}
 		}else{
-			//System.out.println("Condicion invalida");
 			errorList.add("Condicion invalida");
 		}
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String toString(){
 		return "Cond";
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String print(String padding){
 		String str = padding + "If\n";
@@ -171,6 +209,9 @@ public class Cond extends Node{
 		return str;
 	}
 
+	/**
+	*	{@inheritDoc}
+	*/
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 

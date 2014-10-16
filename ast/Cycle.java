@@ -1,29 +1,65 @@
- package compiler.ast;
+package compiler.ast;
 
 import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
-/*
-	for(<id> = <expr>, <expr>) <block>
-	while (<expr>) <block>
 
+/**
+*	Nodo para los ciclos 
+*	for(<id> = <expr>, <expr>) <block>
+*	while (<expr>) <block>
 */
 public class Cycle extends Node{
 
+	/**
+	*	Identificador de tipo de ciclo FOR
+	*/
 	public static final String FOR = "for";
+
+	/**
+	*	Identificador de tipo de ciclo WHILE
+	*/
 	public static final String WHILE = "while";
+
+	/**
+	*	Contador de ciclos creados para numerar tablas de simbolos
+	*/
 	private static int correlativo = 0;
+
+	/**
+	*	Identificador de ciclo para tabla de simbolos
+	*/
 	protected int id;
 
+	/**
+	*	Tipo de ciclo (WHILE o FOR)
+	*/
 	public String tipoCiclo;
 	
-	/* la inicializacion de variable solo se usara en el for */
+	/**
+	*	Incializacion de variable para el for
+	*	la inicializacion de variable solo se usara en el for 
+	*/
 	public Node inicializacionVar;
+
+	/**
+	*	Condicion de ejecucion del ciclo
+	*/
 	public Node condicion;
+
+	/**
+	*	Bloque de codigo a ejecutar en el ciclo
+	*/
 	public Node bloque;
 	
+	/**
+	*	Constructor general de la clase
+	*	@param tipo 	String para indicar que tipo de ciclo es FOR o WHILE
+	*	@param inicializacionVar	Incializacion de variable para el ciclo
+	* 	@param condicion
+	* 	@param bloque
+	*/
 	public Cycle(String tipo, Node inicializacionVar, Node condicion, Node bloque){
-		super();
 		this.inicializacionVar = inicializacionVar;
 		this.condicion = condicion;
 		this.bloque = bloque;
@@ -31,13 +67,18 @@ public class Cycle extends Node{
 		this.id = correlativo++;
 	}
 	
-
+	/**
+	*	Constructor para ciclos FOR
+	*	@param inicializacionVar	Incializacion de variable para el ciclo
+	* 	@param condicion
+	* 	@param bloque
+	*/
 	public Cycle(Node inicializacionVar, Node condicion, Node bloque){
 		this(FOR, inicializacionVar, condicion, bloque);
 	}
 
 	/**
-	*	Constructor para ciclos while
+	*	Constructor para ciclos WHILE
 	* 	@param condicion
 	* 	@param bloque
 	*/
@@ -45,6 +86,14 @@ public class Cycle extends Node{
 		this(WHILE, null, condicion, bloque);
 	}
 	
+
+	/**
+	*	Verifica la condicion del ciclo y cuando es for se verifica la incializacion de variable
+	*	y verifica el bloque correspondiente
+	*	@param 	tb 			tabla del scope al que peretenece
+	*	@param 	st 			Listado de todas las tablas
+	*	@param 	errorList 	Lista de errores
+	*/
 	public void checkCycle(Table tb, String nombre, SymbolTable st, LinkedList<String> errorList){
 		if (this.tipoCiclo.equals("for")){
 			
@@ -186,18 +235,18 @@ public class Cycle extends Node{
 		}
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String toString(){
 		return "Ciclo";
-		/*String str = "";
-		if(this.inicializacionVar != null){
-			str = this.tipoCiclo + " " + this.inicializacionVar.toString() + " " + this.condicion.toString();
-		}else{
-			str = this.tipoCiclo + " " + this.condicion.toString();
-		}
-		return str;*/
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/	
+	@Override
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 
@@ -220,6 +269,10 @@ public class Cycle extends Node{
 		return i;
 	}
 
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
 	public String print(String padding){
 		String str = padding + tipoCiclo + "\n";
 		if(inicializacionVar != null) {

@@ -4,26 +4,53 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 
+/**
+*	Esta clase es un nodo para variables y arreglos
+*/
 public class VarLiteral extends Node {
 	
+	/**
+	*	Nombre de variable
+	*/
 	public String name;
+
+	/**
+	*	Dimension del arreglo, en el caso de no ser arreglo este campo sera null
+	*/
 	public Node dimension;
 
+	/**
+	*	Constructor de clase con dimension entera
+	*	@param 	name 	nombre de variable
+	*	@param 	dim 	dimension del arreglo
+	*/
 	public VarLiteral(String name, int dim){
 		this.name = name;
 		this.dimension = new Literal(Integer.toString(dim));
 	}
 
+	/**
+	*	Constructor de arreglo
+	*	@param name 	Nombre de la variable
+	*	@param n 		Dimension del arreglo
+	*/
 	public VarLiteral(String name, Node n){
 		this.name = name;
 		this.dimension = n;
 	}
 
+	/**
+	*	Constructor de clase para variables
+	*	@param name Nombre de variable
+	*/
 	public VarLiteral(String name){
 		this.name = name;
 		this.dimension = null;
 	}
 
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String print(String padding){
 		String str = padding + "VarLiteral\n";
@@ -34,6 +61,9 @@ public class VarLiteral extends Node {
 		return str;
 	}
 
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String toString(){
 		if (dimension != null)
@@ -42,6 +72,13 @@ public class VarLiteral extends Node {
 			return name;
 	}
 
+	/**
+	*	Verifica la existencia y unicidad de la variable
+	*	@param 	tb 			tabla del scope al que peretenece la operacion
+	*	@param 	st 			Listado de todas las tablas
+	*	@param 	errorList 	Lista de errores
+	*	@return tipo de dato de la variable
+	*/
 	public String checkVarLiteral(Table tb, SymbolTable st, LinkedList<String> errorList){
 		String resultado = "";
 		boolean b = false;
@@ -67,7 +104,6 @@ public class VarLiteral extends Node {
 							}else{
 								resultado = tableaux2.tabla.get(this.name).tipo;
 							}
-							//System.out.println(tableaux2.name);
 							i=st.listaTablas.size();
 							b = true;
 						}else{tableaux = tableaux2;i=st.listaTablas.size();}
@@ -93,15 +129,26 @@ public class VarLiteral extends Node {
 		return resultado;
 	}
 	
-
+	/**
+	*	Retorna el nombre de la variable
+	*	@return	nombre de variable
+	*/
 	public String getName() {
 		return name;
 	}
 
+	/**
+	*	Devuelve si la variable es un arreglo
+	*	@return true si es arreglo, false si no lo es
+	*/
 	public boolean isArray(){
 		return dimension != null;
 	}
 
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 

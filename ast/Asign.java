@@ -4,28 +4,43 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 
+
+/**
+*	Nodo de Asignacion esta sera clase sera usada para todas las asignaciones de valores a variables
+*/
 public class Asign extends Node{
+
+	/**
+	*	Identificador de variable
+	*/
 	public Node id;
+
+	/**
+	*	tipo de asignacion (=, -=, +=)
+	*/
 	public String asig;
+
+	/**
+	*	Valor a Asignar este puede ser una expresion o un literal
+	*/
 	public Node value;
 	
+	/**
+	*	Constructor de clase inicializa los campos
+	*/
 	public Asign(Node id, String asig, Node value){
-		super();
 		this.id = id;
 		this.asig = asig;
 		this.value = value;
 	}
-	
-	@Override
-	public String print(String padding){
-		String str = padding + asig+"\n";
-		str += id.print(padding + "\t");
-		if(value != null){
-			str += value.print(padding + "\t");
-		}
-		return str;
-	}
 
+	/**
+	*	Chequea la semantica de la asignacion tipos y existencia de variables
+	*	@param tb 			tabla del scope al que peretenece
+	*	@param st 			Listado de todas las tablas
+	*	@param  errorList	Listado con los errores
+	*	@param  isfor		Indicador para saber si la asignacion esta como inicializador de variable de un for
+	*/
 	public void checkAsign(Table tb, SymbolTable st, LinkedList<String> errorList, int isfor){
 		boolean prueba = true;
 		String verificacion = "", tipo = "",expArreglo = "";
@@ -193,12 +208,32 @@ public class Asign extends Node{
 			
 		}
 	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public String print(String padding){
+		String str = padding + asig+"\n";
+		str += id.print(padding + "\t");
+		if(value != null){
+			str += value.print(padding + "\t");
+		}
+		return str;
+	}
 	
+	/**
+	*	{@inheritDoc} 
+	*/
 	@Override
 	public String toString(){
 		return "Asignacion";
 	}
 	
+	/**
+	*	{@inheritDoc} 
+	*/
+	@Override
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 

@@ -5,14 +5,34 @@ import compiler.ast.*;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
 
+
+/**
+*	Clase de la fase de Semantic en esta fase se verifica la logica del programa, unicidad de variables, existencia y tipos
+*/
 public class Semantic {
 
 	public Debug debug;
+
 	public OutputFile of;
+	/**
+	*	Listado de nodos del root
+	*/
 	public LinkedList<Node> listaNodos;
+
+	/**
+	*	Listado con todos los errores de semantic
+	*/
 	public LinkedList<String> listaErrores;
+
+	/**
+	*	Lista de tablas de todos los scopes del programa
+	*/
 	public SymbolTable tablaSimbolos;
 
+	/**
+	*	Constructor que inicializa los campos a partir de un objeto AST se toma la lista de nodos del root de ast
+	*	@param ast 		Abstract Sintax Tree generado en la fase anterior
+	*/
 	public Semantic(Ast ast) throws Exception {
 		tablaSimbolos = new SymbolTable();
 		listaNodos = ast.root.declaraciones;
@@ -24,6 +44,10 @@ public class Semantic {
 		of.writeln(msg);
 	}
 	
+	/**
+	*	Verifica las declaraciones de variables globales y metodos y se mandan a llamar a los checks de cada metodo
+	*	@return boolean que es true si hay errores y false si no hay errores
+	*/
 	public boolean check(){
 		boolean error = false;
 		boolean main = false;
@@ -41,7 +65,6 @@ public class Semantic {
 							t.tabla.put(d.nameFields.get(0).name, new Tipos(d.type));
 						}
 					}else {
-						//System.out.println(decl.nameMethod + " no puede ser declarada de nuevo");
 						this.listaErrores.add(decl.nameMethod + " no puede ser declarada de nuevo");
 					}
 					decl.checkMethod(t,decl.nameMethod,this.tablaSimbolos,this.listaErrores);
@@ -61,7 +84,6 @@ public class Semantic {
 								tglobal.tabla.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}else {
-							//System.out.println(vl.name + " no puede ser declarada de nuevo");
 							this.listaErrores.add(vl.name + " no puede ser declarada de nuevo");
 						}
 					}
@@ -73,7 +95,6 @@ public class Semantic {
 			if (tab.name.equals("main")){main = true;}
 		}
 		if (!main){
-			//System.out.println("No hay main");
 			this.listaErrores.add("No hay main");
 		}
 		if (!this.listaErrores.isEmpty()){

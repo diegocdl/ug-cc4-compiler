@@ -9,13 +9,23 @@ public class MethodCall extends Node {
 	public String nameMethod;
 	public LinkedList<Node> expresiones;
 
-	/* para method_decl */
+	/**
+	*	Constructor de clase
+	*	@param name 	Nombre de metodo
+	*	@param ex 		parametros
+	*/
 	public MethodCall(String name, LinkedList<Node> ex){
-		super();
 		this.nameMethod = name;
 		this.expresiones = ex;
 	}
 
+	/**
+	*	Verifica los tipos de los paremetros de una llamada a metodo
+	*	@param 	tb 			tabla del scope al que peretenece la operacion
+	*	@param 	st 			Listado de todas las tablas
+	*	@param 	errorList 	Lista de errores
+	*	@return tipo de dato que retorna el metodo
+	*/
 	public String checkMethodCall(Table tb, SymbolTable st, LinkedList<String> errorList){
 		boolean p = false;
 		String resultado = "";
@@ -58,6 +68,9 @@ public class MethodCall extends Node {
 		return resultado;
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String print(String padding) {
 		String str = padding + "Llamada " +  nameMethod + "\n";
@@ -69,11 +82,18 @@ public class MethodCall extends Node {
 		return str;
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String toString(){
 		return "Method Call";
 	}
 
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 

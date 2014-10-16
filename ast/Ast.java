@@ -9,13 +9,33 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import compiler.parser.DecafParser;
 import compiler.parser.DecafParserBaseVisitor;
+
+/**
+*	Clase principal de fase de ASTse simplifica el arbol de parseo 
+*	y se extrae solo los elementos necesarios para futuras fases
+*/
 public class Ast {
 	
 	public Debug debug;
+	/**
+	*	Archivo de salida del programa
+	*/
 	public OutputFile of;
+
+	/**
+	*	Parser
+	*/
 	public CC4Parser parser;
+
+	/**
+	*	Raiz del AST
+	*/
 	public Root root;
 
+	/**
+	*	Constructor de clase
+	*	@param parser CC4Parser necesario para obtener el arbol de parseo
+	*/
 	public Ast(CC4Parser parser) throws Exception {
 		this.parser = parser;
 		AstVisitor visitor = new AstVisitor();
@@ -26,14 +46,25 @@ public class Ast {
 		of.writeln(msg);
 	}	
 
+	/**
+	*	Se establece el Debuger para la fase
+	*	@param d debuger
+	*/
 	public void setDebuger(Debug d){
 		debug = d;
 		debug.println("debugging: Ast");
 	}
 
+	/**
+	*	Retorna el archivo de salida
+	*/
 	public OutputFile getOutFile(){
 		return of;
 	}
+
+	/**
+	*	Ejecuta la fase y se despliega el arbol de parseo
+	*/
 	public void start() {
 		try {
 			if(root != null){
@@ -43,17 +74,16 @@ public class Ast {
 			
 				GraphicTree gt = new GraphicTree(root);
 				String dotRepresentation = gt.build();
-
 				of.writeln(dotRepresentation);
 			}
 		} catch (ArrayIndexOutOfBoundsException aiobe) {
 			System.err.println("ArrayIndexOutOfBoundsException");
 			aiobe.printStackTrace();
-			System.exit(1);
+			// System.exit(1);
 		} catch (Exception e) {
 			System.err.println("Exception");
 			e.printStackTrace();
-			System.exit(1);
+			// System.exit(1);
 		} 
   	}
 	

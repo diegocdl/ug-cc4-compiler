@@ -4,20 +4,35 @@ import java.util.List;
 import java.util.regex.*;
 import compiler.semantic.*;
 
+/**
+*	Clase para los nodos literal (char. string, int y hex)
+*/
 public class Literal extends Node {
-	/*char, string, Int, hex */ 
+	/*char, string, int, hex */ 
 	public String value;
 	
+	/**
+	*	Constructor de clase 
+	*	@param s valor en char, string, int o hex
+	*/
 	public Literal(String s){
-		super();
 		this.value = s;
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String print(String padding){
 		return padding + value + "\n";
 	}
 
+	/**
+	*	Devuelve el tipo de dato del literal
+	*	@param tb Tabla de simbolos del scope
+	*	@param st Objeto con todas las tablas
+	*	@return retorna el tipo de dato del literal
+	*/
 	public String checkLiteral(Table tb, SymbolTable st){
 		String resultado = "";
 		if(Pattern.matches("[0-9]+",this.value)){
@@ -34,11 +49,18 @@ public class Literal extends Node {
 		return resultado;
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String toString(){
 		return value;
 	}
 
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 

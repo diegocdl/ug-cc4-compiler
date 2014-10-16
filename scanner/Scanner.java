@@ -4,6 +4,9 @@ import compiler.lib.Debug;
 import compiler.lib.OutputFile;
 import org.antlr.v4.runtime.*;
 
+/**
+*	Clase principal de la fase de Scanner se encarga de tokenizar todo el programa input y genera una lista de tokens
+*/
 public class Scanner {
 
 	public Debug debug;
@@ -12,12 +15,20 @@ public class Scanner {
 	public String inputFile;
 	public BaseErrorListener listener;
 
+	/**
+	*	Constructor que inicializa los campos de la clase
+	*	@param inputFile	Path Codigo fuente a compilar
+	*	@param outFile 		Archivo de salida para escribir el output
+	*/
 	public Scanner(String inputFile, OutputFile outFile) throws Exception {
 		of = outFile;
 		this.inputFile = inputFile;
 	    lexer =  new DecafLexer(new ANTLRFileStream(inputFile));
 	}
 
+	/**
+	*	Inicia la ejecucion de la fase de scanner
+	*/
 	public void start() {
 		try {
 			String msg = "stage: Scanner";
@@ -109,6 +120,9 @@ public class Scanner {
 		return error;
 	}
 
+	/**
+	*	Listener para el manejo de los errores que no fueron contemplados 
+	*/
 	class ErrorListener extends BaseErrorListener	{
 		 @Override
 	    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,

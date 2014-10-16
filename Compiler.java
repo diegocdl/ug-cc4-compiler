@@ -14,6 +14,11 @@ import compiler.lib.OutputFile;
 import compiler.lib.ErrorHandler;
 import compiler.lib.Configuracion;
 
+
+/**
+* 	Clase principal del Compilador se encarga de leer del command line las configuraciones y de verificarlas
+*	y ejecutar hasta la fase que se indique 
+*/
 public class Compiler {
 
 	public static void main(String[] args) {
@@ -36,6 +41,11 @@ public class Compiler {
 		}
     }
 
+    /**
+    *	Lee la configuracion desde un arreglo y la guarda en un objeto Configuracion que se recibe como parametro
+    *	@param 	config 	Objeto que encapsula la configuracion del compilador
+    *	@param 	args 	Arreglo de Strings que contiene todas las banderas y sus valores
+    */
 	public static void readConfiguration(Configuracion config, String[] args) throws ErrorHandler, IOException, Exception {
 		if ( args.length > 1 ) {
 			// recorre el arreglo args y setea las variables de configuración 
@@ -75,6 +85,10 @@ public class Compiler {
 		}
 	}
 
+	/**
+	*	Ejecuta el compilador hasta la fase solicitada
+	*	@param config Configuracion de ejecucion
+	*/
 	public static void execute(Configuracion config) throws ErrorHandler, Exception {
 		Scanner scan;
 		CC4Parser parse;

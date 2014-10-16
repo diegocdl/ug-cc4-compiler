@@ -5,21 +5,37 @@ import java.util.LinkedList;
 import compiler.semantic.*;
 
 public class Statement extends Node{
-	/* continue, break, return */
+	/**
+	*	continue, break, return
+	*/
 	public String keyword;
-	/* valor a retornar */
+	
+	/**
+	*	valor a retornar
+	*/
 	public Node value;
 	
+	/**
+	*	Constructor de clase Statement para return
+	*	@param k 	keyword return
+	*	@param
+	*/
 	public Statement(String k, Node n1){
-		super();
 		this.keyword = k;
 		this.value = n1;
 	}
 
+	/**
+	*	Constructor para clase Statement return, continue y break
+	*	@param	k keyword continue,break y return
+	*/
 	public Statement(String k){
 		this(k, null);
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String print(String padding){
 		String str = padding + keyword + "\n";
@@ -29,6 +45,14 @@ public class Statement extends Node{
 		return str;
 	}
 
+	/**
+	*	Verificar el return que su tipo sea correspondiente con tipo de dato 
+	*	que indicaron en la definicion del metodo.
+	*	@param 	tb 			tabla del scope al que peretenece la operacion
+	*	@param 	st 			Listado de todas las tablas
+	*	@param 	errorList 	Lista de errores
+	*	@return tipo de dato resultando de la expresion del return
+	*/
 	public String checkStatement(Table tb, SymbolTable st, LinkedList<String> errorList){
 		String resultado = "";
 		if (this.keyword.equals("return")){
@@ -46,7 +70,12 @@ public class Statement extends Node{
 		return resultado;
 	}
 	
-	//Devuelve true si el break o continue esta bien
+	/**
+	*	Verifica que break o continue esten dentro de un ciclo
+	*	@param tb 			tabla del scope al que peretenece la operacion
+	*	@param st 			Listado de todas las tablas
+	*	@return Devuelve true si el break o continue esta bien de lo contrario retorna false
+	*/
 	public boolean checkBreakContinue(Table tb, SymbolTable st){
 		boolean b = true;
 		Table tableaux = tb;
@@ -70,11 +99,18 @@ public class Statement extends Node{
 		return b;
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String toString(){
 		return "Statement";
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel) {
 		int nodoActual = i;
 

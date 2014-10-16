@@ -4,31 +4,81 @@ import java.util.LinkedList;
 import java.util.List;
 import compiler.semantic.*;
 
+/**
+*	Nodo para declaraciones de callouts, metodos, fields y parametros
+*/
 public class Declaracion extends Node {
 	
+	/**
+	*	Tipo de declaracion de callout
+	*/
 	public static final String CALLOUT = "callout";
+
+	/**
+	*	Tipo de declaracion de metodo
+	*/
 	public static final String METODO = "metodo";
+
+	/**
+	*	Tipo de declaracion de field
+	*/
 	public static final String FIELD = "field";
+
+	/**
+	*	Tipo de declaracion de parametro
+	*/
 	public static final String PARAMETRO = "parametro";
 	 
-
+	/**
+	*	tipo de dato de variable o de retorno de metodo (int, boolean)
+	*/
 	public String type;
 
+	/**
+	*	Tipo de declaracion
+	*/
 	public String typeDec;
 
-	// para method_decl
+	////////////////////////////////////
+	// 		para method_decl	   /////
+	////////////////////////////////////
+	/**
+	*	Nombre de metodo
+	*/
 	public String nameMethod;
+
+	/**
+	*	Bloque de instrucciones de metodo
+	*/
 	public Node bloque;
+
+	/**
+	*	Listado de declaracion de parametros del metodo
+	*/
 	public LinkedList<Declaracion> parametros;
 
-	// para field_decl
+	////////////////////////////////////
+	//        para field_decl      /////
+	////////////////////////////////////
+
+	/**
+	*	Lista de de nombres de variables 
+	*/
 	public List<VarLiteral> nameFields;
 	
-	// para callout_decl
+	////////////////////////////////////
+	//        para callout_decl    /////
+	////////////////////////////////////
+	/**
+	*	Identificador de callout
+	*/
 	public String id;
 
+	/**
+	*	Consructor para CALLOUT
+	*	@param id Identificador del callout
+	*/
 	public Declaracion(String id){
-		super();
 		this.typeDec = CALLOUT;
 		this.nameMethod = "callout";
 		this.nameFields = null;
@@ -37,7 +87,14 @@ public class Declaracion extends Node {
 		this.id = id;
 		this.type="";
 	}
-	
+
+	/**
+	*	Consructor para METODO
+	*	@param type 			tipo de valor de retorno del metodo
+	*	@param name 			nombre del metood
+	*	@param listaparametros	Listado con los parametros
+	*	@param bloque 			Bloque con instrucciones del metodo
+	*/
 	public Declaracion(String type, String name, LinkedList<Declaracion> listaparametros, Node bloque){
 		this.type = type;
 		this.typeDec = METODO;
@@ -48,6 +105,9 @@ public class Declaracion extends Node {
 		this.id = null;
 	}
 	
+	/**
+	*	Consructor general para declaracion
+	*/
 	public Declaracion(String type, List<VarLiteral> names, String tp){
 		this.type = type;
 		this.nameFields = names;
@@ -137,17 +197,11 @@ public class Declaracion extends Node {
 				}
 			}
 		}
-		/*if ((!this.type.equals(returntype))&&(!returntype.equals(""))){
-			System.out.println("tipo de retorno invalido");
-		}
-		if (!(this.type.equals("void"))&&(!returntype.equals(""))){
-			System.out.println("no tiene que haber return");
-		}
-		if (!(!this.type.equals("void"))&&(returntype.equals(""))){
-			System.out.println("Falta el valor de retorno");
-		}*/
 	}
 	
+	/**
+	*	{@inheritDoc}
+	*/
 	@Override
 	public String print(String padding) {
 		String str = padding + typeDec + "\n";
@@ -175,14 +229,26 @@ public class Declaracion extends Node {
 		return str;
 	}
 
+	/**
+	*	Devuelve el tipo de declaracion
+	*	@return tipo de declaracion
+	*/
 	public String getTypeDec(){
 		return typeDec;
 	}
 	
+	/**
+	*	Devuelve el tipo de dato de la variable o retorno de metodo
+	*	@return tipo de dato de variable o de retorno de metodo
+	*/
 	public String getTypeData(){
 		return type;
 	}
 
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
 	public int getDotTree(int parent, int i, List<String> dec, List<String> rel){
 		int nodoActual = i;
 		dec.add("n" + ( ++i ) + "[label=\"Declaracion\"];");
@@ -212,22 +278,6 @@ public class Declaracion extends Node {
 			dec.add("n" + ( ++i ) + "[label=\"" + id + "\"];");
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
 		}
-
-		// if(tipoCiclo.equals(FOR)){
-		
-		// 	dec.add("n" + ( ++i ) + "[label=\"exp\"];");
-		// 	rel.add("n" + nodoActual + " -> n" + i);		
-
-		// 	i = inicializacionVar.getDotTree(nodoActual, dec, rel);
-		// }
-		// dec.add("n" + ( ++i ) + "[label=\"condicion\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);
-		// i = condicion.getDotTree(i, dec, rel);
-
-		// dec.add("n" + ( ++i ) + "[label=\"bloque\"];");
-		// rel.add("n" + nodoActual + " -> n" + i);
-		// i = bloque.getDotTree(i, dec, rel);
-		
 		return i;
 	}
 
