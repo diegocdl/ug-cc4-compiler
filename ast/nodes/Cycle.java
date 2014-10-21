@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -285,5 +285,14 @@ public class Cycle extends Node{
 			str += bloque.print(padding + "\t");
 		}
 		return str;
+	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public IrtList destruct() {
+		IrtList irtList = new IrtList();
+		return irtList;
 	}
 } 

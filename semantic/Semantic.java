@@ -1,7 +1,8 @@
 package compiler.semantic;
 
 import java.util.LinkedList;
-import compiler.ast.*;
+import compiler.ast.nodes.*;
+import compiler.ast.Ast;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
 

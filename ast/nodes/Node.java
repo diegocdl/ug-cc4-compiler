@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.List;
 
@@ -22,4 +22,12 @@ public abstract class Node{
 	*	@return entero con el ultimo numero que fue asignado a un nodo
 	*/
 	public abstract int getDotTree(int parent, int i, List<String> dec, List<String> rel);
+
+
+	/**
+	*	
+	*/
+	public abstract IrtList destruct();
+
+	
 }

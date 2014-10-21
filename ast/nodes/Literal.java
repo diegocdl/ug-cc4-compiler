@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.List;
 import java.util.regex.*;
@@ -82,4 +82,14 @@ public class Literal extends Node {
 		
 		return i;
 	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public IrtList destruct() {
+		IrtList irtList = new IrtList();
+		return irtList;
+	}
 } 
+

@@ -3,6 +3,7 @@ package compiler.ast;
 import compiler.parser.CC4Parser;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
+import compiler.ast.nodes.Root;
 import java.util.List;
 import java.util.LinkedList;
 import org.antlr.v4.runtime.tree.*;

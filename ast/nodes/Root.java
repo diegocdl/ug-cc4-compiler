@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -81,5 +81,17 @@ public class Root extends Node {
 			i = n.getDotTree(nodoActual+1, i, dec, rel);
 		}
 		return i;
+	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public IrtList destruct() {
+		IrtList irtList = new IrtList();
+		for (Node node : declaraciones ) {
+			irtList.add(node.destruct());
+		}
+		return irtList;
 	}
 } 

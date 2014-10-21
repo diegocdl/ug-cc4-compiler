@@ -1,7 +1,7 @@
 package compiler.semantic;
 
 import java.util.LinkedList;
-import compiler.ast.*;
+import compiler.ast.nodes.*;
 
 /**
 *	Contiene el tipo de variable o de metodo y si es metodo guarda sus tipos de parametros

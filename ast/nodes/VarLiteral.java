@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -164,5 +164,14 @@ public class VarLiteral extends Node {
 		}
 
 		return i;
+	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public IrtList destruct() {
+		IrtList irtList = new IrtList();
+		return irtList;
 	}
 }

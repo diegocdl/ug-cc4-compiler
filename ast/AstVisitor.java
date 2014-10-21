@@ -2,13 +2,14 @@ package compiler.ast;
 
 import compiler.parser.CC4Parser;
 import compiler.lib.Debug;
+import compiler.parser.DecafParser;
+import compiler.parser.DecafParserBaseVisitor;
+import compiler.ast.nodes.*;
 import compiler.lib.OutputFile;
 import java.util.List;
 import java.util.LinkedList;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.Token;
-import compiler.parser.DecafParser;
-import compiler.parser.DecafParserBaseVisitor;
 
 public class AstVisitor extends DecafParserBaseVisitor<Node>{
 

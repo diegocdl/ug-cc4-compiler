@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -227,5 +227,14 @@ public class Cond extends Node{
 		// i = hijo1.getDotTree(i, dec, rel);		
 		
 		return i;
+	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public IrtList destruct() {
+		IrtList irtList = new IrtList();
+		return irtList;
 	}
 } 

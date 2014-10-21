@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -129,5 +129,14 @@ public class BinOp extends Node{
 		i = hijo2.getDotTree(nodoActual + 1, i, dec, rel);		
 		
 		return i;
+	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public IrtList destruct() {
+		IrtList irtList = new IrtList();
+		return irtList;
 	}
 } 

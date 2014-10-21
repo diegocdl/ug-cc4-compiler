@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -279,6 +279,15 @@ public class Declaracion extends Node {
 			rel.add("n" + (nodoActual + 1) + " -> n" + i);
 		}
 		return i;
+	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public IrtList destruct() {
+		IrtList irtList = new IrtList();
+		return irtList;
 	}
 
 }

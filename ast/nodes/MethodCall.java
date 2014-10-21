@@ -1,4 +1,4 @@
-package compiler.ast;
+package compiler.ast.nodes;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -100,5 +100,14 @@ public class MethodCall extends Node {
 		dec.add("n" + ( ++i ) + "[label=\"" + nameMethod + "\"];");
 		rel.add("n" + parent + " -> n" + i);		
 		return i;
+	}
+
+	/**
+	*	{@inheritDoc}
+	*/
+	@Override
+	public IrtList destruct() {
+		IrtList irtList = new IrtList();
+		return irtList;
 	}
 }
