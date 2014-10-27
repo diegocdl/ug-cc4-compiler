@@ -3,6 +3,7 @@ package compiler.ast.nodes;
 import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
+import compiler.irt.IrtList;
 
 /**
 *	Nodo para Condiciones if se numeran para poder crear las tablas de simbolos con nombres unicos
@@ -81,9 +82,9 @@ public class Cond extends Node{
 			if (n instanceof Declaracion){
 				Declaracion decl = (Declaracion)n;
 				for(VarLiteral vl : decl.nameFields){
-						if (tb.tabla.containsKey(vl.name) == false){
+						if (tb.containsKey(vl.name) == false){
 							if (vl.dimension == null){
-								tb.tabla.put(vl.name,new Tipos(decl.type));
+								tb.put(vl.name,new Tipos(decl.type));
 							}else {
 								try{
 									Literal literal = (Literal)vl.dimension;
@@ -92,7 +93,7 @@ public class Cond extends Node{
 										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
 									}
 								} catch(Exception e){ }
-								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+								tb.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}
 					}
@@ -132,9 +133,9 @@ public class Cond extends Node{
 				if (n instanceof Declaracion){
 					Declaracion decl = (Declaracion)n;
 					for(VarLiteral vl : decl.nameFields){
-						if (tb.tabla.containsKey(vl.name) == false){
+						if (tb.containsKey(vl.name) == false){
 							if (vl.dimension == null){
-								tb.tabla.put(vl.name,new Tipos(decl.type));
+								tb.put(vl.name,new Tipos(decl.type));
 							}else {
 								try{
 									Literal literal = (Literal)vl.dimension;
@@ -143,7 +144,7 @@ public class Cond extends Node{
 										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
 									}
 								} catch(Exception e){ }
-								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+								tb.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}
 					}
@@ -233,7 +234,7 @@ public class Cond extends Node{
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
+	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
 		return irtList;
 	}

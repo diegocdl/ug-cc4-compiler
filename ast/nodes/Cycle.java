@@ -3,6 +3,7 @@ package compiler.ast.nodes;
 import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
+import compiler.irt.IrtList;
 
 /**
 *	Nodo para los ciclos 
@@ -123,9 +124,9 @@ public class Cycle extends Node{
 			if (n instanceof Declaracion){
 				Declaracion decl = (Declaracion)n;
 				for(VarLiteral vl : decl.nameFields){
-						if (tb.tabla.containsKey(vl.name) == false){
+						if (tb.containsKey(vl.name) == false){
 							if (vl.dimension == null){
-								tb.tabla.put(vl.name,new Tipos(decl.type));
+								tb.put(vl.name,new Tipos(decl.type));
 							}else {
 								try{
 									Literal literal = (Literal)vl.dimension;
@@ -134,7 +135,7 @@ public class Cycle extends Node{
 										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
 									}
 								} catch(Exception e){ }
-								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+								tb.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}
 					}
@@ -187,51 +188,51 @@ public class Cycle extends Node{
 			}
 			//condicionValida = true;
 			Root rt = (Root)this.bloque;
-		for (Node n : rt.declaraciones){
-			if (n instanceof Declaracion){
-				Declaracion decl = (Declaracion)n;
-				for(VarLiteral vl : decl.nameFields){
-						if (tb.tabla.containsKey(vl.name) == false){
-							if (vl.dimension == null){
-								tb.tabla.put(vl.name,new Tipos(decl.type));
-							}else {
-								try{
-									Literal literal = (Literal)vl.dimension;
-									int dim = Integer.parseInt(literal.value);
-									if(dim == 0){
-										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
-									}
-								} catch(Exception e){ }
-								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+			for (Node n : rt.declaraciones){
+				if (n instanceof Declaracion){
+					Declaracion decl = (Declaracion)n;
+					for(VarLiteral vl : decl.nameFields){
+							if (tb.containsKey(vl.name) == false){
+								if (vl.dimension == null){
+									tb.put(vl.name,new Tipos(decl.type));
+								}else {
+									try{
+										Literal literal = (Literal)vl.dimension;
+										int dim = Integer.parseInt(literal.value);
+										if(dim == 0){
+											errorList.add(vl.name + "[0]  la dimension no puede ser 0");
+										}
+									} catch(Exception e){ }
+									tb.put(vl.name,new Tipos(decl.type + "[]"));
+								}
 							}
 						}
+				}else if (n instanceof Asign){
+					Asign as = (Asign)n;
+					as.checkAsign(tb,st,errorList,0);
+				}else if (n instanceof MethodCall){
+					MethodCall mc = (MethodCall)n;
+					mc.checkMethodCall(tb,st,errorList);
+				}else if (n instanceof Cond){
+					Cond c = (Cond)n;
+					Table t = new Table("IF_"+c.id, nombre);
+					st.listaTablas.add(t);
+					c.checkCond(tb,t,"IF_"+c.id,st,errorList);
+				}else if (n instanceof Cycle){
+					Cycle cy = (Cycle)n;
+					// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
+					if (cy.tipoCiclo.equals(Cycle.FOR)) {
+						Asign init = (Asign)cy.inicializacionVar;
+						init.checkAsign(tb,st, errorList,1);
 					}
-			}else if (n instanceof Asign){
-				Asign as = (Asign)n;
-				as.checkAsign(tb,st,errorList,0);
-			}else if (n instanceof MethodCall){
-				MethodCall mc = (MethodCall)n;
-				mc.checkMethodCall(tb,st,errorList);
-			}else if (n instanceof Cond){
-				Cond c = (Cond)n;
-				Table t = new Table("IF_"+c.id, nombre);
-				st.listaTablas.add(t);
-				c.checkCond(tb,t,"IF_"+c.id,st,errorList);
-			}else if (n instanceof Cycle){
-				Cycle cy = (Cycle)n;
-				// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
-				if (cy.tipoCiclo.equals(Cycle.FOR)) {
-					Asign init = (Asign)cy.inicializacionVar;
-					init.checkAsign(tb,st, errorList,1);
+					Table t = new Table("CICLO_"+cy.id, nombre);
+					st.listaTablas.add(t);
+					cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
+				}else if (n instanceof Statement){
+					Statement state = (Statement)n;
+					state.checkStatement(tb,st,errorList);
 				}
-				Table t = new Table("CICLO_"+cy.id, nombre);
-				st.listaTablas.add(t);
-				cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
-			}else if (n instanceof Statement){
-				Statement state = (Statement)n;
-				state.checkStatement(tb,st,errorList);
 			}
-		}
 		}
 	}
 	
@@ -291,7 +292,7 @@ public class Cycle extends Node{
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
+	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
 		return irtList;
 	}

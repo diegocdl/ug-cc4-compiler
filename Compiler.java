@@ -1,4 +1,5 @@
 import java.util.regex.Pattern;
+import java.util.Date;
 import java.io.File;
 import java.io.IOException;
 import compiler.scanner.Scanner;
@@ -24,6 +25,8 @@ public class Compiler {
 	public static void main(String[] args) {
 		// Variables de configuracion del Compilador
 		Configuracion config = new Configuracion();
+		Date date = new Date();
+		long time = date.getTime();
 		try {
 			// leer configuarcion de los argumentos recibidos desde la consola
 			readConfiguration(config, args);
@@ -36,8 +39,13 @@ public class Compiler {
 			}
 		} catch(ErrorHandler e) {
 			System.err.println(e.getMessage());
+			e.printStackTrace();
 		} catch(Exception e) {
 			System.err.println(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			date = new Date();
+			System.out.println("Ejecucion terminada en: " + (date.getTime() - time)/1000.0  + "seg");
 		}
     }
 
@@ -47,7 +55,7 @@ public class Compiler {
     *	@param 	args 	Arreglo de Strings que contiene todas las banderas y sus valores
     */
 	public static void readConfiguration(Configuracion config, String[] args) throws ErrorHandler, IOException, Exception {
-		if ( args.length > 1 ) {
+		if ( args.length > 0 ) {
 			// recorre el arreglo args y setea las variables de configuración 
 			for ( int i = 0; i< args.length; i++ ) {
 				switch(args[i]){

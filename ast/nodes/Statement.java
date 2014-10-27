@@ -3,6 +3,7 @@ package compiler.ast.nodes;
 import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
+import compiler.irt.IrtList;
 
 public class Statement extends Node{
 	/**
@@ -131,7 +132,7 @@ public class Statement extends Node{
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
+	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
 		return irtList;
 	}

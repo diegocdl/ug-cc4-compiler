@@ -1,10 +1,10 @@
 make: scanner\DecafLexer.java scanner\DecafLexer.class scanner\Scanner.class	\
 	parser\DecafParser.java parser\DecafParser.class parser\CC4Parser.class 	\
 	ast\Ast.class \
-	semantic\Semantic.class semantic\Table.class \
+	semantic\Tipos.class semantic\Table.class semantic\Semantic.class \
 	irt\Irt.class codegen\Codegen.class		\
-	opt\Algebraic.class opt\ConstantFolding.class 		\
-	lib\Debug.class lib\ErrorHandler.class lib\OutputFile.class		\
+	opt\Algebraic.class opt\ConstantFolding.class 	\
+	lib\Debug.class lib\ErrorHandler.class lib\OutputFile.class lib\Configuracion.class	\
 	Compiler.class
 
 Compiler.class: Compiler.java
@@ -33,11 +33,21 @@ parser\DecafParser.class: parser\DecafErrorListener.java parser\ParseListener.ja
 	javac parser\DecafParser.java
 
 # ast	
-ast\Ast.class: 	ast\Ast.java ast\AstVisitor.java ast\nodes\BinOp.java ast\nodes\Cond.java ast\nodes\Cycle.java 				\
-				ast\nodes\Declaracion.java ast\nodes\Exp.java ast\GraphicTree.java ast\nodes\Literal.java ast\nodes\MethodCall.java 	\
-				ast\nodes\Node.java ast\nodes\Root.java ast\nodes\Statement.java ast\nodes\VarLiteral.java
-	javac ast/*.java
+ast\Ast.class: 	ast\nodes\Node.java \
+				ast\nodes\Asign.java \
+				ast\nodes\BinOp.java \
+				ast\nodes\Cond.java \
+				ast\nodes\Cycle.java \
+				ast\nodes\Declaracion.java \
+				ast\nodes\Exp.java \
+				ast\nodes\Literal.java \
+				ast\nodes\MethodCall.java \
+				ast\nodes\Root.java \
+				ast\nodes\Statement.java \
+				ast\nodes\VarLiteral.java \
+				ast\AstVisitor.java ast\Ast.java ast\GraphicTree.java 
 	javac ast\nodes/*.java
+	javac ast/*.java
 
 # Semantic
 semantic\Semantic.class: semantic\Semantic.java
@@ -46,9 +56,19 @@ semantic\Semantic.class: semantic\Semantic.java
 semantic\Table.class: semantic\Table.java
 	javac semantic\Table.java
 
+semantic\Tipos.class: semantic\Tipos.java
+	javac semantic\Tipos.java
+
 # Irt
-irt\Irt.class: irt\Irt.java
-	javac irt\Irt.java
+irt\Irt.class: 	irt\instructions\Instruction.java 	\
+				irt\instructions\ALU.java 			\
+				irt\instructions\Immediate.java		\
+				irt\instructions\Jump.java 			\
+				irt\instructions\Label.java			\
+				irt\instructions\LoadStore.java		\
+				irt\Irt.java irt\IrtList.java irt\Register.java irt\RegisterManager.java
+	javac irt\instructions/*.java
+	javac irt/*.java
 
 # codegen
 codegen\Codegen.class: codegen\Codegen.java
@@ -72,6 +92,9 @@ lib\ErrorHandler.class: lib\ErrorHandler.java
 lib\OutputFile.class: lib\OutputFile.java
 	javac lib\OutputFile.java
 
+lib\Configuracion.class: lib\Configuracion.java 
+	javac lib\Configuracion.java
+
 clean:
 	del Compiler.class
 	del scanner\*.class
@@ -81,8 +104,10 @@ clean:
 	del parser\DecafParser.java
 	del parser\DecafParser.tokens
 	del ast\*.class
+	del ast\nodes\*.class
 	del semantic\*.class
 	del irt\*.class
+	del irt\instructions\*.class
 	del codegen\*.class
 	del opt\*.class
 	del lib\*.class

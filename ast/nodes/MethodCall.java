@@ -3,6 +3,7 @@ package compiler.ast.nodes;
 import java.util.LinkedList;
 import java.util.List;
 import compiler.semantic.*;
+import compiler.irt.IrtList;
 
 public class MethodCall extends Node {
 	
@@ -49,15 +50,15 @@ public class MethodCall extends Node {
 				tabla = t;
 			}
 		}
-		if (tabla.tabla.containsKey(this.nameMethod) == true){
-			resultado = tabla.tabla.get(this.nameMethod).tipo;
+		if (tabla.containsKey(this.nameMethod) == true){
+			resultado = tabla.get(this.nameMethod).tipo;
 			//System.out.println("----> " + lista.toString());
 			//System.out.println("----> " + tabla.tabla.get(this.nameMethod).tiposparametros.toString());
-			if (lista.size() != tabla.tabla.get(this.nameMethod).tiposparametros.size()){
+			if (lista.size() != tabla.get(this.nameMethod).tiposparametros.size()){
 				//System.out.println("Error en el numero de argumentos");
 				errorList.add("Error en el numero de argumentos en el Metodo " + this.nameMethod);
 			}
-			if (!lista.equals(tabla.tabla.get(this.nameMethod).tiposparametros)){
+			if (!lista.equals(tabla.get(this.nameMethod).tiposparametros)){
 				//System.out.println("parametro invalido en la llamada a " + this.nameMethod);
 				errorList.add("parametro invalido en la llamada a " + this.nameMethod);
 			}
@@ -106,7 +107,7 @@ public class MethodCall extends Node {
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
+	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
 		return irtList;
 	}

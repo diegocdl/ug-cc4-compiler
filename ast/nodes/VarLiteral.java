@@ -3,6 +3,7 @@ package compiler.ast.nodes;
 import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
+import compiler.irt.IrtList;
 
 /**
 *	Esta clase es un nodo para variables y arreglos
@@ -82,14 +83,14 @@ public class VarLiteral extends Node {
 	public String checkVarLiteral(Table tb, SymbolTable st, LinkedList<String> errorList){
 		String resultado = "";
 		boolean b = false;
-		if (tb.tabla.containsKey(this.name) == false){
+		if (tb.containsKey(this.name) == false){
 			Table tableaux = tb;
 			Table tableaux2 = null;
 			while(!(tableaux.parent.equals("NULL")) && !b){
 				for (int i=0; i<st.listaTablas.size(); i++){
 					tableaux2 = st.listaTablas.get(i);
 					if (tableaux2.name.equals(tableaux.parent)){
-						if (tableaux2.tabla.containsKey(this.name) == true){
+						if (tableaux2.containsKey(this.name) == true){
 							if (this.dimension != null){
 								if (this.dimension instanceof Exp){
 									Exp expr2 = (Exp)this.dimension;
@@ -102,7 +103,7 @@ public class VarLiteral extends Node {
 									resultado = lit2.checkLiteral(tb,st);
 								}
 							}else{
-								resultado = tableaux2.tabla.get(this.name).tipo;
+								resultado = tableaux2.get(this.name).tipo;
 							}
 							i=st.listaTablas.size();
 							b = true;
@@ -123,7 +124,7 @@ public class VarLiteral extends Node {
 					resultado = lit2.checkLiteral(tb,st);
 				}
 			}else {
-				resultado = tb.tabla.get(this.name).tipo;
+				resultado = tb.get(this.name).tipo;
 			}
 		}
 		return resultado;
@@ -170,8 +171,9 @@ public class VarLiteral extends Node {
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
+	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		
 		return irtList;
 	}
 }

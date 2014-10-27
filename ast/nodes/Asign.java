@@ -3,6 +3,7 @@ package compiler.ast.nodes;
 import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
+import compiler.irt.IrtList;
 
 
 /**
@@ -78,7 +79,7 @@ public class Asign extends Node{
 						expArreglo = lit2.checkLiteral(tb,st);
 					}
 				}
-			if (tb.tabla.containsKey(var.name) == false){
+			if (tb.containsKey(var.name) == false){
 				Table tableaux = tb;
 				Table tableaux2 = null;
 				while(!(tableaux.parent.equals("NULL")) && !b){
@@ -88,9 +89,9 @@ public class Asign extends Node{
 						tableaux2 = st.listaTablas.get(i);
 						if (tableaux2.name.equals(tableaux.parent)){
 							
-							if (tableaux2.tabla.containsKey(var.name) == true){
+							if (tableaux2.containsKey(var.name) == true){
 								declaracion = true;
-								tipo = tableaux2.tabla.get(var.name).tipo;
+								tipo = tableaux2.get(var.name).tipo;
 								//System.out.println("si " + tipo);
 								//System.out.println(tableaux2.name);
 								if (var.dimension == null){
@@ -151,7 +152,7 @@ public class Asign extends Node{
 				}
 			}else{
 				declaracion = true;
-				tipo = tb.tabla.get(var.name).tipo;
+				tipo = tb.get(var.name).tipo;
 				if (var.dimension == null){
 					if (this.asig.equals("=")){
 						if ((!tipo.equals(verificacion))&&(isfor == 0)){
@@ -250,7 +251,7 @@ public class Asign extends Node{
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
+	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
 		return irtList;
 	}

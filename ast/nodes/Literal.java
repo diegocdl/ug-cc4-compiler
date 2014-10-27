@@ -3,6 +3,7 @@ package compiler.ast.nodes;
 import java.util.List;
 import java.util.regex.*;
 import compiler.semantic.*;
+import compiler.irt.IrtList;
 
 /**
 *	Clase para los nodos literal (char. string, int y hex)
@@ -87,7 +88,7 @@ public class Literal extends Node {
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
+	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
 		return irtList;
 	}

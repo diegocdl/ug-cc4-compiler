@@ -3,6 +3,9 @@ package compiler.ast.nodes;
 import java.util.LinkedList;
 import java.util.List;
 import compiler.semantic.*;
+import compiler.irt.IrtList;
+import compiler.irt.RegisterManager;
+import compiler.irt.instructions.*;
 
 /**
 *	Nodo para declaraciones de callouts, metodos, fields y parametros
@@ -132,9 +135,9 @@ public class Declaracion extends Node {
 			if (n instanceof Declaracion){
 				Declaracion d = (Declaracion)n;
 				for(VarLiteral vl : d.nameFields){
-					if (tb.tabla.containsKey(vl.name) == false){
+					if (tb.containsKey(vl.name) == false){
 						if (vl.dimension == null){
-							tb.tabla.put(vl.name,new Tipos(d.type));
+							tb.put(vl.name,new Tipos(d.type));
 						}else {
 							// verificar que la dimension no se 0 
 							try{
@@ -144,7 +147,7 @@ public class Declaracion extends Node {
 									errorList.add(vl.name + "[0]  la dimension no puede ser 0");
 								}
 							} catch(Exception e){ }
-							tb.tabla.put(vl.name,new Tipos(d.type + "[]"));
+							tb.put(vl.name,new Tipos(d.type + "[]"));
 						}
 					}else {
 						//System.out.println(vl.name + " no puede ser declarada de nuevo");
@@ -285,9 +288,44 @@ public class Declaracion extends Node {
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
-		IrtList irtList = new IrtList();
-		return irtList;
+	public IrtList destruct(String parent, SymbolTable symbolTable) {
+		IrtList instructions = new IrtList();
+		if(getTypeDec().equals(METODO)){
+			// agrega label con nombre de metodo
+			instructions.add(new Label(nameMethod));
+
+			// solicita el espacio al stack
+			LoadStore temp = new LoadStore	(
+												"li", 
+												symbolTable.registerManager.getT(),
+												Integer.toString(-4)
+											);
+			instructions.add(temp);
+			instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRD() ));
+			symbolTable.registerManager.returnRegister(temp.getRD());
+			// almacena los registros
+			instructions.add(new LoadStore("sw", RegisterManager.RA, 0 , RegisterManager.SP));
+
+			// agrega instrucciones del blique
+			instructions.add(((Root)bloque).destruct(nameMethod, symbolTable));
+
+			// restaura los registros guardados
+			instructions.add(new LoadStore("lw", RegisterManager.RA, 0 , RegisterManager.SP));
+			// restaura el espacio al stack
+			temp = new LoadStore	(
+										"li", 
+										symbolTable.registerManager.getT(),
+										Integer.toString(4)
+									);
+			instructions.add(temp);
+			instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRD() ));
+			symbolTable.registerManager.returnRegister(temp.getRD());
+			// regresa
+			instructions.add(new Jump("jr", RegisterManager.RA));
+		} else if (getTypeDec().equals(FIELD)) {
+			// field instructions
+		}
+		return instructions;
 	}
 
 }

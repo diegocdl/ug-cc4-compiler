@@ -60,10 +60,10 @@ public class Semantic {
 				if(decl.typeDec.equals(Declaracion.METODO)){
 					Table t = new Table(decl.nameMethod, "ROOT");
 					this.tablaSimbolos.listaTablas.add(t);
-					if (tglobal.tabla.containsKey(decl.nameMethod) == false){
-						tglobal.tabla.put(decl.nameMethod, new Tipos(decl.type, decl.parametros));
+					if (tglobal.containsKey(decl.nameMethod) == false){
+						tglobal.put(decl.nameMethod, new Tipos(decl.type, decl.parametros));
 						for (Declaracion d : decl.parametros){
-							t.tabla.put(d.nameFields.get(0).name, new Tipos(d.type));
+							t.put(d.nameFields.get(0).name, new Tipos(d.type));
 						}
 					}else {
 						this.listaErrores.add(decl.nameMethod + " no puede ser declarada de nuevo");
@@ -71,9 +71,9 @@ public class Semantic {
 					decl.checkMethod(t,decl.nameMethod,this.tablaSimbolos,this.listaErrores);
 				}else if(decl.typeDec.equals(Declaracion.FIELD)){
 					for(VarLiteral vl : decl.nameFields){
-						if (tglobal.tabla.containsKey(vl.name) == false){
+						if (tglobal.containsKey(vl.name) == false){
 							if (vl.dimension == null){
-								tglobal.tabla.put(vl.name,new Tipos(decl.type));
+								tglobal.put(vl.name,new Tipos(decl.type));
 							}else {
 								try{
 									Literal literal = (Literal)vl.dimension;
@@ -82,7 +82,7 @@ public class Semantic {
 										this.listaErrores.add(vl.name + "[0]  la dimension no puede ser 0");
 									}
 								} catch(Exception e){ }
-								tglobal.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+								tglobal.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}else {
 							this.listaErrores.add(vl.name + " no puede ser declarada de nuevo");
@@ -109,12 +109,20 @@ public class Semantic {
 	}
 	
 
+	public LinkedList<Node> getListaNodos() {
+		return listaNodos;
+	}
+
+	public SymbolTable getSymbolTable() {
+		return tablaSimbolos;
+	}
+
 	public void setDebuger(Debug d) {
 		debug = d;
 		debug.println("debugging: Semantic");
 	}
 
-	public OutputFile getOutFile(){
+	public OutputFile getOutFile() {
 		return of;
 	}
 	

@@ -3,6 +3,8 @@ package compiler.ast.nodes;
 import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.Table;
+import compiler.semantic.SymbolTable;
+import compiler.irt.IrtList;
 
 /**
 * 	Root representa cada scope en el programa este tendra una lista de declaraciones y se usara para todo el programa y para
@@ -87,10 +89,23 @@ public class Root extends Node {
 	*	{@inheritDoc}
 	*/
 	@Override
-	public IrtList destruct() {
+	public IrtList destruct(String parent, SymbolTable symbolTable) {
 		IrtList irtList = new IrtList();
 		for (Node node : declaraciones ) {
-			irtList.add(node.destruct());
+			if(node instanceof Declaracion) {
+				// se podria ignorar dado que las instrucciones en este bloque solo podran ser field decl y para esos no se necesita realizar nada
+			} else if(node instanceof Cond) {
+				irtList.add(((Cond)node).destruct(parent, symbolTable));
+			} else if(node instanceof Cycle) {
+				irtList.add(((Cycle)node).destruct(parent, symbolTable));
+			} else if(node instanceof Statement) {
+				irtList.add(((Statement)node).destruct(parent, symbolTable));
+			} else if(node instanceof Asign) {
+				irtList.add(((Asign)node).destruct(parent, symbolTable));
+			} else if(node instanceof MethodCall) {
+				irtList.add(((Asign)node).destruct(parent, symbolTable));
+			}
+			// irtList.add(node.destruct());
 		}
 		return irtList;
 	}

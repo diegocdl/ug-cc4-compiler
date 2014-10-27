@@ -1,11 +1,13 @@
 package compiler.ast.nodes;
 
 import java.util.List;
+import compiler.irt.IrtList;
+import compiler.semantic.SymbolTable;
 
 /**
 *	Clase abstracta para los nodos de AST
 */
-public abstract class Node{
+public abstract class Node {
 	
 	/**
 	*	Imprime el ast con un padding definido como parametro
@@ -27,7 +29,7 @@ public abstract class Node{
 	/**
 	*	
 	*/
-	public abstract IrtList destruct();
+	public abstract IrtList destruct(String parent, SymbolTable  symbolTable);
 
 	
 }

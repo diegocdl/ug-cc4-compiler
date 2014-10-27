@@ -24,7 +24,7 @@ public class Configuracion {
 	*	El target le indica al compilador hasta que fase debe ejecutar,
 	* 	los target pueden ser  scan, parse, ast, semantic, irt y codegen
 	*/
-	protected String target = "ast";
+	protected String target = "irt";
 
 	/**
 	*	Le indica al compilador que optimizacion debe realizar 
@@ -126,7 +126,7 @@ public class Configuracion {
 	}
 		
 	public boolean checkData() throws Exception {
-		return getOutputFile() != null && input != null && target != null;
+		return getInputFileName() != null && getOutputFile() != null && input != null && target != null;
 
 
 	}
