@@ -93,6 +93,21 @@ public class Exp extends Node{
 				str = "error";
 				errorList.add("la expresion de \"!\" debe ser boolean");
 			}
+		}else if (this.exprModifier.equals("-")){
+			if (this.expr instanceof Exp){
+				Exp ex = (Exp)this.expr;
+				str = ex.checkExp(tb,st,errorList);
+			}else if (this.expr instanceof BinOp){
+				BinOp bo = (BinOp)this.expr;
+				str = bo.checkBinOp(tb,st,errorList);
+			}else if (this.expr instanceof Literal){
+				Literal lit = (Literal)this.expr;
+				str = lit.checkLiteral(tb,st);
+			}
+			if (!str.equals("int")){
+				str = "error";
+				errorList.add("la expresion de \"-\" debe ser int");
+			}
 		}
 		return str;
 	}
