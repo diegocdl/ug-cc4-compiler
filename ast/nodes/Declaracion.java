@@ -301,8 +301,8 @@ public class Declaracion extends Node {
 												Integer.toString(-4)
 											);
 			instructions.add(temp);
-			instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRD() ));
-			symbolTable.registerManager.returnRegister(temp.getRD());
+			instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRd() ));
+			symbolTable.registerManager.returnRegister(temp.getRd());
 			// almacena los registros
 			instructions.add(new LoadStore("sw", RegisterManager.RA, 0 , RegisterManager.SP));
 
@@ -318,8 +318,8 @@ public class Declaracion extends Node {
 										Integer.toString(4)
 									);
 			instructions.add(temp);
-			instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRD() ));
-			symbolTable.registerManager.returnRegister(temp.getRD());
+			instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRd() ));
+			symbolTable.registerManager.returnRegister(temp.getRd());
 			// regresa
 			instructions.add(new Jump("jr", RegisterManager.RA));
 		} else if (getTypeDec().equals(FIELD)) {

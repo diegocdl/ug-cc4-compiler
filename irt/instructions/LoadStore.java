@@ -36,7 +36,7 @@ public class LoadStore extends Instruction {
 
 	}
 
-	public Register getRD() {
+	public Register getRd() {
 		return rs;
 	}
 	

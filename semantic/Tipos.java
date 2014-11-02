@@ -53,6 +53,11 @@ public class Tipos {
 		num = n;
 	}
 	
+	public int getNumber() {
+		return num;
+	}
+
+
 	/**
 	*	{@inheritDoc}
 	*/

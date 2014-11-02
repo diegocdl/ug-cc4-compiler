@@ -253,6 +253,8 @@ public class Asign extends Node{
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+
+		irtList.add(value.destruct(parent, symbolTable));
 		return irtList;
 	}
 

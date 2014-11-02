@@ -99,7 +99,7 @@ clean:
 	del Compiler.class
 	del scanner\*.class
 	del scanner\DecafLexer.java
-	del scanner\DecafLexer.tokens
+	del scanner\*.tokens
 	del parser\*.class
 	del parser\DecafParser.java
 	del parser\DecafParser.tokens

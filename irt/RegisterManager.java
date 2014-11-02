@@ -21,6 +21,7 @@ public class RegisterManager {
 	public Register getS() {
 		for (int i = 0;  i < s.length; i++ ) {
 			if(!s[i]) {
+				s[i] = true;
 				return new Register("s", i);
 			}
 		}
@@ -30,21 +31,26 @@ public class RegisterManager {
 	public Register getT() {
 		for (int i = 0;  i < s.length; i++ ) {
 			if(!t[i]) {
-				return new Register("t" + i);
+				t[i] = true;
+				Register r = new Register("t", i);
+				System.out.println("Otorgado: " + r);
+				return r;
 			}
 		}
 		return null;
 	}
 
 	public void returnRegister(Register r) {
-		switch (r.getType()) {
-			case "s":
-				s[r.getNumber()] = false;
-				break;
-			case "t":
-				t[r.getNumber()] = false;
-				break;
-		}
+		if(r != null) {
+			switch (r.getType()) {
+				case "s":
+					s[r.getNumber()] = false;
+					break;
+				case "t":
+					t[r.getNumber()] = false;
+					break;
+			}
+		} 
 	}
 
 

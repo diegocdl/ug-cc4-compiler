@@ -35,7 +35,7 @@ public class Table {
 	*	@param name Nombre de la tabla este debe ser unico
 	*	@param parent Nombre de la tabla padre
 	*/
-	public Table(String name, String parent){
+	public Table(String name, String parent) {
 		cantidad = 0;
 		this.name = name;
 		this.parent = parent;
@@ -73,7 +73,7 @@ public class Table {
 	*	Retorna un String con el nombre de la tabla, el nombre de la tabla padre y los valores de la tabla
 	*	@return String con el nombre de la tabla, el nombre de la tabla padre y los valores de la tabla
 	*/
-	public String toTableString(){
+	public String toTableString() {
 		String str = "\nTABLA: " + this.name; 
 		str += "\nPADRE: " + this.parent;
 		str += "\nCANTIDAD VARIABLES: " + this.cantidad + "\n";
@@ -83,6 +83,24 @@ public class Table {
 			str += "\t" + key + ": " + tabla.get(key) + "\n";
 		}
 		return str;
+	}
+
+
+	/**
+	*	Retorna la posicion de memoria en el Starck de la variable
+	*	@param symbolTable 	Contenedor de tablas de simbolos
+	*	@param var variable para buscar su poscion
+	*/
+	public int getPositionVar(SymbolTable symbolTable, String var) {
+		if(tabla.containsKey(var)) {
+			return (4*tabla.get(var).getNumber());
+		} else {
+			if(!parent.equals("NULL")) {
+				return (cantidad + symbolTable.searchByName(parent).getPositionVar(symbolTable, var)) * 4;
+			} else {
+				return -1;
+			}
+		}
 	}
 
 	/**

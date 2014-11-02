@@ -9,7 +9,7 @@ import compiler.semantic.Table;
 import compiler.semantic.SymbolTable;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
-
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Irt {
@@ -47,9 +47,9 @@ public class Irt {
 											Integer.toString(nVars*4*(-1))
 										);
 		instructions.add(temp);
-		instructions.add(new Alu(Alu.ADD, RegisterManager.GP, RegisterManager.GP, temp.getRD() ));
+		instructions.add(new Alu(Alu.ADD, RegisterManager.GP, RegisterManager.GP, temp.getRd() ));
 		// se regresa el registro temporal usado para reservar espacio en el stack
-		symbolTable.registerManager.returnRegister(temp.getRD());
+		symbolTable.registerManager.returnRegister(temp.getRd());
 
 		// se inicializan con 0 todas las variables
 		for (int i = 0; i < nVars; i++) {
@@ -63,14 +63,16 @@ public class Irt {
 											Integer.toString(nVars*4)
 										);
 		instructions.add(temp);
-		instructions.add(new Alu(Alu.ADD, RegisterManager.GP, RegisterManager.GP, temp.getRD() ));
+		instructions.add(new Alu(Alu.ADD, RegisterManager.GP, RegisterManager.GP, temp.getRd() ));
 		// se regresa el registro temporal usado para reservar espacio en el stack
-		symbolTable.registerManager.returnRegister(temp.getRD());
+		symbolTable.registerManager.returnRegister(temp.getRd());
 		instructions.add(new LoadStore	(
 											"li", 
 											RegisterManager.V0,
 											Integer.toString(10)
 										));
+
+		instructions.add(new Syscall());
 
 
 		// destruct de todos los nodos de declaracion
@@ -85,6 +87,8 @@ public class Irt {
 		}
 
 		System.out.println(instructions);
+		System.out.println(Arrays.toString(symbolTable.registerManager.s));
+		System.out.println(Arrays.toString(symbolTable.registerManager.t));
 
 	}
 

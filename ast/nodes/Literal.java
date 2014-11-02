@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.regex.*;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
+import compiler.irt.Register;
+import compiler.irt.instructions.LoadStore;
 
 /**
 *	Clase para los nodos literal (char. string, int y hex)
@@ -90,6 +92,16 @@ public class Literal extends Node {
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		Register temp = symbolTable.registerManager.getT();
+		if(Pattern.matches("[0-9]+",this.value)){
+			irtList.add(new LoadStore("li", temp, value));
+		} else if(Pattern.matches(".",this.value)) {
+			irtList.add(new LoadStore("li", temp, "'" + value + "'"));
+		} else if ((this.value.equals("\'"))||(this.value.equals("\""))||(this.value.equals("\\"))||(this.value.equals("\t"))||(this.value.equals("\n"))){
+			irtList.add(new LoadStore("li", temp, "'" + value + "'"));
+		} else {
+			irtList.add(new LoadStore("li", temp, value));
+		}
 		return irtList;
 	}
 } 

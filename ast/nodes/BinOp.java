@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
+import compiler.irt.instructions.Alu;
+import compiler.irt.instructions.Instruction;
 
 /**
 *	Nodo para operaciones Binarias suma, resta, multiplicacion, division y operaciones logicas
@@ -138,6 +140,47 @@ public class BinOp extends Node{
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+
+		// se solicita la lista de instrucciones de cada hijo
+		IrtList listHijo1 = hijo1.destruct(parent, symbolTable);
+		IrtList listHijo2 = hijo2.destruct(parent, symbolTable);
+
+		Instruction i1 = listHijo1.getTail();
+		System.out.println(hijo2.getClass().getName());
+		Instruction i2 = listHijo2.getTail();
+
+		// se verifica si las instrucciones eran operaciones aritmeticas y se retornan los registros
+		if (i1 instanceof Alu) {
+			Alu alu = (Alu)i1;
+			symbolTable.registerManager.returnRegister(alu.getOp1());
+			symbolTable.registerManager.returnRegister(alu.getOp2());
+		}
+		if (i2 instanceof Alu) {
+			Alu alu = (Alu)i2;
+			symbolTable.registerManager.returnRegister(alu.getOp1());
+			symbolTable.registerManager.returnRegister(alu.getOp2());
+		}
+		String op = "";
+		switch(operation) {
+			case "+":
+				op = Alu.ADD;
+				break;
+			case "-":
+				op = Alu.SUB;
+				break;
+			case "/":
+				op = Alu.DIV;
+				break;
+			case "*":
+				op = Alu.MULT;
+				break;
+		}
+
+		irtList.add(listHijo1);
+		irtList.add(listHijo2);
+		irtList.add(new Alu(op, symbolTable.registerManager.getT(), i1.getRd(), i2.getRd()));
+		symbolTable.registerManager.returnRegister(i2.getRd());
+		symbolTable.registerManager.returnRegister(i2.getRd());
 		return irtList;
 	}
 } 

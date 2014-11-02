@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
+import compiler.irt.instructions.LoadStore;
+import compiler.irt.RegisterManager;
 
 /**
 *	Esta clase es un nodo para variables y arreglos
@@ -173,7 +175,9 @@ public class VarLiteral extends Node {
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
-		
+		Table t = symbolTable.searchByName(parent);
+		int p = t.getPositionVar(symbolTable, name);
+		irtList.add(new LoadStore("lw", symbolTable.registerManager.getT(), p, RegisterManager.SP));
 		return irtList;
 	}
 }

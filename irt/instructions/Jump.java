@@ -22,6 +22,11 @@ public class Jump extends Instruction {
 		this.label = label;
 	}
 
+
+	public Register getRd(){
+		return null;
+	}
+
 	/**
 	*	{@inheritDoc}
 	*/
