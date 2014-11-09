@@ -22,6 +22,11 @@ public class Tipos {
 	*	Numero de variable
 	*/
 	int num = -1;
+
+	/**
+	*	Dimension en el caso de los arreglos
+	*/
+	int dimension;
 	
 	/**
 	*	Constructor de Tipos para metodo recibe dos parametros
@@ -37,11 +42,13 @@ public class Tipos {
 	}
 	
 	/**
-	*	Constructor de Tipos para variables solo recibe tipo de variable
+	*	Constructor de Tipos para variables/arreglos solo recibe tipo de variable
 	*	@param t 	tipo de variable
+	*	@param dim 	dimension del arreglo
 	*/
-	public Tipos(String t) {
+	public Tipos(String t, int dim) {
 		this.tipo = t;
+		dimension = dim;
 		this.tiposparametros = null;
 	}
 
@@ -57,13 +64,20 @@ public class Tipos {
 		return num;
 	}
 
+	/**
+	*	Retorna el tamaño del arreglo
+	*	@return cantidad de posiciones del arreglo
+	*/
+	public int getDimension() {
+		return dimension;
+	}
 
 	/**
 	*	{@inheritDoc}
 	*/
 	@Override
 	public String toString(){
-		String str = "";
+		String str = "(" + dimension + ")";
 		str = str + this.tipo;
 		if(this.tiposparametros == null){
 			str += " #" + num;

@@ -82,21 +82,22 @@ public class Cond extends Node{
 			if (n instanceof Declaracion){
 				Declaracion decl = (Declaracion)n;
 				for(VarLiteral vl : decl.nameFields){
-						if (tb.containsKey(vl.name) == false){
-							if (vl.dimension == null){
-								tb.put(vl.name,new Tipos(decl.type));
-							}else {
-								try{
-									Literal literal = (Literal)vl.dimension;
-									int dim = Integer.parseInt(literal.value);
-									if(dim == 0){
-										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
-									}
-								} catch(Exception e){ }
-								tb.put(vl.name,new Tipos(decl.type + "[]"));
-							}
+					if (tb.containsKey(vl.name) == false){
+						if (vl.dimension == null) {
+							tb.put(vl.name,new Tipos(decl.type, 1));
+						} else {
+
+							try {
+								Literal literal = (Literal)vl.dimension;
+								int dim = Integer.parseInt(literal.value);
+								if(dim == 0){
+									errorList.add(vl.name + "[0]  la dimension no puede ser 0");
+								}
+								tb.put(vl.name,new Tipos(decl.type + "[]", dim));
+							} catch(Exception e){ }
 						}
 					}
+				}	
 			}else if (n instanceof Asign){
 				Asign as = (Asign)n;
 				as.checkAsign(tb,st,errorList,0);
@@ -135,7 +136,7 @@ public class Cond extends Node{
 					for(VarLiteral vl : decl.nameFields){
 						if (tb.containsKey(vl.name) == false){
 							if (vl.dimension == null){
-								tb.put(vl.name,new Tipos(decl.type));
+								tb.put(vl.name,new Tipos(decl.type, 1));
 							}else {
 								try{
 									Literal literal = (Literal)vl.dimension;
@@ -143,8 +144,8 @@ public class Cond extends Node{
 									if(dim == 0){
 										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
 									}
+									tb.put(vl.name,new Tipos(decl.type + "[]", dim));
 								} catch(Exception e){ }
-								tb.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}
 					}

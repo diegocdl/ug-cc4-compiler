@@ -85,7 +85,7 @@ public class VarLiteral extends Node {
 	public String checkVarLiteral(Table tb, SymbolTable st, LinkedList<String> errorList){
 		String resultado = "";
 		boolean b = false;
-		if (tb.containsKey(this.name) == false){
+		if (tb.containsKey(this.name) == false) {
 			Table tableaux = tb;
 			Table tableaux2 = null;
 			while(!(tableaux.parent.equals("NULL")) && !b){
@@ -113,7 +113,7 @@ public class VarLiteral extends Node {
 					}
 				}
 			}
-		}else{
+		} else {
 			if (this.dimension != null){
 				if (this.dimension instanceof Exp){
 					Exp expr2 = (Exp)this.dimension;
@@ -175,8 +175,11 @@ public class VarLiteral extends Node {
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		// solicitamos la tabla del scope correspondiente
 		Table t = symbolTable.searchByName(parent);
+		// se obtiene la posicion en el stack de la variable
 		int p = t.getPositionVar(symbolTable, name);
+		// se agrega un load word para cargar el valor de la posicion de memoria hacia un registro
 		irtList.add(new LoadStore("lw", symbolTable.registerManager.getT(), p, RegisterManager.SP));
 		return irtList;
 	}

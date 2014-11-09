@@ -137,7 +137,7 @@ public class Declaracion extends Node {
 				for(VarLiteral vl : d.nameFields){
 					if (tb.containsKey(vl.name) == false){
 						if (vl.dimension == null){
-							tb.put(vl.name,new Tipos(d.type));
+							tb.put(vl.name,new Tipos(d.type, 1));
 						}else {
 							// verificar que la dimension no se 0 
 							try{
@@ -146,8 +146,8 @@ public class Declaracion extends Node {
 								if(dim == 0){
 									errorList.add(vl.name + "[0]  la dimension no puede ser 0");
 								}
+								tb.put(vl.name,new Tipos(d.type + "[]", dim));
 							} catch(Exception e){ }
-							tb.put(vl.name,new Tipos(d.type + "[]"));
 						}
 					}else {
 						//System.out.println(vl.name + " no puede ser declarada de nuevo");
@@ -306,7 +306,7 @@ public class Declaracion extends Node {
 			// almacena los registros
 			instructions.add(new LoadStore("sw", RegisterManager.RA, 0 , RegisterManager.SP));
 
-			// agrega instrucciones del blique
+			// agrega instrucciones del bloque
 			instructions.add(((Root)bloque).destruct(nameMethod, symbolTable));
 
 			// restaura los registros guardados

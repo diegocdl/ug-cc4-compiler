@@ -54,35 +54,43 @@ public class Semantic {
 		boolean main = false;
 		Table tglobal = new Table("ROOT", "NULL");
 		this.tablaSimbolos.listaTablas.add(tglobal);
+		// se recorre el listado de todos los nodos de root
 		for (Node n : listaNodos){
+			// se verifica que tipo de Nodo es 
 			if(n instanceof Declaracion) {
 				Declaracion decl = (Declaracion)n;
 				if(decl.typeDec.equals(Declaracion.METODO)){
+					// si es metodo
 					Table t = new Table(decl.nameMethod, "ROOT");
 					this.tablaSimbolos.listaTablas.add(t);
+					// se verifica que el metodo no este declarado antes si no se agrega
+					// un error al listado de errores
 					if (tglobal.containsKey(decl.nameMethod) == false){
 						tglobal.put(decl.nameMethod, new Tipos(decl.type, decl.parametros));
+						// se agregan todas las variables de los parametros 
+						// a la tabla de simbolos del scope del metodo
 						for (Declaracion d : decl.parametros){
-							t.put(d.nameFields.get(0).name, new Tipos(d.type));
+							t.put(d.nameFields.get(0).name, new Tipos(d.type, 1));
 						}
 					}else {
 						this.listaErrores.add(decl.nameMethod + " no puede ser declarada de nuevo");
 					}
 					decl.checkMethod(t,decl.nameMethod,this.tablaSimbolos,this.listaErrores);
-				}else if(decl.typeDec.equals(Declaracion.FIELD)){
+				} else if(decl.typeDec.equals(Declaracion.FIELD)){
+					// campo
 					for(VarLiteral vl : decl.nameFields){
 						if (tglobal.containsKey(vl.name) == false){
 							if (vl.dimension == null){
-								tglobal.put(vl.name,new Tipos(decl.type));
+								tglobal.put(vl.name,new Tipos(decl.type, 1));
 							}else {
 								try{
 									Literal literal = (Literal)vl.dimension;
 									int dim = Integer.parseInt(literal.value);
+									tglobal.put(vl.name,new Tipos(decl.type + "[]", dim));
 									if(dim == 0){
 										this.listaErrores.add(vl.name + "[0]  la dimension no puede ser 0");
 									}
 								} catch(Exception e){ }
-								tglobal.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}else {
 							this.listaErrores.add(vl.name + " no puede ser declarada de nuevo");

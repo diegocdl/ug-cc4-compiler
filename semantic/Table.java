@@ -49,7 +49,9 @@ public class Table {
 		System.out.println(value.getTipoParametros());
 		if(value.getTipoParametros() == null){
 			value.setNumber(cantidad);
-			cantidad++;
+			// se suma la cantidad de posiciones que tenga el arreglo 
+			// en el caso de una variable sera igual a 1
+			cantidad += value.getDimension();
 		}
 		return res;
 	}

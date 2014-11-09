@@ -1,5 +1,7 @@
 package compiler.irt;
 
+import java.util.LinkedList;
+
 public class RegisterManager {
 
 
@@ -33,7 +35,6 @@ public class RegisterManager {
 			if(!t[i]) {
 				t[i] = true;
 				Register r = new Register("t", i);
-				System.out.println("Otorgado: " + r);
 				return r;
 			}
 		}
@@ -51,6 +52,22 @@ public class RegisterManager {
 					break;
 			}
 		} 
+	}
+
+	/**
+	*	Este metodo retorna una lista con los registros que estan siendo usados
+	*	en el momento que es llamado
+	*	@return Lista de registros usados en el momento
+	*/
+	public LinkedList<Register> getUsedRegisters() {
+		LinkedList<Register> list = new LinkedList<Register>();
+		for (int i = 0; i< t.length; i++) {
+			list.add(new Register("t", i));
+		}
+		for (int i = 0; i< s.length; i++) {
+			list.add(new Register("s", i));
+		}
+		return list;
 	}
 
 
