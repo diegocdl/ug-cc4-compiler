@@ -127,14 +127,16 @@ public class Cond extends Node{
 			}
 		}
 		if (this.alternativa != null){
-			Root rt2 = (Root)this.consecuencia;
+			Root rt2 = (Root)this.alternativa;
+			Table telse = new Table("ELSE_"+this.id, tb.parent);
+			st.listaTablas.add(telse);
 			for (Node n : rt2.declaraciones){
 				if (n instanceof Declaracion){
 					Declaracion decl = (Declaracion)n;
 					for(VarLiteral vl : decl.nameFields){
-						if (tb.tabla.containsKey(vl.name) == false){
+						if (telse.tabla.containsKey(vl.name) == false){
 							if (vl.dimension == null){
-								tb.tabla.put(vl.name,new Tipos(decl.type));
+								telse.tabla.put(vl.name,new Tipos(decl.type));
 							}else {
 								try{
 									Literal literal = (Literal)vl.dimension;
@@ -143,35 +145,35 @@ public class Cond extends Node{
 										errorList.add(vl.name + "[0]  la dimension no puede ser 0");
 									}
 								} catch(Exception e){ }
-								tb.tabla.put(vl.name,new Tipos(decl.type + "[]"));
+								telse.tabla.put(vl.name,new Tipos(decl.type + "[]"));
 							}
 						}
 					}
 				}else if (n instanceof Asign){
 					Asign as = (Asign)n;
-					as.checkAsign(tb,st,errorList,0);
+					as.checkAsign(telse,st,errorList,0);
 				}else if (n instanceof MethodCall){
 					MethodCall mc = (MethodCall)n;
-					mc.checkMethodCall(tb,st,errorList);
+					mc.checkMethodCall(telse,st,errorList);
 				}else if (n instanceof Cond){
 					Cond c = (Cond)n;
 					Table t = new Table("IF_"+c.id, nombre);
 					st.listaTablas.add(t);
-					c.checkCond(tb,t,"IF_"+c.id,st,errorList);
+					c.checkCond(telse,t,"IF_"+c.id,st,errorList);
 				}else if (n instanceof Cycle){
 					Cycle cy = (Cycle)n;
 					// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
 					if (cy.tipoCiclo.equals(Cycle.FOR)) {
 						Asign init = (Asign)cy.inicializacionVar;
-						init.checkAsign(tb,st, errorList,1);
+						init.checkAsign(telse,st, errorList,1);
 					}
 					Table t = new Table("CICLO_"+cy.id, nombre);
 					st.listaTablas.add(t);
 					cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
 				}else if (n instanceof Statement){
 					Statement state = (Statement)n;
-					//state.checkStatement(tb,st);
-					if (state.checkBreakContinue(tb,st) == false){
+					//state.checkStatement(telse,st);
+					if (state.checkBreakContinue(telse,st) == false){
 						errorList.add("no puede haber un break o continue fuera de un For o While");
 					}
 				}
@@ -228,7 +230,7 @@ public class Cond extends Node{
 		
 		return i;
 	}
-
+	
 	/**
 	*	{@inheritDoc}
 	*/
