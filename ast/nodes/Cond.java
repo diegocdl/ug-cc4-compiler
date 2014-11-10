@@ -180,7 +180,7 @@ public class Cond extends Node{
 			}
 		}
 		}else{
-			errorList.add("Condicion invalida");
+			errorList.add("Condicion invalida en un IF");
 		}
 	}
 	

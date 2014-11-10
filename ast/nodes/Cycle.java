@@ -102,19 +102,19 @@ public class Cycle extends Node{
 				Exp expr = (Exp)this.condicion;
 				if (!(expr.checkExp(tb,st,errorList).equals("int"))){
 					//System.out.println("condicion invalida");
-					errorList.add("Condicion Invalida");
+					errorList.add("Condicion Invalida en un FOR");
 				}else{condicionForValida = true;}
 			}else if (this.condicion instanceof Literal){
 				Literal lit = (Literal)this.condicion;
 				if (!(lit.checkLiteral(tb,st).equals("int"))){
 					//System.out.println("condicion invalida");
-					errorList.add("Condicion Invalida");
+					errorList.add("Condicion Invalida en un FOR");
 				}else{condicionForValida = true;}
 			}else if (this.condicion instanceof BinOp){
 				BinOp bo = (BinOp)this.condicion;
 				if (!(bo.checkBinOp(tb,st,errorList).equals("int"))){
 					//System.out.println("condicion invalida");
-					errorList.add("Condicion Invalida");
+					errorList.add("Condicion Invalida en un FOR");
 				}else{condicionForValida = true;}
 			}
 			
@@ -170,19 +170,19 @@ public class Cycle extends Node{
 				Exp expr = (Exp)this.condicion;
 				if (!(expr.checkExp(tb,st,errorList).equals("boolean"))){
 					//System.out.println("condicion invalida");
-					errorList.add("Condicion Invalida");
+					errorList.add("Condicion Invalida en un WHILE");
 				}else{condicionValida = true;}
 			}else if (this.condicion instanceof Literal){
 				Literal lit = (Literal)this.condicion;
 				if (!(lit.checkLiteral(tb,st).equals("boolean"))){
 					//System.out.println("condicion invalida");
-					errorList.add("Condicion Invalida");
+					errorList.add("Condicion Invalida en un WHILE");
 				}else{condicionValida = true;}
 			}else if (this.condicion instanceof BinOp){
 				BinOp bo = (BinOp)this.condicion;
 				if (!(bo.checkBinOp(tb,st,errorList).equals("boolean"))){
 					//System.out.println("condicion invalida");
-					errorList.add("Condicion Invalida");
+					errorList.add("Condicion Invalida en un WHILE");
 				}else{condicionValida = true;}
 			}
 			//condicionValida = true;

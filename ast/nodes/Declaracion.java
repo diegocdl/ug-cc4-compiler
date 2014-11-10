@@ -184,16 +184,16 @@ public class Declaracion extends Node {
 		if (this.type.equals("void")){
 			if (!returntype.equals("")){
 				//System.out.println("no tiene que haber return");
-				errorList.add("no tiene que haber return");
+				errorList.add("no tiene que haber return en el metodo " + this.nameMethod);
 			}
 		}else{
 			if (returntype.equals("")){
 				//System.out.println("Falta el valor de retorno");
-				errorList.add("Falta el valor de retorno");
+				errorList.add("Falta el valor de retorno en el metodo " + this.nameMethod);
 			}else{
 				if (!this.type.equals(returntype)){
 					//System.out.println("tipo de retorno invalido");
-					errorList.add("tipo de retorno invalido");
+					errorList.add("tipo de retorno invalido en el metodo " + this.nameMethod);
 				}
 			}
 		}
