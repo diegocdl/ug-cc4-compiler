@@ -26,13 +26,13 @@ public class CC4Parser {
 	public CC4Parser(Scanner scan) throws Exception {
 		this.scan = scan;
 		of = scan.getOutFile();
-		String msg = "stage: Parser";
-		System.out.println(msg);
-		of.writeln(msg);
 	}
 
 	public void start() throws ErrorHandler {
-		try {	    
+		try {
+			String msg = "stage: Parser";
+			if(debug != null) debug.println(msg);
+			of.writeln(msg);
 			parser = new DecafParser(new CommonTokenStream(scan.lexer));
 			parser.removeErrorListeners();
 			parser.addErrorListener(new DecafErrorListener());
@@ -54,7 +54,8 @@ public class CC4Parser {
 			ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			ventana.setVisible(true);
 
-			System.out.println("Arbol de parseo: " + tree.toStringTree(parser));
+			if(debug != null)
+				debug.println("Arbol de parseo: " + tree.toStringTree(parser));
 
 			// desplegar los errores
 			LinkedList<String> errores = listener.getErrorList();
@@ -63,7 +64,7 @@ public class CC4Parser {
 				of.writeln(" * " + e);
 			}
 			if(listener.getErrorList().size() > 0) {
-				throw new ErrorHandler("Se han encontrado " + listener.getErrorList().size() + " error(s) y no se puede continuar la compilacion.");
+				throw new ErrorHandler("Se han encontrado " + listener.getErrorList().size() + " error(es) y no se puede continuar la compilacion.");
 			}
 
 		} catch (ArrayIndexOutOfBoundsException aiobe) {

@@ -140,6 +140,7 @@ public class Compiler {
 			}
 			irt = new Irt(semantic);
 			if (config.isADebugPhase("irt")) irt.setDebuger(deb);
+			irt.start();
 			if(config.getTarget().equals("irt")) {
 				return;
 			}

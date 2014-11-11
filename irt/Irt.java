@@ -29,15 +29,19 @@ public class Irt {
 		listaNodos 		= semantic.getListaNodos();
 		symbolTable 	= semantic.getSymbolTable();
 		instructions 	= new IrtList();
-		
-		String msg = "stage: Irt";
 		of = semantic.getOutFile();
-		System.out.println(msg);
-		of.writeln(msg);
-		start();
+		// start();
 	}
 
 	public void start() {
+		String msg = "stage: Irt";
+
+		if(debug != null)
+			debug.println(msg);
+		try{
+			of.writeln(msg);
+		} catch (IOException ioe ) {}
+
 		Table root = symbolTable.searchByName("ROOT");
 		// se solicita la cantidad de variables a la tabla de scope principal
 		int nVars = root.getCantidadVariables();

@@ -42,9 +42,6 @@ public class Ast {
 		AstVisitor visitor = new AstVisitor();
 		this.root = (Root)visitor.visit(parser.tree);
 		of = parser.getOutFile();
-		String msg = "stage: Ast";
-		System.out.println(msg);
-		of.writeln(msg);
 	}	
 
 	/**
@@ -68,9 +65,14 @@ public class Ast {
 	*/
 	public void start() {
 		try {
+			String msg = "stage: Ast";
+			if(debug != null) 
+				debug.println(msg);
+			of.writeln(msg);
 			if(root != null){
 				String strTree = this.root.print();
-				System.out.println(strTree);
+				if(debug != null)
+					debug.println(strTree);
 				of.writeln(strTree);
 			
 				GraphicTree gt = new GraphicTree(root);
@@ -80,11 +82,9 @@ public class Ast {
 		} catch (ArrayIndexOutOfBoundsException aiobe) {
 			System.err.println("ArrayIndexOutOfBoundsException");
 			aiobe.printStackTrace();
-			// System.exit(1);
 		} catch (Exception e) {
 			System.err.println("Exception");
 			e.printStackTrace();
-			// System.exit(1);
 		} 
   	}
 	

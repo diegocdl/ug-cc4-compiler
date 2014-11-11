@@ -17,10 +17,7 @@ public class AstVisitor extends DecafParserBaseVisitor<Node>{
 	public Node visitRoot(DecafParser.RootContext ctx){
 		Root root = new Root();											// raiz del arbol
 		List<DecafParser.Field_declContext> list = ctx.field_decl();	// lista con todas las expresiones, exp()
-		System.out.println("list: " + list);
 		for(int i=0; i<ctx.callout_decl().size(); i++){
-			/*Declaracion cd = new Declaracion(ctx.callout_decl(i).ID().getText());		
-			cd.print("");*/
 			Node n2 = visit(ctx.callout_decl(i));
 			root.add(n2);
 		}

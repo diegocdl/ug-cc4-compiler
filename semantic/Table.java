@@ -46,7 +46,7 @@ public class Table {
 	public Tipos put(String key, Tipos value) {
 		// Tipos res = null;
 		Tipos res = tabla.put(key, value);
-		System.out.println(value.getTipoParametros());
+		// System.out.println(value.getTipoParametros());
 		if(value.getTipoParametros() == null){
 			value.setNumber(cantidad);
 			// se suma la cantidad de posiciones que tenga el arreglo 

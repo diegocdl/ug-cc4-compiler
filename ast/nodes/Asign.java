@@ -83,16 +83,13 @@ public class Asign extends Node{
 				Table tableaux2 = null;
 				while(!(tableaux.parent.equals("NULL")) && !b){
 				
-					for (int i=0; i<st.listaTablas.size(); i++){//(Table t : st.listaTablas){
-						//if (b){
+					for (int i=0; i<st.listaTablas.size(); i++){
 						tableaux2 = st.listaTablas.get(i);
 						if (tableaux2.name.equals(tableaux.parent)){
 							
 							if (tableaux2.containsKey(var.name) == true){
 								declaracion = true;
 								tipo = tableaux2.get(var.name).tipo;
-								//System.out.println("si " + tipo);
-								//System.out.println(tableaux2.name);
 								if (var.dimension == null){
 									if (this.asig.equals("=")){
 										if ((!tipo.equals(verificacion))&&(isfor == 0)&&(!verificacion.equals("error"))){

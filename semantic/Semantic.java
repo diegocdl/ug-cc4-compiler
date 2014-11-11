@@ -1,6 +1,7 @@
 package compiler.semantic;
 
 import java.util.LinkedList;
+import java.io.IOException;
 import compiler.ast.nodes.*;
 import compiler.ast.Ast;
 import compiler.lib.Debug;
@@ -39,10 +40,6 @@ public class Semantic {
 		listaNodos = ast.root.declaraciones;
 		listaErrores = new LinkedList<String>();
 		of = ast.getOutFile();
-		String msg = "stage: Semantic";
-		System.out.println(msg);
-		of = ast.getOutFile();
-		of.writeln(msg);
 	}
 	
 	/**
@@ -50,6 +47,12 @@ public class Semantic {
 	*	@return boolean que es true si hay errores y false si no hay errores
 	*/
 	public boolean check(){
+		String msg = "stage: Semantic";
+		if(debug != null)
+			debug.println(msg);
+		try {
+			of.writeln(msg);
+		} catch(IOException ioe) {}
 		boolean error = false;
 		boolean main = false;
 		Table tglobal = new Table("ROOT", "NULL");
@@ -100,7 +103,8 @@ public class Semantic {
 			}
 		}
 		for (Table tab : this.tablaSimbolos.listaTablas){
-			System.out.println(tab.toTableString());
+			if(debug != null)
+				debug.println(tab.toTableString());
 			if (tab.name.equals("main")){main = true;}
 		}
 		if (!main){

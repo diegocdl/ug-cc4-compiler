@@ -94,7 +94,7 @@ public class Root extends Node {
 	public IrtList destruct(String parent, SymbolTable symbolTable) {
 		int cantidadVar = 0;
 		IrtList irtList = new IrtList();
-		System.out.println("padre: "  + parent);
+		// System.out.println("padre: "  + parent);
 		// if(!parent.equals("NULL")) {
 		// }
 		cantidadVar = symbolTable.searchByName(parent).getCantidadVariables();
