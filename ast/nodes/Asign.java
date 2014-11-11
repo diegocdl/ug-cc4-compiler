@@ -55,16 +55,13 @@ public class Asign extends Node{
 			//if (var.dimension == null){
 				if (this.value instanceof Exp){
 					Exp expr = (Exp)this.value;
-					//System.out.println("Estoy en Exp");
 					verificacion = expr.checkExp(tb,st,errorList);
 				}else if (this.value instanceof Statement){
 					Statement stm = (Statement)this.value;
 					stm.checkStatement(tb,st,errorList);
 				}else if (this.value instanceof BinOp){
 					BinOp bo = (BinOp)this.value;
-					//System.out.println("Estoy en BinOp");
 					verificacion = bo.checkBinOp(tb,st,errorList);
-					//System.out.println(verificacion);
 				}else if (this.value instanceof Literal){
 					Literal lit = (Literal)this.value;
 					verificacion = lit.checkLiteral(tb,st);
@@ -98,17 +95,21 @@ public class Asign extends Node{
 								//System.out.println(tableaux2.name);
 								if (var.dimension == null){
 									if (this.asig.equals("=")){
-										if ((!tipo.equals(verificacion))&&(isfor == 0)){
-											//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
-											errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
-										}else if(((!tipo.equals("int")) || (!verificacion.equals("int")))&&(isfor == 1)){
-											errorList.add("Error de tipos en la condicion del for, " + tipo + " = " + verificacion + " invalido");
+										if ((!tipo.equals(verificacion))&&(isfor == 0)&&(!verificacion.equals("error"))){
+											errorList.add("Error de tipos, int y boolean incompatibles en la asignacion a la variable " + var.name);
+										}else if ((!tipo.equals(verificacion))&&(isfor == 0)&&(verificacion.equals("error"))){
+											errorList.add("Error de tipos, la variable " + var.name + " de tipo " + tipo + " incompatible con la asignacion");
+										}else if((!tipo.equals("int")) && (verificacion.equals("int"))&&(isfor == 1)){
+											errorList.add("Error de tipos en la condicion del for, boolean = int es invalido");
+										}else if((tipo.equals("int")) && (!verificacion.equals("int"))&&(isfor == 1)){
+											errorList.add("Error de tipos en la condicion del for, int = boolean es invalido");
+										}else if((!tipo.equals("int")) && (!verificacion.equals("int"))&&(isfor == 1)){
+											errorList.add("Error de tipos en la condicion del for, boolean = boolean es invalido");
 										}
 									}else {
 										if (isfor == 0){
 											if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
-												//System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
-												errorList.add("Error de tipos: " + tipo + " " + this.asig + " " + verificacion + " incompatible");
+												errorList.add("Error de tipos en una asignacion " + this.asig + ", deben ser ambos de tipo int");
 											}
 										}else{
 											errorList.add(" \"+=\" y \"-=\" invalidos en for");
@@ -118,29 +119,28 @@ public class Asign extends Node{
 									if (expArreglo.equals("int")){
 										if (this.asig.equals("=")){
 											if (tipo.equals("int[]")){
-												if (!verificacion.equals("int")){
-													//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
-													errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+												if ((verificacion.equals("int[]")) || (verificacion.equals("boolean[]"))){
+													errorList.add("Error de tipos, int y " + verificacion + " incompatibles");
+												}else if (!verificacion.equals("int")){
+													errorList.add("Error de tipos, int y boolean incompatibles");
 												}
 											}else if (tipo.equals("boolean[]")){
-												if (!verificacion.equals("boolean")){
-													//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
-													errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+												if ((verificacion.equals("int[]")) || (verificacion.equals("boolean[]"))){
+													errorList.add("Error de tipos, boolean y " + verificacion + " incompatibles");
+												}else if (!verificacion.equals("boolean")){
+													errorList.add("Error de tipos, boolean y int incompatibles");
 												}
 											}
 										}else {
 											if (tipo.equals("int[]")){
 												if (!verificacion.equals("int")){
-													//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
-													errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+													errorList.add("Error de tipos, una asignacion " + this.asig + " debe ser tipo int");
 												}
 											}else if (tipo.equals("boolean[]")){
-												//System.out.print("error de tipos ");
-												errorList.add("Error de tipos");
+												errorList.add("Error de tipos " + this.asig + " incompatible con boolean");
 											}
 										}
 									}else{
-										//System.out.println("El indice del arreglo debe ser int");
 										errorList.add("El indice del arreglo debe ser int en la variable " + var.name);
 									}
 								}
@@ -157,16 +157,21 @@ public class Asign extends Node{
 				tipo = tb.get(var.name).tipo;
 				if (var.dimension == null){
 					if (this.asig.equals("=")){
-						if ((!tipo.equals(verificacion))&&(isfor == 0)){
-							errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
-						}else if(((!tipo.equals("int")) || (!verificacion.equals("int")))&&(isfor == 1)){
-							errorList.add("Error de tipos en la condicion del for, " + tipo + " = " + verificacion + " invalido");
+						if ((!tipo.equals(verificacion))&&(isfor == 0)&&(!verificacion.equals("error"))){
+							errorList.add("Error de tipos, int y boolean incompatibles en la asignacion a la variable " + var.name);
+						}else if ((!tipo.equals(verificacion))&&(isfor == 0)&&(verificacion.equals("error"))){
+							errorList.add("Error de tipos, la variable " + var.name + " de tipo " + tipo + " incompatible con la asignacion");
+						}else if((!tipo.equals("int")) && (verificacion.equals("int"))&&(isfor == 1)){
+							errorList.add("Error de tipos en la condicion del for, boolean = int es invalido");
+						}else if((tipo.equals("int")) && (!verificacion.equals("int"))&&(isfor == 1)){
+							errorList.add("Error de tipos en la condicion del for, int = boolean es invalido");
+						}else if((!tipo.equals("int")) && (!verificacion.equals("int"))&&(isfor == 1)){
+							errorList.add("Error de tipos en la condicion del for, boolean = boolean es invalido");
 						}
 					}else {
 						if (isfor == 0){
 							if ((!tipo.equals("int")) || (!verificacion.equals("int"))){
-								//System.out.print("error de tipos: " + tipo + " " + this.asig + " " + verificacion);
-								errorList.add("Error de tipos: " + tipo + " " + this.asig + " " + verificacion + " incompatible");
+								errorList.add("Error de tipos en una asignacion " + this.asig + ", deben ser ambos de tipo int");
 							}
 						}else{
 							errorList.add(" \"+=\" y \"-=\" invalidos en for");
@@ -176,35 +181,33 @@ public class Asign extends Node{
 					if (expArreglo.equals("int")){
 						if (this.asig.equals("=")){
 							if (tipo.equals("int[]")){
-								if (!verificacion.equals("int")){
-									//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
-									errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+								if ((verificacion.equals("int[]")) || (verificacion.equals("boolean[]"))){
+									errorList.add("Error de tipos, int y " + verificacion + " incompatibles");
+								}else if (!verificacion.equals("int")){
+									errorList.add("Error de tipos, int y boolean incompatibles");
 								}
 							}else if (tipo.equals("boolean[]")){
-								if (!verificacion.equals("boolean")){
-									//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
-									errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+								if ((verificacion.equals("int[]")) || (verificacion.equals("boolean[]"))){
+									errorList.add("Error de tipos, boolean y " + verificacion + " incompatibles");
+								}else if (!verificacion.equals("boolean")){
+									errorList.add("Error de tipos, boolean y int incompatibles");
 								}
 							}
 						}else {
 							if (tipo.equals("int[]")){
 								if (!verificacion.equals("int")){
-									//System.out.print("error de tipos ");System.out.println(tipo + " " + verificacion);
-									errorList.add("Error de tipos, " + tipo + " y " + verificacion + " incompatibles");
+									errorList.add("Error de tipos, una asignacion " + this.asig + " debe ser tipo int");
 								}
 							}else if (tipo.equals("boolean[]")){
-								//System.out.print("error de tipos ");
-								errorList.add("Error de tipos ");
+								errorList.add("Error de tipos " + this.asig + " incompatible con boolean");
 							}
 						}
 					}else{
-						//System.out.println("El indice del arreglo debe ser int");
 						errorList.add("El indice del arreglo debe ser int en la variable " + var.name);
 					}
 				}
 			}
 			if (!declaracion){
-				//System.out.println(var.name + " no esta declarada");		
 				errorList.add(var.name + " no esta declarada");
 			}
 			//}

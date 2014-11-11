@@ -134,28 +134,28 @@ public class Compiler {
 		if (config.isADebugPhase("semantic")) semantic.setDebuger(deb);
 		if (semantic.check()){
 			System.out.println("Programa Invalido");
-		}
-		if(config.getTarget().equals("semantic")) {
-			return;
-		}
-
-		irt = new Irt(semantic);
-		if (config.isADebugPhase("irt")) irt.setDebuger(deb);
-		if(config.getTarget().equals("irt")) {
-			return;
-		}
-		
-		codegen = new Codegen(irt);
-		if (config.isADebugPhase("codegen")) codegen.setDebuger(deb);
-
-		// Optimizaciones
-		if( config.getOptimization().equals("constant") ){
-			cf = new ConstantFolding(config.getInputFileName());
-		} else if( config.getOptimization().equals("algebraic") ){
-			algebraic = new Algebraic(config.getInputFileName());
 		}else {
-			throw new ErrorHandler("Opcion de optimizacion invalida: " + config.getOptimization());
+			if(config.getTarget().equals("semantic")) {
+				return;
+			}
+			irt = new Irt(semantic);
+			if (config.isADebugPhase("irt")) irt.setDebuger(deb);
+			if(config.getTarget().equals("irt")) {
+				return;
+			}
+			
+			codegen = new Codegen(irt);
+			if (config.isADebugPhase("codegen")) codegen.setDebuger(deb);
+			// Optimizaciones
+			if( config.getOptimization().equals("constant") ){
+				cf = new ConstantFolding(config.getInputFileName());
+			} else if( config.getOptimization().equals("algebraic") ){
+				algebraic = new Algebraic(config.getInputFileName());
+			}else {
+				throw new ErrorHandler("Opcion de optimizacion invalida: " + config.getOptimization());
+			}
 		}
+
 	}
 
 	/**

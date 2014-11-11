@@ -82,6 +82,18 @@ public class BinOp extends Node{
 			resultado = "int";
 		}else if ((str2.equals("<") || str2.equals(">") || str2.equals("<=") || str2.equals(">=") ) && ((str.equals("int")) && (str3.equals("int")))){
 			resultado = "boolean";			
+		}else if ((str2.equals("&&") || str2.equals("||")) && (((!str.equals("boolean")) || (!str3.equals("boolean"))))){
+			resultado = "error";
+			errorList.add("Operacion Invalida, los operandos de \"&&\" y \"||\" deben ser boolean");
+		}else if ( (str2.equals("==") || str2.equals("!=")) && ((((str.equals("boolean")) && (!str3.equals("boolean")))) || (((str.equals("int")) && (!str3.equals("int"))))) ){
+			resultado = "error";
+			errorList.add("Operacion Invalida, los operandos de \"==\" y \"!=\" deben ser del mismo tipo");
+		}else if ((str2.equals("+") || str2.equals("-") || str2.equals("*") || str2.equals("/") || str2.equals("%") ) && (((!str.equals("int")) || (!str3.equals("int"))))){
+			resultado = "error";
+			errorList.add("Operacion Invalida, los operandos de \"+\", \"-\", \"*\", \"/\" y \"%\" deben ser int");
+		}else if ((str2.equals("<") || str2.equals(">") || str2.equals("<=") || str2.equals(">=") ) && (((!str.equals("int")) || (!str3.equals("int"))))){
+			resultado = "error";
+			errorList.add("Operacion Invalida, los operandos de \"<\", \">\", \"<=\" y \">=\" deben ser int");	
 		}else {
 			resultado = "error";
 			errorList.add("Operacion Invalida");
