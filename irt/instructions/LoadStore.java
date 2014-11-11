@@ -4,6 +4,9 @@ import compiler.irt.Register;
 
 public class LoadStore extends Instruction {
 
+	public final static String LI = "li";
+	public final static String LW = "lw";
+	public final static String SW = "sw";
 	protected String type;
 	protected Register rs;
 	protected Register rd;

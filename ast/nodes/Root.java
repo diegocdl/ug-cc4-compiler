@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import compiler.semantic.Table;
 import compiler.semantic.SymbolTable;
 import compiler.irt.IrtList;
+import compiler.irt.RegisterManager;
+import compiler.irt.instructions.*;
 
 /**
 * 	Root representa cada scope en el programa este tendra una lista de declaraciones y se usara para todo el programa y para
@@ -90,23 +92,45 @@ public class Root extends Node {
 	*/
 	@Override
 	public IrtList destruct(String parent, SymbolTable symbolTable) {
+		int cantidadVar = 0;
 		IrtList irtList = new IrtList();
+		System.out.println("padre: "  + parent);
+		// if(!parent.equals("NULL")) {
+		// }
+		cantidadVar = symbolTable.searchByName(parent).getCantidadVariables();
+		LoadStore li = new LoadStore	(
+											"li", 
+											symbolTable.getRegisterManager().getT(),
+											Integer.toString(cantidadVar*4*(-1))
+										);
+		irtList.add(li);
+		irtList.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, li.getRd()));
+		symbolTable.getRegisterManager().returnRegister(li.getRd());
+
 		for (Node node : declaraciones ) {
-			if(node instanceof Declaracion) {
-				// se podria ignorar dado que las instrucciones en este bloque solo podran ser field decl y para esos no se necesita realizar nada
-			} else if(node instanceof Cond) {
-				irtList.add(((Cond)node).destruct(parent, symbolTable));
-			} else if(node instanceof Cycle) {
-				irtList.add(((Cycle)node).destruct(parent, symbolTable));
-			} else if(node instanceof Statement) {
-				irtList.add(((Statement)node).destruct(parent, symbolTable));
-			} else if(node instanceof Asign) {
-				irtList.add(((Asign)node).destruct(parent, symbolTable));
-			} else if(node instanceof MethodCall) {
-				irtList.add(((Asign)node).destruct(parent, symbolTable));
-			}
-			// irtList.add(node.destruct());
+			// if(node instanceof Declaracion) {
+			// 	// se podria ignorar dado que las instrucciones en este bloque solo podran ser field decl y para esos no se necesita realizar nada
+			// } else if(node instanceof Cond) {
+			// 	irtList.add(((Cond)node).destruct(parent, symbolTable));
+			// } else if(node instanceof Cycle) {
+			// 	irtList.add(((Cycle)node).destruct(parent, symbolTable));
+			// } else if(node instanceof Statement) {
+			// 	irtList.add(((Statement)node).destruct(parent, symbolTable));
+			// } else if(node instanceof Asign) {
+			// 	irtList.add(((Asign)node).destruct(parent, symbolTable));
+			// } else if(node instanceof MethodCall) {
+			// 	irtList.add(((Asign)node).destruct(parent, symbolTable));
+			// }
+			irtList.add(node.destruct(parent, symbolTable));
 		}
+		li = new LoadStore	(
+											LoadStore.LI, 
+											symbolTable.getRegisterManager().getT(),
+											Integer.toString(cantidadVar*4)
+										);
+		irtList.add(li);
+		irtList.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, li.getRd()));
+		symbolTable.getRegisterManager().returnRegister(li.getRd());
 		return irtList;
 	}
 } 

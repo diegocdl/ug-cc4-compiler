@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
+import compiler.irt.RegisterManager;
+import compiler.irt.instructions.*;
 
 /**
 *	Nodo para Condiciones if se numeran para poder crear las tablas de simbolos con nombres unicos
@@ -77,68 +79,17 @@ public class Cond extends Node{
 			condicionValida = true;
 		}
 		if (condicionValida){
-		Root rt = (Root)this.consecuencia;
-		for (Node n : rt.declaraciones){
-			if (n instanceof Declaracion){
-				Declaracion decl = (Declaracion)n;
-				for(VarLiteral vl : decl.nameFields){
-					if (tb.containsKey(vl.name) == false){
-						if (vl.dimension == null) {
-							tb.put(vl.name,new Tipos(decl.type, 1));
-						} else {
-
-							try {
-								Literal literal = (Literal)vl.dimension;
-								int dim = Integer.parseInt(literal.value);
-								if(dim == 0){
-									errorList.add(vl.name + "[0]  la dimension no puede ser 0");
-								}
-								tb.put(vl.name,new Tipos(decl.type + "[]", dim));
-							} catch(Exception e){ }
-						}
-					}
-				}	
-			}else if (n instanceof Asign){
-				Asign as = (Asign)n;
-				as.checkAsign(tb,st,errorList,0);
-			}else if (n instanceof MethodCall){
-				MethodCall mc = (MethodCall)n;
-				mc.checkMethodCall(tb,st,errorList);
-			}else if (n instanceof Cond){
-				Cond c = (Cond)n;
-				Table t = new Table("IF_"+c.id, nombre);
-				st.listaTablas.add(t);
-				c.checkCond(tb,t,"IF_"+c.id,st, errorList);
-			} else if (n instanceof Cycle) {
-				Cycle cy = (Cycle)n;
-				// si es un for verifica la existencia y los tipos de la inicializacion de variables
-				if (cy.tipoCiclo.equals(Cycle.FOR)) {
-					Asign init = (Asign)cy.inicializacionVar;
-					init.checkAsign(tb,st, errorList,1);
-				}
-
-				Table t = new Table("CICLO_"+cy.id, nombre);
-				st.listaTablas.add(t);
-				cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
-			}else if (n instanceof Statement){
-				Statement state = (Statement)n;
-				//state.checkStatement(tb,st);
-				if (state.checkBreakContinue(tb,st) == false){
-					errorList.add("no puede haber un break o continue fuera de un For o While");
-				}
-			}
-		}
-		if (this.alternativa != null){
-			Root rt2 = (Root)this.consecuencia;
-			for (Node n : rt2.declaraciones){
+			Root rt = (Root)this.consecuencia;
+			for (Node n : rt.declaraciones){
 				if (n instanceof Declaracion){
 					Declaracion decl = (Declaracion)n;
 					for(VarLiteral vl : decl.nameFields){
 						if (tb.containsKey(vl.name) == false){
-							if (vl.dimension == null){
+							if (vl.dimension == null) {
 								tb.put(vl.name,new Tipos(decl.type, 1));
-							}else {
-								try{
+							} else {
+
+								try {
 									Literal literal = (Literal)vl.dimension;
 									int dim = Integer.parseInt(literal.value);
 									if(dim == 0){
@@ -148,7 +99,7 @@ public class Cond extends Node{
 								} catch(Exception e){ }
 							}
 						}
-					}
+					}	
 				}else if (n instanceof Asign){
 					Asign as = (Asign)n;
 					as.checkAsign(tb,st,errorList,0);
@@ -159,14 +110,15 @@ public class Cond extends Node{
 					Cond c = (Cond)n;
 					Table t = new Table("IF_"+c.id, nombre);
 					st.listaTablas.add(t);
-					c.checkCond(tb,t,"IF_"+c.id,st,errorList);
-				}else if (n instanceof Cycle){
+					c.checkCond(tb,t,"IF_"+c.id,st, errorList);
+				} else if (n instanceof Cycle) {
 					Cycle cy = (Cycle)n;
-					// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
+					// si es un for verifica la existencia y los tipos de la inicializacion de variables
 					if (cy.tipoCiclo.equals(Cycle.FOR)) {
 						Asign init = (Asign)cy.inicializacionVar;
 						init.checkAsign(tb,st, errorList,1);
 					}
+
 					Table t = new Table("CICLO_"+cy.id, nombre);
 					st.listaTablas.add(t);
 					cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
@@ -178,7 +130,57 @@ public class Cond extends Node{
 					}
 				}
 			}
-		}
+			if (this.alternativa != null){
+				Root rt2 = (Root)this.consecuencia;
+				for (Node n : rt2.declaraciones){
+					if (n instanceof Declaracion){
+						Declaracion decl = (Declaracion)n;
+						for(VarLiteral vl : decl.nameFields){
+							if (tb.containsKey(vl.name) == false){
+								if (vl.dimension == null){
+									tb.put(vl.name,new Tipos(decl.type, 1));
+								}else {
+									try{
+										Literal literal = (Literal)vl.dimension;
+										int dim = Integer.parseInt(literal.value);
+										if(dim == 0){
+											errorList.add(vl.name + "[0]  la dimension no puede ser 0");
+										}
+										tb.put(vl.name,new Tipos(decl.type + "[]", dim));
+									} catch(Exception e){ }
+								}
+							}
+						}
+					}else if (n instanceof Asign){
+						Asign as = (Asign)n;
+						as.checkAsign(tb,st,errorList,0);
+					}else if (n instanceof MethodCall){
+						MethodCall mc = (MethodCall)n;
+						mc.checkMethodCall(tb,st,errorList);
+					}else if (n instanceof Cond){
+						Cond c = (Cond)n;
+						Table t = new Table("IF_"+c.id, nombre);
+						st.listaTablas.add(t);
+						c.checkCond(tb,t,"IF_"+c.id,st,errorList);
+					}else if (n instanceof Cycle){
+						Cycle cy = (Cycle)n;
+						// si es un for verifica la existencia y los tipos de la inicializacion de variablesz
+						if (cy.tipoCiclo.equals(Cycle.FOR)) {
+							Asign init = (Asign)cy.inicializacionVar;
+							init.checkAsign(tb,st, errorList,1);
+						}
+						Table t = new Table("CICLO_"+cy.id, nombre);
+						st.listaTablas.add(t);
+						cy.checkCycle(t,"CICLO_"+cy.id,st,errorList);
+					}else if (n instanceof Statement){
+						Statement state = (Statement)n;
+						//state.checkStatement(tb,st);
+						if (state.checkBreakContinue(tb,st) == false){
+							errorList.add("no puede haber un break o continue fuera de un For o While");
+						}
+					}
+				}
+			}
 		}else{
 			errorList.add("Condicion invalida");
 		}
@@ -237,6 +239,26 @@ public class Cond extends Node{
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		irtList.add(new Comment("IF_" + id));
+		IrtList condicionList = condicion.destruct(parent, symbolTable);
+		irtList.add(condicionList);
+		irtList.add(new Jump(
+			Jump.BEQ, 
+			condicionList.getTail().getRd(),
+			RegisterManager.ZERO,
+			"IF_" + id + "_alernativa"
+		));
+		symbolTable.getRegisterManager().returnRegister(condicionList.getTail().getRd());	
+		// agregar etiqueta para consecuencia
+		irtList.add(new Label("IF_" + id + "_consecuencia"));
+		irtList.add(consecuencia.destruct("IF_" + id, symbolTable));
+		irtList.add(new Jump("j", "IF_" + id + "_end"));
+		irtList.add(new Label("IF_" + id + "_alernativa"));
+		if(alternativa != null) {
+		}
+		irtList.add(new Label("IF_" + id + "_end"));
+
+		irtList.add(new Comment("end IF_" + id));
 		return irtList;
 	}
 } 

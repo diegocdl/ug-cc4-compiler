@@ -98,7 +98,7 @@ public class Table {
 			return (4*tabla.get(var).getNumber());
 		} else {
 			if(!parent.equals("NULL")) {
-				return (cantidad + symbolTable.searchByName(parent).getPositionVar(symbolTable, var)) * 4;
+				return cantidad*4 + symbolTable.searchByName(parent).getPositionVar(symbolTable, var);
 			} else {
 				return -1;
 			}

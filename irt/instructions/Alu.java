@@ -7,10 +7,12 @@ import compiler.irt.Register;
 */
 public class Alu extends Instruction {
 
-	public static final String ADD 	= "add";
-	public static final String SUB 	= "sub";
-	public static final String MULT = "mult";
-	public static final String DIV 	= "div";
+	public static final String ADD 		= "add";
+	public static final String SUB 		= "sub";
+	public static final String MULT 	= "mul";
+	public static final String DIV 		= "div";
+	public static final String EQUAL	= "seq";
+	public static final String NOTEQUAL	= "sne";
 
 
 	protected Register rd;

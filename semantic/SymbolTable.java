@@ -33,4 +33,8 @@ public class SymbolTable{
 		return null;
 	}
 
+	public RegisterManager getRegisterManager() {
+		return registerManager;
+	}
+
 }

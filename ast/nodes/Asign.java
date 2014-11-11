@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
+import compiler.irt.instructions.LoadStore;
+import compiler.irt.RegisterManager;
 
 
 /**
@@ -254,7 +256,25 @@ public class Asign extends Node{
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
 
-		irtList.add(value.destruct(parent, symbolTable));
+		// posicion en el stack de la variable
+		String varName = ((VarLiteral)id).getName();
+		int varPos = symbolTable.searchByName(parent).getPositionVar(symbolTable, varName);
+
+		// listado con operaciones para la asignacion
+		IrtList valueList = value.destruct(parent, symbolTable);
+		irtList.add(valueList);
+		// se guarda el valor en el espacio de memoria de la variable en el stack
+		irtList.add(
+			new LoadStore(
+				LoadStore.SW,
+				valueList.getTail().getRd(),
+				varPos,
+				RegisterManager.SP
+			)
+		);
+		
+		// se retorna el ultimo registro usado para guardar el valor de la asig
+		symbolTable.getRegisterManager().returnRegister(valueList.getTail().getRd());
 		return irtList;
 	}
 

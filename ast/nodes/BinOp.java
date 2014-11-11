@@ -174,6 +174,12 @@ public class BinOp extends Node{
 			case "*":
 				op = Alu.MULT;
 				break;
+			case "==":
+				op = Alu.EQUAL;
+				break;
+			default:
+				// System.out.println(operation);
+				break;
 		}
 
 		irtList.add(listHijo1);

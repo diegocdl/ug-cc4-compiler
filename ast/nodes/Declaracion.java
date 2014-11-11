@@ -5,6 +5,7 @@ import java.util.List;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
 import compiler.irt.RegisterManager;
+import compiler.irt.Register;
 import compiler.irt.instructions.*;
 
 /**
@@ -291,40 +292,101 @@ public class Declaracion extends Node {
 	public IrtList destruct(String parent, SymbolTable symbolTable) {
 		IrtList instructions = new IrtList();
 		if(getTypeDec().equals(METODO)){
-			// agrega label con nombre de metodo
-			instructions.add(new Label(nameMethod));
-
-			// solicita el espacio al stack
-			LoadStore temp = new LoadStore	(
-												"li", 
-												symbolTable.registerManager.getT(),
-												Integer.toString(-4)
-											);
-			instructions.add(temp);
-			instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRd() ));
-			symbolTable.registerManager.returnRegister(temp.getRd());
-			// almacena los registros
-			instructions.add(new LoadStore("sw", RegisterManager.RA, 0 , RegisterManager.SP));
-
-			// agrega instrucciones del bloque
-			instructions.add(((Root)bloque).destruct(nameMethod, symbolTable));
-
-			// restaura los registros guardados
-			instructions.add(new LoadStore("lw", RegisterManager.RA, 0 , RegisterManager.SP));
-			// restaura el espacio al stack
-			temp = new LoadStore	(
-										"li", 
-										symbolTable.registerManager.getT(),
-										Integer.toString(4)
-									);
-			instructions.add(temp);
-			instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRd() ));
-			symbolTable.registerManager.returnRegister(temp.getRd());
-			// regresa
-			instructions.add(new Jump("jr", RegisterManager.RA));
+			instructions.add(destructMethod(parent, symbolTable));
 		} else if (getTypeDec().equals(FIELD)) {
 			// field instructions
+			instructions.add(destructField(parent, symbolTable));
 		}
+		return instructions;
+	}
+
+	protected IrtList destructMethod(String parent, SymbolTable symbolTable){
+		IrtList instructions = new IrtList();
+
+		// agrega label con nombre de metodo
+		instructions.add(new Label(nameMethod));
+
+
+
+
+
+		// solicita el espacio al stack
+		int cantidadVar = symbolTable.searchByName(parent).getCantidadVariables();
+		LoadStore li = new LoadStore	(
+											"li", 
+											symbolTable.getRegisterManager().getT(),
+											Integer.toString((cantidadVar + 1)*-4)
+										);
+		instructions.add(li);
+		instructions.add(new Alu(
+			Alu.ADD, 
+			RegisterManager.SP, 
+			RegisterManager.SP, 
+			li.getRd()
+			));
+		symbolTable.getRegisterManager().returnRegister(li.getRd());
+
+		// se mueven de $fp a $sp los parametros
+		Register reg = symbolTable.getRegisterManager().getT();
+		for (int i = 0; i< parametros.size(); i++) {
+			instructions.add(new LoadStore(
+				LoadStore.LW,
+				reg,
+				i*4,
+				RegisterManager.FP
+				));
+			instructions.add(new LoadStore(
+				LoadStore.SW,
+				reg,
+				i*4,
+				RegisterManager.SP
+				));
+		}
+		symbolTable.getRegisterManager().returnRegister(reg);
+
+		// LoadStore temp = new LoadStore	(
+		// 									LoadStore.LI, 
+		// 									symbolTable.registerManager.getT(),
+		// 									// "skffsdf"
+		// 									Integer.toString(-4)
+		// 								);
+		// instructions.add(temp);
+		// instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRd() ));
+		// symbolTable.registerManager.returnRegister(temp.getRd());
+
+		// // almacena los registros
+		instructions.add(new LoadStore("sw", RegisterManager.RA, cantidadVar*4 , RegisterManager.SP));
+
+
+		// agrega instrucciones del bloque
+		Root rootMethod = (Root)bloque;
+		int limit = rootMethod.size();
+		for (int i = 0; i < limit; i++) {
+			instructions.add(rootMethod.getChild(i).destruct(nameMethod, symbolTable));
+		}
+
+		// instructions.add(((Root)bloque).destruct(nameMethod, symbolTable));
+
+
+		// restaura los registros guardados
+		instructions.add(new LoadStore("lw", RegisterManager.RA, cantidadVar*4 , RegisterManager.SP));
+		// restaura el espacio al stack
+		LoadStore temp = new LoadStore	(
+									"li",
+									symbolTable.registerManager.getT(),
+									Integer.toString((cantidadVar+1)*4)
+								);
+		instructions.add(temp);
+		instructions.add(new Alu(Alu.ADD, RegisterManager.SP, RegisterManager.SP, temp.getRd() ));
+		symbolTable.registerManager.returnRegister(temp.getRd());
+		// regresa
+		instructions.add(new Jump("jr", RegisterManager.RA));
+		return instructions;
+	}
+
+	protected IrtList destructField(String parent, SymbolTable symbolTable){
+		IrtList instructions = new IrtList();
+		
 		return instructions;
 	}
 

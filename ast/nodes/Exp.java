@@ -157,7 +157,6 @@ public class Exp extends Node{
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
-		System.out.println(expr.getClass().getName());
 		irtList.add(expr.destruct(parent, symbolTable));
 		return irtList;
 	}

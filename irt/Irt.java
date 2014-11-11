@@ -9,6 +9,8 @@ import compiler.semantic.Table;
 import compiler.semantic.SymbolTable;
 import compiler.lib.Debug;
 import compiler.lib.OutputFile;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -86,9 +88,16 @@ public class Irt {
 			
 		}
 
+		try {
+			of.reset();
+			of.write(instructions.toString());
+		} catch (Exception ioe ) {
+
+		}
+
 		System.out.println(instructions);
-		System.out.println(Arrays.toString(symbolTable.registerManager.s));
-		System.out.println(Arrays.toString(symbolTable.registerManager.t));
+		System.out.println("Registros S: " + Arrays.toString(symbolTable.registerManager.s));
+		System.out.println("Registros T:" + Arrays.toString(symbolTable.registerManager.t));
 
 	}
 

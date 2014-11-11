@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
+import compiler.irt.RegisterManager;
+import compiler.irt.instructions.Alu;
+
 
 public class Statement extends Node{
 	/**
@@ -134,6 +137,19 @@ public class Statement extends Node{
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		switch (keyword) {
+			case "return":
+				IrtList valueList = value.destruct(parent, symbolTable);
+				irtList.add(valueList);
+				irtList.add(new Alu(
+					Alu.ADD,
+					RegisterManager.V0,
+					valueList.getTail().getRd(),
+					RegisterManager.ZERO
+					));
+				symbolTable.getRegisterManager().returnRegister(valueList.getTail().getRd());
+				break;
+		}
 		return irtList;
 	}
 } 

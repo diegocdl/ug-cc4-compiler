@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
+import compiler.irt.instructions.*;
+import compiler.irt.RegisterManager;
 
 public class MethodCall extends Node {
 	
@@ -109,6 +111,64 @@ public class MethodCall extends Node {
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		irtList.add(new Comment("llamada a funcion"));
+		// reservar espacio en stack para parametros
+		int cant = expresiones.size();
+		LoadStore li = new LoadStore(
+			LoadStore.LI, 
+			symbolTable.getRegisterManager().getT(),
+			Integer.toString(cant*-4)
+			);
+		irtList.add(li);
+		irtList.add(new Alu(
+			Alu.ADD,
+			RegisterManager.SP,
+			RegisterManager.SP,
+			li.getRd()
+			));
+		symbolTable.getRegisterManager().returnRegister(li.getRd());
+
+		// se guardan todos los parametros en el stack 
+		irtList.add(new Comment("Parametros"));
+		for (int i = 0;  i < expresiones.size(); i++ ) {
+			IrtList listExp = expresiones.get(i).destruct(parent, symbolTable);
+			irtList.add(listExp);
+			irtList.add(new LoadStore(
+				LoadStore.SW,
+				listExp.getTail().getRd(),
+				i*4,
+				RegisterManager.SP
+				));
+			symbolTable.getRegisterManager().returnRegister(listExp.getTail().getRd());
+		}
+		irtList.add(new Alu(Alu.ADD, RegisterManager.FP, RegisterManager.SP, RegisterManager.ZERO));
+		// Jump hacia la funcion
+		irtList.add(new Jump(Jump.JAL, nameMethod));
+
+		irtList.add(new Comment("end llamada a funcion"));
+
+		// retornar el spacio al stack
+		li = new LoadStore(
+			LoadStore.LI, 
+			symbolTable.getRegisterManager().getT(),
+			Integer.toString(cant*4)
+			);
+		irtList.add(li);
+		irtList.add(new Alu(
+			Alu.ADD,
+			RegisterManager.SP,
+			RegisterManager.SP,
+			li.getRd()
+			));
+		symbolTable.getRegisterManager().returnRegister(li.getRd());
+		// se agrega una suma de $v0 con $v0 y $0 solo para que al obtener 
+		// el tail de la lista devuelta se pueda obtener como rd el $v0
+		irtList.add(new Alu(
+			Alu.ADD,
+			RegisterManager.V0,
+			RegisterManager.V0,
+			RegisterManager.ZERO
+			));
 		return irtList;
 	}
 }
