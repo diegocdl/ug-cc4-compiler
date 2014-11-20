@@ -309,6 +309,7 @@ public class Cycle extends Node{
 			irtList.add(new Comment("condicion/bloque"));
 			irtList.add(bloque.destruct("CICLO_" + id, symbolTable));
 			// irtList.add(new Label("CICLO_" + id + "_step"));		
+			irtList.add(new Label("CICLO_" + id + "_step"));
 			irtList.add(new Jump(Jump.J, "CICLO_" + id));
 			irtList.add(new Label("CICLO_" + id + "_end"));
 		} else {

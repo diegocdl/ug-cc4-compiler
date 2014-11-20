@@ -157,7 +157,7 @@ public class Statement extends Node{
 				break;
 			case "continue":
 				cycleName = symbolTable.searchByName(parent).getNearCicloName(symbolTable);
-				irtList.add(new Jump(Jump.J, cycleName));
+				irtList.add(new Jump(Jump.J, cycleName + "_step"));
 				break;
 
 		}

@@ -22,6 +22,10 @@ public class Register {
 		return number;
 	}
 
+	public boolean equals(Register r){
+		return type.equals(r.getType()) && number == r.getNumber();
+	}
+
 	@Override
 	public String toString() {
 		if(type.length() > 1) {

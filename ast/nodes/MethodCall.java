@@ -6,6 +6,7 @@ import compiler.semantic.*;
 import compiler.irt.IrtList;
 import compiler.irt.instructions.*;
 import compiler.irt.RegisterManager;
+import compiler.irt.Register;
 
 public class MethodCall extends Node {
 	
@@ -109,32 +110,44 @@ public class MethodCall extends Node {
 		irtList.add(new Comment("llamada a funcion"));
 		// reservar espacio en stack para parametros
 		int cant = expresiones.size();
-		LoadStore li = new LoadStore(
-			LoadStore.LI, 
-			symbolTable.getRegisterManager().getT(),
-			Integer.toString(cant*-4)
-			);
-		irtList.add(li);
-		irtList.add(new Alu(
-			Alu.ADD,
-			RegisterManager.SP,
-			RegisterManager.SP,
-			li.getRd()
-			));
-		symbolTable.getRegisterManager().returnRegister(li.getRd());
-
-		// se guardan todos los parametros en el stack 
-		irtList.add(new Comment("Parametros"));
-		for (int i = 0;  i < expresiones.size(); i++ ) {
-			IrtList listExp = expresiones.get(i).destruct(parent, symbolTable);
-			irtList.add(listExp);
-			irtList.add(new LoadStore(
-				LoadStore.SW,
-				listExp.getTail().getRd(),
-				i*4,
-				RegisterManager.SP
+		LoadStore li;
+		if(cant > 0){
+			Register temp = symbolTable.getRegisterManager().getS();
+			irtList.add(new Alu(Alu.ADD, temp, RegisterManager.SP, RegisterManager.ZERO));
+			li = new LoadStore(
+				LoadStore.LI, 
+				symbolTable.getRegisterManager().getT(),
+				Integer.toString(cant*-4)
+				);
+			irtList.add(li);
+			irtList.add(new Alu(
+				Alu.ADD,
+				RegisterManager.SP,
+				RegisterManager.SP,
+				li.getRd()
 				));
-			symbolTable.getRegisterManager().returnRegister(listExp.getTail().getRd());
+			symbolTable.getRegisterManager().returnRegister(li.getRd());
+
+			// se guardan todos los parametros en el stack 
+			irtList.add(new Comment("Parametros"));
+			for (int i = 0;  i < expresiones.size(); i++ ) {
+				IrtList listExp = expresiones.get(i).destruct(parent, symbolTable);
+				if(listExp.getTail() instanceof LoadStore){
+					LoadStore ls = (LoadStore)listExp.getTail();
+					if(ls.equals(RegisterManager.SP)){
+						ls.setRs(temp);
+					}
+				}
+				irtList.add(listExp);
+				irtList.add(new LoadStore(
+					LoadStore.SW,
+					listExp.getTail().getRd(),
+					i*4,
+					RegisterManager.SP
+					));
+				symbolTable.getRegisterManager().returnRegister(listExp.getTail().getRd());
+			}
+			symbolTable.getRegisterManager().returnRegister(temp);
 		}
 		irtList.add(new Alu(Alu.ADD, RegisterManager.FP, RegisterManager.SP, RegisterManager.ZERO));
 		// Jump hacia la funcion
