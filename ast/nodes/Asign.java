@@ -97,11 +97,11 @@ public class Asign extends Node{
 										}else if ((!tipo.equals(verificacion))&&(isfor == 0)&&(verificacion.equals("error"))){
 											errorList.add("Error de tipos, la variable " + var.name + " de tipo " + tipo + " incompatible con la asignacion");
 										}else if((!tipo.equals("int")) && (verificacion.equals("int"))&&(isfor == 1)){
-											errorList.add("Error de tipos en la condicion del for, boolean = int es invalido");
+											errorList.add("Error de tipos en la inicializacion del for, boolean = int es invalido");
 										}else if((tipo.equals("int")) && (!verificacion.equals("int"))&&(isfor == 1)){
-											errorList.add("Error de tipos en la condicion del for, int = boolean es invalido");
+											errorList.add("Error de tipos en la inicializacion del for, la asignacion es invalida ");
 										}else if((!tipo.equals("int")) && (!verificacion.equals("int"))&&(isfor == 1)){
-											errorList.add("Error de tipos en la condicion del for, boolean = boolean es invalido");
+											errorList.add("Error de tipos en la inicializacion del for, boolean es invalido");
 										}
 									}else {
 										if (isfor == 0){
@@ -159,11 +159,11 @@ public class Asign extends Node{
 						}else if ((!tipo.equals(verificacion))&&(isfor == 0)&&(verificacion.equals("error"))){
 							errorList.add("Error de tipos, la variable " + var.name + " de tipo " + tipo + " incompatible con la asignacion");
 						}else if((!tipo.equals("int")) && (verificacion.equals("int"))&&(isfor == 1)){
-							errorList.add("Error de tipos en la condicion del for, boolean = int es invalido");
+							errorList.add("Error de tipos en la inicializacion del for, boolean = int es invalido");
 						}else if((tipo.equals("int")) && (!verificacion.equals("int"))&&(isfor == 1)){
-							errorList.add("Error de tipos en la condicion del for, int = boolean es invalido");
+							errorList.add("Error de tipos en la inicializacion del for, la asignacion es invalida");
 						}else if((!tipo.equals("int")) && (!verificacion.equals("int"))&&(isfor == 1)){
-							errorList.add("Error de tipos en la condicion del for, boolean = boolean es invalido");
+							errorList.add("Error de tipos en la inicializacion del for, boolean es invalido");
 						}
 					}else {
 						if (isfor == 0){
