@@ -299,6 +299,7 @@ public class Cycle extends Node{
 		IrtList irtList = new IrtList();
 
 		if(tipoCiclo.equals(WHILE)){
+			// while
 			irtList.add(new Label("CICLO_" + id));
 			IrtList irtListCondicion = condicion.destruct(parent, symbolTable);
 			irtList.add(irtListCondicion);
@@ -310,6 +311,32 @@ public class Cycle extends Node{
 			// irtList.add(new Label("CICLO_" + id + "_step"));		
 			irtList.add(new Jump(Jump.J, "CICLO_" + id));
 			irtList.add(new Label("CICLO_" + id + "_end"));
+		} else {
+			// for
+			IrtList iniIrtList = inicializacionVar.destruct(parent, symbolTable);
+			Register counter = symbolTable.getRegisterManager().getS();
+			irtList.add(iniIrtList);
+			// se mueve a un s
+			irtList.add(new Alu(Alu.ADD, counter, iniIrtList.getTail().getRd(), RegisterManager.ZERO));
+			irtList.add(new Label("CICLO_" + id));
+			IrtList irtListCondicion = condicion.destruct(parent, symbolTable);
+			irtList.add(irtListCondicion);
+			Register rd = irtListCondicion.getTail().getRd();
+			irtList.add(new Jump(Jump.BEQ, counter, rd , "CICLO_" + id + "_end"));
+			irtList.add(bloque.destruct("CICLO_" + id, symbolTable));
+			symbolTable.getRegisterManager().returnRegister(rd);
+			
+			irtList.add(new Label("CICLO_" + id + "_step"));
+			// se solicita un registro temporal para cargar un 1 y hacer el step
+			Register temp = symbolTable.getRegisterManager().getT();
+			LoadStore li = new LoadStore(LoadStore.LI, temp, "1");
+			irtList.add(li);
+			irtList.add(new Alu(Alu.ADD, counter, counter, temp));
+			// se retorna el registro temporal para sumar 1
+			symbolTable.getRegisterManager().returnRegister(temp);
+			irtList.add(new Jump(Jump.J, "CICLO_" + id));
+			irtList.add(new Label("CICLO_" + id + "_end"));
+			
 		}
 
 		return irtList;
