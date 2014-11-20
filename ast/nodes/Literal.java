@@ -93,7 +93,10 @@ public class Literal extends Node {
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
 		Register temp = symbolTable.registerManager.getT();
-		if(Pattern.matches("[0-9]+",this.value)){
+		if(value.equals("true") || value.equals("false")){
+			String booleanBinario = value.equals("true")?"1":"0"; 
+			irtList.add(new LoadStore("li", temp, booleanBinario));
+		} else if(Pattern.matches("[0-9]+",this.value)){
 			irtList.add(new LoadStore("li", temp, value));
 		} else if(Pattern.matches(".",this.value)) {
 			irtList.add(new LoadStore("li", temp, "'" + value + "'"));

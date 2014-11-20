@@ -258,6 +258,7 @@ public class Cond extends Node{
 		irtList.add(new Jump("j", "IF_" + id + "_end"));
 		irtList.add(new Label("IF_" + id + "_alernativa"));
 		if(alternativa != null) {
+			irtList.add(alternativa.destruct("ELSE_" + id, symbolTable));
 		}
 		irtList.add(new Label("IF_" + id + "_end"));
 

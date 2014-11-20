@@ -92,14 +92,18 @@ public class Irt {
 			
 		}
 
+		String print = "print:\n\tadd $sp $sp -8\n\tsw $a0 0($sp)\n\tsw $v0 4($sp)\n\tlw $a0 0($fp)\n\tli $v0 1\n\tsyscall\n\tlw $a0 0($sp)\n\tlw $v0 4($sp)\n\tadd $sp $sp 8\n\tjr $ra";
 		try {
 			of.reset();
 			of.write(instructions.toString());
+			of.write(print);
 		} catch (Exception ioe ) {
 
 		}
 
 		System.out.println(instructions);
+		// se agrega al codigo funcion print 
+		System.out.println(print);
 		System.out.println("Registros S: " + Arrays.toString(symbolTable.registerManager.s));
 		System.out.println("Registros T:" + Arrays.toString(symbolTable.registerManager.t));
 

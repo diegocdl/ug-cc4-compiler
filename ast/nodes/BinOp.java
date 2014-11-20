@@ -189,6 +189,27 @@ public class BinOp extends Node{
 			case "==":
 				op = Alu.EQUAL;
 				break;
+			case "!=":
+				op = Alu.NOTEQUAL;
+				break;
+			case "&&":
+				op = Alu.AND;
+				break;
+			case "||":
+				op = Alu.OR;
+				break;
+			case "<":
+				op = Alu.LESS;
+				break;
+			case ">":
+				op = Alu.GREATER;
+				break;
+			case "<=":
+				op = Alu.LESS_EQUAL;
+				break;
+			case ">=":
+				op = Alu.GREATER_EQUAL;
+				break;
 			default:
 				// System.out.println(operation);
 				break;

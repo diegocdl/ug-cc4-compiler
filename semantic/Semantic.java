@@ -56,6 +56,25 @@ public class Semantic {
 		boolean error = false;
 		boolean main = false;
 		Table tglobal = new Table("ROOT", "NULL");
+
+		// se agrega funcion print a la tabla principal
+		LinkedList<VarLiteral> var = new LinkedList<VarLiteral>();
+		var.add(new VarLiteral("num"));
+		LinkedList<Declaracion> printParametros = new LinkedList<Declaracion>();
+		printParametros.add(new Declaracion(
+			"int",
+			var,
+			Declaracion.FIELD
+			));
+		tglobal.put(
+			"print",
+			new Tipos(
+				"void", 
+				printParametros
+				)
+			);
+		// fin de agrega funcion print
+		
 		this.tablaSimbolos.listaTablas.add(tglobal);
 		// se recorre el listado de todos los nodos de root
 		for (Node n : listaNodos){
