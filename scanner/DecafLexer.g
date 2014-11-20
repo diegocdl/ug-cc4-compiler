@@ -61,6 +61,7 @@ PLUS 				: '+';
 MINUS 				: '-';
 MULT				: '*';
 DIV					: '/';
+MOD					: '%';
 AND					: '&&';
 OR 					: '||';
 PUNTO_COMA			: ';';

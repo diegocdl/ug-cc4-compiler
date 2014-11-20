@@ -41,7 +41,7 @@ block:
 	(LLAVE_I (field_decl | statement | field_decl_error | statement_error)* LLAVE_D )				#bloque;
 
 bin_op: 
-	( mulOp | addOp | REL_OP | EQ_OP | COND_OP);
+	( mulOp | addOp | REL_OP | EQ_OP | COND_OP | MOD);
 
 method_decl:
 	(type | KW_VOID) ID PARENTESIS_I ( (type ID) | (type ID COMA )+(type ID) )? PARENTESIS_D block 				#method_dec;	
