@@ -6,6 +6,7 @@ import compiler.semantic.*;
 import compiler.irt.IrtList;
 import compiler.irt.RegisterManager;
 import compiler.irt.instructions.Alu;
+import compiler.irt.instructions.Jump;
 
 
 public class Statement extends Node{
@@ -137,6 +138,7 @@ public class Statement extends Node{
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		String cycleName;
 		switch (keyword) {
 			case "return":
 				IrtList valueList = value.destruct(parent, symbolTable);
@@ -149,6 +151,15 @@ public class Statement extends Node{
 					));
 				symbolTable.getRegisterManager().returnRegister(valueList.getTail().getRd());
 				break;
+			case "break":
+				cycleName = symbolTable.searchByName(parent).getNearCicloName(symbolTable);
+				irtList.add(new Jump(Jump.J, cycleName+ "_end"));
+				break;
+			case "continue":
+				cycleName = symbolTable.searchByName(parent).getNearCicloName(symbolTable);
+				irtList.add(new Jump(Jump.J, cycleName));
+				break;
+
 		}
 		return irtList;
 	}

@@ -330,10 +330,14 @@ public class Cycle extends Node{
 			// se solicita un registro temporal para cargar un 1 y hacer el step
 			Register temp = symbolTable.getRegisterManager().getT();
 			LoadStore li = new LoadStore(LoadStore.LI, temp, "1");
+
 			irtList.add(li);
 			irtList.add(new Alu(Alu.ADD, counter, counter, temp));
 			// se retorna el registro temporal para sumar 1
 			symbolTable.getRegisterManager().returnRegister(temp);
+			LoadStore sw = ((LoadStore)iniIrtList.getTail()).copia();
+			sw.setRs(counter);
+			irtList.add(sw);
 			irtList.add(new Jump(Jump.J, "CICLO_" + id));
 			irtList.add(new Label("CICLO_" + id + "_end"));
 			

@@ -43,6 +43,20 @@ public class LoadStore extends Instruction {
 		return rs;
 	}
 	
+	public void setRs(Register rs){
+		this.rs = rs;
+	}
+
+	public LoadStore copia() {
+		LoadStore clone;
+		if(rd == null) {
+			clone = new LoadStore(type, rs, value);
+		} else {
+			clone = new LoadStore(type, rs, offset, rd);
+		}
+		return clone;
+	}
+
 	@Override
 	public String toString() {
 		switch (type) {

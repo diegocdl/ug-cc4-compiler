@@ -1,7 +1,7 @@
 make: scanner\DecafLexer.java scanner\DecafLexer.class scanner\Scanner.class	\
 	parser\DecafParser.java parser\DecafParser.class parser\CC4Parser.class 	\
+	semantic\Tipos.class semantic\Table.class semantic\SymbolTable.class semantic\Semantic.class \
 	ast\Ast.class \
-	semantic\Tipos.class semantic\Table.class semantic\Semantic.class \
 	irt\Irt.class codegen\Codegen.class		\
 	opt\Algebraic.class opt\ConstantFolding.class 	\
 	lib\Debug.class lib\ErrorHandler.class lib\OutputFile.class lib\Configuracion.class	\
@@ -58,6 +58,9 @@ semantic\Table.class: semantic\Table.java
 
 semantic\Tipos.class: semantic\Tipos.java
 	javac semantic\Tipos.java
+
+semantic\SymbolTable.class: semantic\SymbolTable.java
+	javac semantic\SymbolTable.java
 
 # Irt
 irt\Irt.class: 	irt\instructions\Instruction.java 	\

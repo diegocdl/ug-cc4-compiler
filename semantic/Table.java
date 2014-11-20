@@ -113,6 +113,22 @@ public class Table {
 		return name;
 	}
 
+
+	/**
+	*	Busca recursivamente un nombre de ciclo hacia arriba de las tablas
+	*	@param symbolTable para poder solicitar la tabla padre
+	*	@return nombre del ciclo mas cercano
+	*/
+	public String getNearCicloName(SymbolTable symbolTable) {
+		if(name.contains("CICLO_")){
+			return name;
+		} else if (!parent.equals("NULL")) {
+			return symbolTable.searchByName(parent).getNearCicloName(symbolTable);
+		} else {
+			return "";
+		}
+	}
+
 	/**
 	*	{@inheritDoc}
 	*/
