@@ -6,6 +6,7 @@ import compiler.semantic.*;
 import compiler.irt.IrtList;
 import compiler.irt.instructions.LoadStore;
 import compiler.irt.RegisterManager;
+import compiler.irt.Register;
 
 
 /**
@@ -259,7 +260,12 @@ public class Asign extends Node{
 		// posicion en el stack de la variable
 		String varName = ((VarLiteral)id).getName();
 		int varPos = symbolTable.searchByName(parent).getPositionVar(symbolTable, varName);
+		Register rd = RegisterManager.SP;
 
+		if(varPos == -1){
+			varPos = symbolTable.searchByName(parent).getPositionVarGlobal(symbolTable, varName);
+			rd = RegisterManager.GP;
+		}
 		// listado con operaciones para la asignacion
 		IrtList valueList = value.destruct(parent, symbolTable);
 		irtList.add(valueList);
@@ -269,7 +275,7 @@ public class Asign extends Node{
 				LoadStore.SW,
 				valueList.getTail().getRd(),
 				varPos,
-				RegisterManager.SP
+				rd
 			)
 		);
 		

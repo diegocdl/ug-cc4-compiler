@@ -6,6 +6,7 @@ import compiler.semantic.*;
 import compiler.irt.IrtList;
 import compiler.irt.instructions.LoadStore;
 import compiler.irt.RegisterManager;
+import compiler.irt.Register;
 
 /**
 *	Esta clase es un nodo para variables y arreglos
@@ -175,12 +176,18 @@ public class VarLiteral extends Node {
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		Register rd = RegisterManager.SP;
 		// solicitamos la tabla del scope correspondiente
 		Table t = symbolTable.searchByName(parent);
 		// se obtiene la posicion en el stack de la variable
 		int p = t.getPositionVar(symbolTable, name);
+		// si no la encontro entonces se busca en las variables globales
+		if(p == -1){
+			p = t.getPositionVarGlobal(symbolTable, name);
+			rd = RegisterManager.GP;
+		}
 		// se agrega un load word para cargar el valor de la posicion de memoria hacia un registro
-		irtList.add(new LoadStore("lw", symbolTable.registerManager.getT(), p, RegisterManager.SP));
+		irtList.add(new LoadStore("lw", symbolTable.registerManager.getT(), p, rd));
 		return irtList;
 	}
 }

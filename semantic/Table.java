@@ -89,20 +89,37 @@ public class Table {
 
 
 	/**
-	*	Retorna la posicion de memoria en el Starck de la variable
+	*	Retorna la posicion de memoria en el Stack de la variable
+	*	si no se encuentra la variable se devuelve -1 y se debe buscar para el gp
 	*	@param symbolTable 	Contenedor de tablas de simbolos
 	*	@param var variable para buscar su poscion
 	*/
 	public int getPositionVar(SymbolTable symbolTable, String var) {
-		if(tabla.containsKey(var)) {
-			return (4*tabla.get(var).getNumber());
-		} else {
-			if(!parent.equals("NULL")) {
-				return cantidad*4 + symbolTable.searchByName(parent).getPositionVar(symbolTable, var);
+		if(!name.equals("ROOT")){
+			if(tabla.containsKey(var)) {
+				return (4*tabla.get(var).getNumber());
 			} else {
-				return -1;
+				if(!parent.equals("NULL")) {
+					return cantidad*4 + symbolTable.searchByName(parent).getPositionVar(symbolTable, var);
+				} else {
+					return -1;
+				}
 			}
+		} else {
+			return -1;
 		}
+	}
+
+	/**
+	*	Retorna la posicion de memoria en el Stack de la variable
+	*	si no se encuentra la variable se devuelve -1 y se debe buscar para el gp
+	*	@param symbolTable 	Contenedor de tablas de simbolos
+	*	@param var variable para buscar su poscion
+	*/
+	public int getPositionVarGlobal(SymbolTable symbolTable, String var) {
+		Table tabla = symbolTable.searchByName("ROOT");
+		int pos = tabla.get(var).getNumber();
+		return pos;
 	}
 
 	/**
