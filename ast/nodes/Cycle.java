@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.LinkedList;
 import compiler.semantic.*;
 import compiler.irt.IrtList;
+import compiler.irt.RegisterManager;
+import compiler.irt.Register;
+import compiler.irt.instructions.*;
 
 /**
 *	Nodo para los ciclos 
@@ -294,6 +297,21 @@ public class Cycle extends Node{
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+
+		if(tipoCiclo.equals(WHILE)){
+			irtList.add(new Label("CICLO_" + id));
+			IrtList irtListCondicion = condicion.destruct(parent, symbolTable);
+			irtList.add(irtListCondicion);
+			Register rd = irtListCondicion.getTail().getRd();
+			irtList.add(new Jump(Jump.BEQ, rd, RegisterManager.ZERO, "CICLO_" + id + "_end"));
+			symbolTable.getRegisterManager().returnRegister(rd);
+			irtList.add(new Comment("condicion/bloque"));
+			irtList.add(bloque.destruct("CICLO_" + id, symbolTable));
+			// irtList.add(new Label("CICLO_" + id + "_step"));		
+			irtList.add(new Jump(Jump.J, "CICLO_" + id));
+			irtList.add(new Label("CICLO_" + id + "_end"));
+		}
+
 		return irtList;
 	}
 } 
