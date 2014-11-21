@@ -312,7 +312,6 @@ public class Declaracion extends Node {
 
 		// solicita el espacio al stack
 		int cantidadVar = symbolTable.searchByName(nameMethod).getCantidadVariables();
-		System.out.println("cantidadVar:" + cantidadVar);
 		LoadStore li = new LoadStore	(
 											"li", 
 											symbolTable.getRegisterManager().getT(),

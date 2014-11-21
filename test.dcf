@@ -1,39 +1,12 @@
-// int a;
-// int add(int a) {
-// 	return a*2;
-// }
-
-// void main(){
-// 	int a;
-// 	a = add(5);
-// 	print(a);
-// }	
-// int i;
-// void main() {
-// 	for(i = 1, 5){
-// 		if(i == 3){
-// 			continue;
-// 		}
-// 		print(i);
-// 	}
-// }
-
-int factorial(int n) {
-	int res;
-	if (n <= 1) {
-		res = 1;
-	} else { 
-		res = n * factorial(n - 1);
-		// print(temp2);
-	}
-	// print(res);
-
-	return res;
-}
-
 void main() {
-	int res;
-	res = factorial(10);
-	// print(10000000000);
-	print(res);
+	int array[10];
+	int i;
+	for(i = 0, 5){
+		print(i);
+		// array[i] = i;
+	}
+	for(i = 0, 5){
+		print(i);
+		// print(array[i]);
+	}
 }

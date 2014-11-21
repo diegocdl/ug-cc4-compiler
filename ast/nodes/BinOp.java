@@ -158,7 +158,6 @@ public class BinOp extends Node{
 		IrtList listHijo2 = hijo2.destruct(parent, symbolTable);
 
 		Instruction i1 = listHijo1.getTail();
-		System.out.println(hijo2.getClass().getName());
 		Instruction i2 = listHijo2.getTail();
 
 		// se verifica si las instrucciones eran operaciones aritmeticas y se retornan los registros

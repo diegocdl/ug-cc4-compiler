@@ -20,6 +20,22 @@ public class Irt {
 	public OutputFile of;
 	public LinkedList<Node> listaNodos;
 	public SymbolTable symbolTable;
+
+	/**
+	*	Funcion print que recibe los parametros en el stack (fp)
+	*	print:
+	*		add $sp $sp -8
+	*		sw $a0 0($sp)
+	*		sw $v0 4($sp)
+	*		lw $a0 0($fp)
+	*		li $v0 1
+	*		syscall
+	*		lw $a0 0($sp)
+	*		lw $v0 4($sp)
+	*		add $sp $sp 8
+	*		jr $ra
+	*/
+	public final static String PRINT = "print:\n\tadd $sp $sp -8\n\tsw $a0 0($sp)\n\tsw $v0 4($sp)\n\tlw $a0 0($fp)\n\tli $v0 1\n\tsyscall\n\tlw $a0 0($sp)\n\tlw $v0 4($sp)\n\tadd $sp $sp 8\n\tjr $ra";
 	
 	public IrtList instructions;
 
@@ -92,21 +108,23 @@ public class Irt {
 			
 		}
 
-		String print = "print:\n\tadd $sp $sp -8\n\tsw $a0 0($sp)\n\tsw $v0 4($sp)\n\tlw $a0 0($fp)\n\tli $v0 1\n\tsyscall\n\tlw $a0 0($sp)\n\tlw $v0 4($sp)\n\tadd $sp $sp 8\n\tjr $ra";
+		// SE AGREGAN AL ARCHIVO LAS INSTRUCCIONES
 		try {
-			of.reset();
 			of.write(instructions.toString());
-			of.write(print);
+			of.write(PRINT);
 		} catch (Exception ioe ) {
-
+			// excepcion ignorada
 		}
 
-		System.out.println(instructions);
+		if(debug != null) {
+			debug.println(instructions.toString());
+			debug.println(PRINT);
+		}
 		// se agrega al codigo funcion print 
-		System.out.println(print);
-		System.out.println("Registros S: " + Arrays.toString(symbolTable.registerManager.s));
-		System.out.println("Registros T:" + Arrays.toString(symbolTable.registerManager.t));
+	}
 
+	public IrtList getInstructions() {
+		return instructions;
 	}
 
 	public void setDebuger(Debug d){

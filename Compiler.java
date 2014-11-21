@@ -39,7 +39,7 @@ public class Compiler {
 			}
 		} catch(ErrorHandler e) {
 			System.err.println(e.getMessage());
-			e.printStackTrace();
+			// e.printStackTrace();
 		} catch(Exception e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
@@ -152,7 +152,7 @@ public class Compiler {
 				cf = new ConstantFolding(config.getInputFileName());
 			} else if( config.getOptimization().equals("algebraic") ){
 				algebraic = new Algebraic(config.getInputFileName());
-			}else {
+			}else if(!config.getOptimization().equals("")){
 				throw new ErrorHandler("Opcion de optimizacion invalida: " + config.getOptimization());
 			}
 		}

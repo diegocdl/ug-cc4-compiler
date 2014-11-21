@@ -44,3 +44,17 @@ Este código generaría las siguientes tablas de símbolos:
 |      b       |      int       |         null           |
 
  - no hay declaraciones de variables en main por lo tanto no tiene tabla de símbolos
+
+
+Errores:
+-----------------------
+Este funcion deberia ser valida pero tenemos un error en la verificación del return que reporta ese programa como invalido nos dimos cuenta al finalizar Irt/codegen y no teniamos suficiente tiempo para solucionarlo
+```java
+int factorial(int n) {
+	if (n <= 1) {
+		return 1;
+	} else { 
+		return n * factorial(n - 1);
+	}
+}
+```

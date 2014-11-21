@@ -29,3 +29,12 @@ Autores: Erwin Morataya y Diego Calderon
 		add $sp $sp 8
 		jr $ra
 	```
+
+Errores:
+-----------------------
+ -	Cuando se accede a una posición por medio de una variable da error como en el siguiente ejemplo
+ ```java
+ 	int array[10], n;
+ 	n = 5;
+ 	print(array[n]); // aqui se produciria un error
+```
