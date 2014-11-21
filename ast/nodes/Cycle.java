@@ -337,7 +337,7 @@ public class Cycle extends Node{
 			// se retorna el registro temporal para sumar 1
 			symbolTable.getRegisterManager().returnRegister(temp);
 			LoadStore sw = ((LoadStore)iniIrtList.getTail()).copia();
-			sw.setRs(counter);
+			sw.setRd(counter);
 			irtList.add(sw);
 			irtList.add(new Jump(Jump.J, "CICLO_" + id));
 			irtList.add(new Label("CICLO_" + id + "_end"));

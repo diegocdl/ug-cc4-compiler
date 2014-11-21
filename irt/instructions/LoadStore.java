@@ -51,6 +51,10 @@ public class LoadStore extends Instruction {
 		this.rd = rd;
 	}
 
+	public void setRd(Register rd){
+		this.rs = rd;
+	}
+
 	public LoadStore copia() {
 		LoadStore clone;
 		if(rd == null) {
