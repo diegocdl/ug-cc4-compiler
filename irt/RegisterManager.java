@@ -62,12 +62,35 @@ public class RegisterManager {
 	public LinkedList<Register> getUsedRegisters() {
 		LinkedList<Register> list = new LinkedList<Register>();
 		for (int i = 0; i< t.length; i++) {
-			list.add(new Register("t", i));
+			if(t[i])
+				list.add(new Register("t", i));
 		}
 		for (int i = 0; i< s.length; i++) {
-			list.add(new Register("s", i));
+			if(s[i])
+				list.add(new Register("s", i));
 		}
+		// list.add(V0);
 		return list;
+	}
+
+	public void reset() {
+		s = new boolean[8];
+		t = new boolean[8];
+	}
+
+	public void setUsedRegisters(LinkedList<Register> registers){
+		reset();
+		for (Register r:  registers) {
+			switch (r.getType()) {
+				case "s":
+					s[r.getNumber()] = true;
+					break;
+				case "t":
+					t[r.getNumber()] = true;
+					break;
+			}
+		}
+
 	}
 
 

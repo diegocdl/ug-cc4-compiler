@@ -43,8 +43,12 @@ public class LoadStore extends Instruction {
 		return rs;
 	}
 	
-	public void setRs(Register rs){
-		this.rs = rs;
+	public Register getRs() {
+		return rd;
+	}
+
+	public void setRs(Register rd){
+		this.rd = rd;
 	}
 
 	public LoadStore copia() {

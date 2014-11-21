@@ -107,9 +107,11 @@ public class MethodCall extends Node {
 	@Override
 	public IrtList destruct(String parent, SymbolTable  symbolTable) {
 		IrtList irtList = new IrtList();
+		LinkedList<Register> usedRegisters = symbolTable.getRegisterManager().getUsedRegisters();
+
 		irtList.add(new Comment("llamada a funcion"));
 		// reservar espacio en stack para parametros
-		int cant = expresiones.size();
+		int cant = expresiones.size() + usedRegisters.size();
 		LoadStore li;
 		if(cant > 0){
 			Register temp = symbolTable.getRegisterManager().getS();
@@ -132,10 +134,12 @@ public class MethodCall extends Node {
 			irtList.add(new Comment("Parametros"));
 			for (int i = 0;  i < expresiones.size(); i++ ) {
 				IrtList listExp = expresiones.get(i).destruct(parent, symbolTable);
-				if(listExp.getTail() instanceof LoadStore){
-					LoadStore ls = (LoadStore)listExp.getTail();
-					if(ls.equals(RegisterManager.SP)){
-						ls.setRs(temp);
+				for (Instruction inst : listExp.getList() ) {
+					if(inst instanceof LoadStore){
+						LoadStore ls = (LoadStore)inst;
+						if(ls.getRs() != null && ls.getRs().equals(RegisterManager.SP)){
+							ls.setRs(temp);
+						}
 					}
 				}
 				irtList.add(listExp);
@@ -148,12 +152,33 @@ public class MethodCall extends Node {
 				symbolTable.getRegisterManager().returnRegister(listExp.getTail().getRd());
 			}
 			symbolTable.getRegisterManager().returnRegister(temp);
+
+			for (int i = expresiones.size(); i< cant; i++) {
+				irtList.add(new LoadStore(
+						LoadStore.SW,
+						usedRegisters.get(i-expresiones.size()),
+						i*4,
+						RegisterManager.SP
+					));	
+			}
+			symbolTable.getRegisterManager().reset();
 		}
 		irtList.add(new Alu(Alu.ADD, RegisterManager.FP, RegisterManager.SP, RegisterManager.ZERO));
 		// Jump hacia la funcion
 		irtList.add(new Jump(Jump.JAL, nameMethod));
 
 		irtList.add(new Comment("end llamada a funcion"));
+
+		// retornar los registros usados
+		for (int i = expresiones.size(); i< cant; i++) {
+			irtList.add(new LoadStore(
+				LoadStore.LW,
+				usedRegisters.get(i-expresiones.size()),
+				i*4,
+				RegisterManager.SP
+			));	
+		}
+		symbolTable.getRegisterManager().setUsedRegisters(usedRegisters);
 
 		// retornar el spacio al stack
 		li = new LoadStore(
