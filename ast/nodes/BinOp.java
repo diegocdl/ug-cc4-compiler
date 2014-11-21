@@ -183,6 +183,9 @@ public class BinOp extends Node{
 			case "/":
 				op = Alu.DIV;
 				break;
+			case "%":
+				op = Alu.DIV;
+				break;
 			case "*":
 				op = Alu.MULT;
 				break;
