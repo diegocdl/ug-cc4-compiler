@@ -24,7 +24,7 @@ public class Configuracion {
 	*	El target le indica al compilador hasta que fase debe ejecutar,
 	* 	los target pueden ser  scan, parse, ast, semantic, irt y codegen
 	*/
-	protected String target = "irt";
+	protected String target = "codegen";
 
 	/**
 	*	Le indica al compilador que optimizacion debe realizar 
