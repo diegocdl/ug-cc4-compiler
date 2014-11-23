@@ -5,5 +5,5 @@ int foo(int i, boolean b) {
 
 void main() {
 	int x;
-	x = foo(34, 35);	// types don't match signature
+	x = foo(34);	// types don't match signature
 }

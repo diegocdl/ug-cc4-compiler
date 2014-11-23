@@ -1,4 +1,4 @@
-callout printf
+callout printf;
 void bar(int a) {
   for (i = 0, a) {
     printf("%d\n", i);

@@ -16,6 +16,7 @@ public class Codegen {
 		String msg = "stage: codegen";
 		of = irt.getOutFile();
 		of.writeln(msg);
+		instructions = irt.getInstructions();
 	}
 
 	public void start(){
@@ -24,7 +25,9 @@ public class Codegen {
 			of.reset();
 			of.write(instructions.toString());
 			of.write(Irt.PRINT);
-		} catch ( Exception e) {}
+		} catch ( Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

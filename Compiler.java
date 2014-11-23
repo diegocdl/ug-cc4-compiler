@@ -124,8 +124,8 @@ public class Compiler {
 		}
 
 		ast = new Ast(parse);
-		ast.start();
 		if (config.isADebugPhase("ast")) ast.setDebuger(deb);
+		ast.start();
 		if(config.getTarget().equals("ast")) {
 			return;
 		}
@@ -147,6 +147,7 @@ public class Compiler {
 			
 			codegen = new Codegen(irt);
 			if (config.isADebugPhase("codegen")) codegen.setDebuger(deb);
+			codegen.start();
 			// Optimizaciones
 			if( config.getOptimization().equals("constant") ){
 				cf = new ConstantFolding(config.getInputFileName());
